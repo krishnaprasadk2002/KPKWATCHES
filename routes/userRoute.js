@@ -20,12 +20,12 @@ const UserAuth=require("../middleware/userAuth")
 
 //sign up
 const userController=require("../controllers/userControllers")
-userRoute.get("/register",UserAuth.isLogout,userController.loadRegister)
+userRoute.get("/register",userController.loadRegister)
 userRoute.post("/register",userController.insertUser)
 
 //login
 userRoute.post("/login",userController.verifyLogin)
-userRoute.get("/login",UserAuth.isLogout,userController.verifyLogin)
+userRoute.get("/login",userController.verifyLogin)
 
 //home
 userRoute.get("/",userController.loadHome)
