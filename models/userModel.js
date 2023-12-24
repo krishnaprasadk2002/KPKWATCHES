@@ -27,6 +27,11 @@ const userSchema=new mongoose.Schema({
     is_verified:{
         type:Number,
         default:0
+    },
+    status: {
+        type: String,
+        uStatus: ['Active', 'Block'],
+        default: 'Active'
     }
 })
 

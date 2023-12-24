@@ -21,7 +21,7 @@ const UserAuth=require("../middleware/userAuth")
 //sign up
 const userController=require("../controllers/userControllers")
 userRoute.get("/register",userController.loadRegister)
-userRoute.post("/register",UserAuth.isLogout,userController.insertUser)
+userRoute.post("/register",userController.insertUser)
 
 //login
 userRoute.post("/login",userController.verifyLogin)
