@@ -21,15 +21,16 @@ const UserAuth=require("../middleware/userAuth")
 //sign up
 const userController=require("../controllers/userControllers")
 userRoute.get("/register",userController.loadRegister)
-userRoute.post("/register",userController.insertUser)
+userRoute.post("/register",UserAuth.isLogout,userController.insertUser)
 
 //login
 userRoute.post("/login",userController.verifyLogin)
-userRoute.get("/login",userController.verifyLogin)
+userRoute.get("/login",UserAuth.isLogin,userController.verifyLogin)
 
 //home
-userRoute.get("/",userController.loadHome)
-userRoute.get("/home",userController.loadHome)
+userRoute.get("/",UserAuth.isLogout,userController.loadHome)
 
+//logout
+userRoute.get("/logout",userController.userLogout)
 
 module.exports=userRoute

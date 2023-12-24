@@ -55,6 +55,7 @@
 
                                 <li><a href="#">Blog</a></li>
                             </ul><!-- End .menu -->
+                            
                         </nav><!-- End .main-nav -->
 
                         <button class="mobile-menu-toggler">
@@ -147,10 +148,39 @@
                                 </div><!-- End .dropdown-cart-total -->
                             </div><!-- End .dropdown-menu -->
                         </div><!-- End .cart-dropdown -->
+                        
+                        <% if (locals.username) { %>
+                            <div class="ml-auto">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <%= username %>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="/logout">Logout</a>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } else { %>
+                            <div class="ml-auto">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Guest
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="/login">Log in</a>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+                        
+                    
+                        
                     </div><!-- End .header-right -->
                 </div><!-- End .container -->
             </div><!-- End .header-middle -->
         </header><!-- End .header -->
+
+       
 
         <main class="main">
             <div class="intro-slider-container mb-3 mb-lg-5">
