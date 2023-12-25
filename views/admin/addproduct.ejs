@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>DarkPan - Bootstrap 5 Admin Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet"> 
+    
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax//admin/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- /admin/Libraries Stylesheet -->
+    <link href="/admin/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/admin/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+    
+</head>
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+       <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-secondary navbar-dark">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>DarkPan</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">KRISHNAPRASAD</h6>
+                        <span>Admin</span>
+                    </div>
+                </div>
+
+                <div class="navbar-nav w-100">
+                    <a href="/admin/dashboard" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <div class="nav-item dropdown">
+                        <a href="/admin/alluser" class="nav-item nav-link " ><i class="fa fa-laptop me-2"></i>All Users</a>
+                    </div>
+
+                    <div class="nav-item dropdown">
+                        <a href="/admin/allproduct" class="nav-item nav-link "><i class="fa fa-laptop me-2"></i>All Product</a>
+                    </div>
+
+                    <div class="nav-item dropdown">
+                        <a href="/admin/addproduct" class="nav-item nav-link active" ><i class="fa fa-laptop me-2"></i>Add Product</a>
+                    </div>
+
+                    <div class="nav-item dropdown">
+                        <a href="/admin/category" class="nav-item nav-link " ><i class="fa fa-laptop me-2"></i>Category</a>
+                    </div>
+                   
+                    
+                </div>
+                <a href="/admin/logout" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Logout</a>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Product Form</h2>
+        <form id="productForm" action="/admin/addproduct" method="POST" novalidate enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="productName" class="form-label">Name</label>
+                <input type="text" class="form-control" style="background-color: white;" placeholder="ProductName" id="productName" name="name" required>
+                <div class="invalid-feedback">
+                    Please enter the product name.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="productDescription" class="form-label">Description</label>
+                <textarea class="form-control" style="background-color: white;" id="productDescription" placeholder="ProductDescription" name="description" required></textarea>
+                <div class="invalid-feedback">
+                    Please enter the product description.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="productPrice" class="form-label">Price</label>
+                <input type="number" style="background-color: white;" class="form-control" id="productPrice" placeholder="EnterPrice" name="price" min="0" required>
+                <div class="invalid-feedback">
+                    Please enter a valid price.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="productOfferPrice" class="form-label">Offer Price</label>
+                <input type="number" style="background-color: white;" class="form-control" id="productOfferPrice" placeholder="Enter offerprice" name="offerprice" min="0" required>
+                <div class="invalid-feedback">
+                    Please enter a valid offer price.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="productCategory" class="form-label">Category</label>
+                <input type="text" style="background-color: white;" class="form-control" id="productCategory" placeholder="Category" name="category" required>
+                <div class="invalid-feedback">
+                    Please enter the product category.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="productQuantity" class="form-label">Quantity</label>
+                <input type="number" style="background-color: white;" class="form-control" id="productQuantity" placeholder="Quantity" name="quentity" min="0" required>
+                <div class="invalid-feedback">
+                    Please enter a valid quantity.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="productDate" class="form-label">Date</label>
+                <input type="date" style="background-color: white;" class="form-control" id="productDate" name="date" required>
+                <div class="invalid-feedback">
+                    Please enter a valid date.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="productImage" class="form-label">Images</label>
+                <input type="file" class="form-control" id="productImage" name="image" accept="image/*" required multiple>
+                <div class="invalid-feedback">
+                    Please select at least one image.
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js (for Bootstrap functionality) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Validate the form using Bootstrap's native form validation
+        document.getElementById('productForm').addEventListener('submit', function (event) {
+            if (!this.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            this.classList.add('was-validated');
+        });
+    </script>
+
+
+ <!-- Back to Top -->
+ <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+
+<!-- JavaScript /admin/Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/admin/lib/chart/chart.min.js"></script>
+<script src="/admin/lib/easing/easing.min.js"></script>
+<script src="/admin/lib/waypoints/waypoints.min.js"></script>
+<script src="/admin/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="/admin/lib/tempusdominus/js/moment.min.js"></script>
+<script src="/admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
+<script src="/admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<!-- Template Javascript -->
+<script src="js/main.js"></script>
+</body>
+
+</html>

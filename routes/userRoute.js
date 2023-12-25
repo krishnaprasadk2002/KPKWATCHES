@@ -30,6 +30,9 @@ userRoute.get("/login",UserAuth.isLogin,userController.verifyLogin)
 //home
 userRoute.get("/",UserAuth.isLogout,userController.loadHome)
 
+//product
+userRoute.get("/product",userController.loadProduct)
+
 //logout
 userRoute.get("/logout",userController.userLogout)
 

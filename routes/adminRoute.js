@@ -1,7 +1,10 @@
 const express=require("express")
 const adminRoute=express()
 const users=require('../models/userModel')
-
+const multer=require("multer")
+// const { join } = require('path'); // Import the join function from the path module
+const path =require("path")
+const productController=require("../controllers/productController")
 const session=require("express-session")
 const config=require("../config/config")
 adminRoute.use(session({secret: config.sessionSecret,
@@ -19,48 +22,50 @@ adminRoute.set('views','./views/admin')
 const adminController=require("../controllers/adminController")
 const adminAuth=require("../middleware/adminAuth")
 
-adminRoute.get("/",adminAuth.islogout,adminController.loadLogin)
-adminRoute.post("/",adminAuth.islogout,adminController.verifyLogin)
+adminRoute.get("/",adminController.loadLogin)
+adminRoute.post("/",adminController.verifyLogin)
 
 
 adminRoute.post("/dashboard",adminController.loadDashboard);
 adminRoute.get("/dashboard",adminController.loadDashboard);
 
-
 // All user
 adminRoute.get("/alluser",adminController.loadAlluser)
 
+//Admin status
+adminRoute.post('/activeuser/:id', adminController.activeUser);
+adminRoute.post('/blockuser/:id', adminController.blockUser);
+
+//All product
+adminRoute.get('/allproduct',adminController.loadAllproduct)
 
 
 
 
 
 
-
-adminRoute.post('/activeuser/:id',async (req,res)=>{
-  const user_id=req.params.id
-  const check= await users.findByIdAndUpdate({_id:user_id},{status:"Active"})
-  const status=check.status
- res.json({status:status})
-
-})
-
-adminRoute.post('/blockuser/:id', async (req,res)=>{
-  const user_id=req.params.id
-  const check=await users.findByIdAndUpdate({_id:user_id},{status:"Block"})
-  const status=check.status
-  res.json({status:status})
-})
-
-
+//Add product
+adminRoute.get('/addproduct',adminController.loadAddproducts)
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../public/uploads'));
+    // cb(null, join(__dirname, '..', 'public', 'uploads')); // it is also applicable but that time enable {join} upward.
+  },
+  filename: function (req, file, cb) {
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().replace(/:/g, '-').replace(/\..+/, '');
+    const name = formattedDate + '_' + file.originalname;
+    cb(null, name);
+  },
+});
+const upload = multer({ storage: storage });
+adminRoute.post("/addproduct", upload.array('image', 5),productController.insertProduct);
 
 
 
 
 //Logout
-
-adminRoute.get("/logout",adminAuth.islogin,adminController.adminLogout)
-
+adminRoute.get("/logout",adminController.adminLogout)
 adminRoute.get("*",(req,res)=>{
     res.redirect('/admin')
   })

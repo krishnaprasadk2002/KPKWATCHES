@@ -65,6 +65,40 @@ const loginLoad = async (req, res) => {
   }
 }
 
+// const verifyLogin = async (req, res) => {
+//   try {
+//     const email = req.body.email;
+//     const password = req.body.password;
+//     const userData = await User.findOne({ email: email });
+
+//     if (userData) {
+//       const passwordMatch = await bcrypt.compare(password, userData.password);
+
+//       if (passwordMatch) {
+//         if (userData.is_verfied === 0) {
+//           return res.render('login', { message: 'Login successful' });
+//         } else {
+         
+//           if (req.session) {
+//             req.session.user_id = userData.name;
+//             return res.redirect('/');
+//           } else {
+//             console.error('req.session is undefined');
+//             return res.status(500).send('Internal Server Error');
+//           }
+//         }
+//       } else {
+//         return res.render('login', { message: 'Email and password are incorrect' });
+//       }
+//     } else {
+//       return res.render('login', { message: 'Email and password are incorrect' });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).send('Internal Server Error');
+//   }
+// };
+
 const verifyLogin = async (req, res) => {
   try {
     const email = req.body.email;
@@ -75,10 +109,8 @@ const verifyLogin = async (req, res) => {
       const passwordMatch = await bcrypt.compare(password, userData.password);
 
       if (passwordMatch) {
-        if (userData.is_verfied === 0) {
-          return res.render('login', { message: 'Login successful' });
-        } else {
-          // Check if req.session is defined before setting properties
+        if (userData.status === 'Active') {
+          // User is active, allow login
           if (req.session) {
             req.session.user_id = userData.name;
             return res.redirect('/');
@@ -86,12 +118,17 @@ const verifyLogin = async (req, res) => {
             console.error('req.session is undefined');
             return res.status(500).send('Internal Server Error');
           }
+        } else {
+          // User is blocked
+          return res.render('login', { message: 'User account is blocked' });
         }
       } else {
+        // Incorrect password
         return res.render('login', { message: 'Email and password are incorrect' });
       }
     } else {
-      return res.render('login', { message: 'Email and password are incorrect' });
+      // User not found
+      return res.render('login', { message2: '' });
     }
   } catch (error) {
     console.error(error);
@@ -112,6 +149,16 @@ const loadHome = async (req, res) => {
   }
 }
 
+//  Product list
+
+const loadProduct=(req,res)=>{
+  try {
+    res.render("allproduct")
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
 const userLogout=async(req,res)=>{
   try {
     req.session.destroy()
@@ -127,5 +174,6 @@ module.exports = {
   loginLoad,
   verifyLogin,
   loadHome,
+  loadProduct,
   userLogout
 }
