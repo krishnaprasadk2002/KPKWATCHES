@@ -87,6 +87,8 @@ const loadAllproduct=async(req,res)=>{
 }
 
 
+
+
 const loadAddproducts=async(req,res)=>{
     try {
         res.render("addproduct")
@@ -94,6 +96,7 @@ const loadAddproducts=async(req,res)=>{
         console.log(error.message);
     }
 }
+
 
 
 const adminLogout=async(req,res)=>{

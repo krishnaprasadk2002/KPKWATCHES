@@ -10,7 +10,8 @@ userRoute.use(session({secret: config.sessionSecret,
     resave: false, 
     saveUninitialized: true  
   }));
-  
+  const flash=require("express-flash")
+  userRoute.use(flash())
 
 const bodyparser=require("body-parser")
 userRoute.use(bodyparser.json())
@@ -22,6 +23,11 @@ const UserAuth=require("../middleware/userAuth")
 const userController=require("../controllers/userControllers")
 userRoute.get("/register",userController.loadRegister)
 userRoute.post("/register",userController.insertUser)
+
+
+userRoute.get("/otp",userController.loadotp)
+userRoute.post('/otp',userController.verifyOtp);
+
 
 //login
 userRoute.post("/login",userController.verifyLogin)

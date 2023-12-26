@@ -43,6 +43,10 @@ const productSchema = new mongoose.Schema({
         type:[String],
         required:true
     },
+    is_listed:{
+        type:Number,
+        default:1
+    }
 
 });
 

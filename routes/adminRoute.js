@@ -7,6 +7,7 @@ const path =require("path")
 const productController=require("../controllers/productController")
 const session=require("express-session")
 const config=require("../config/config")
+
 adminRoute.use(session({secret: config.sessionSecret,
     resave: false, 
     saveUninitialized: true  
