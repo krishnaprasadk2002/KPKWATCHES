@@ -61,7 +61,7 @@
                 <div class="navbar-nav w-100">
                     <a href="/admin/dashboard" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                   
-                    <a href="/admin/alluser" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>All User</a>
+                    <a href="/admin/alluser" class="nav-item nav-link"><i class="fa fa-th me-2"></i>All User</a>
                     <div class="nav-item dropdown">
                         <a href="/admin/allproduct" class="nav-link dropdown-toggle "><i class="far fa-file-alt me-2"></i>All Product</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                     <div class="nav-item dropdown">
-                        <a href="/admin/category" class="nav-link dropdown-toggle" ><i class="far fa-file-alt me-2"></i>Category</a>
+                        <a href="/admin/category" class="nav-link dropdown-toggle active" ><i class="far fa-file-alt me-2"></i>Category</a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="/admin/addcategory" class="dropdown-item">Add Category</a>
                         </div>
@@ -87,94 +87,71 @@
         <div class="content">
             <!-- Navbar Start -->
             <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
-               
+                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
+                </a>
                 <a href="#" class="sidebar-toggler flex-shrink-0">
                     <i class="fa fa-bars"></i>
                 </a>
-               
+                
               
             </nav>
             <!-- Navbar End -->
-                <!-- Content Start -->
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Users</th>
-                <th scope="col">Email</th>
-                <th scope="col">Status</th>
-                <th scope="col">Edit</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% userData.forEach((result) => { %>
-                <tr>
-                    <td><%= result.name %></td>
-                    <td><%= result.email %></td>
-                    <td id="status_<%=result._id%>" > <%=result.status%></td>
-                    <td>
-                       <!-- Add a data attribute to store the user ID -->
-                        <button  onclick="activeorblock('<%= result._id %>','active')" class="btn btn-success">Active</button>
-                        <button onclick="activeorblock('<%= result._id %>','block')"  class="btn btn-danger">Block</button>
+        <div class="container mt-5">        
+            <h2 class="mb-4">Add Category</h2>
+            <form id="categoryForm" action="/admin/addcategory" method="POST" novalidate>
+                <div class="mb-3">
+                    <label for="categoryName" class="form-label">Category Name</label>
+                    <input type="text"  class="form-control" style="background-color: white"  placeholder="Category Name" id="categoryName" name="name" required>
+                    <div class="invalid-feedback">
+                        Please enter the category name.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="categoryDescription" class="form-label">Category Description</label>
+                    <textarea class="form-control" style="background-color: white"  id="categoryDescription" placeholder="Category Description" name="description" required></textarea>
+                    <div class="invalid-feedback">
+                        Please enter the category description.
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    
+        <!-- Bootstrap JS and Popper.js (for Bootstrap functionality) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+        <script>
+            // Validate the form using Bootstrap's native form validation
+            document.getElementById('categoryForm').addEventListener('submit', function (event) {
+                if (!this.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                this.classList.add('was-validated');
+            });
+        </script>
 
-                    </td>
-                </tr>
-            <% }); %>
-        </tbody>
-    </table>
+           <!-- ... (your existing scripts) ... -->
+
+   <!-- Back to Top -->
+   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
 
+<!-- JavaScript /admin/Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/admin/lib/chart/chart.min.js"></script>
+<script src="/admin/lib/easing/easing.min.js"></script>
+<script src="/admin/lib/waypoints/waypoints.min.js"></script>
+<script src="/admin/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="/admin/lib/tempusdominus/js/moment.min.js"></script>
+<script src="/admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
+<script src="/admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
+<!-- Template Javascript -->
+<script src="js/main.js"></script>
+</body>
 
-<!-- ... (user active and block) ... -->
-
-                   
-              <script>
-                function activeorblock(userid,action){
-
-                    fetch(`/admin/${action}user/${userid}`,{
-                        method:"POST",
-                        headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ userid, status }),
-
-                    }).then(respone => respone.json())
-                    .then(data =>{
-                        const display= document.getElementById(`status_${userid}`)
-                        if(display){
-                            display.textContent=data.status
-                        }
-                    }).catch(error => { console.error('Error:', error);
-                      });
-
-                    }
-                
-              </script>   
-        
-        
-                  
-        
-        
-                <!-- Back to Top -->
-                <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-            </div>
-        
-            <!-- JavaScript /admin/Libraries -->
-            <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="/admin/lib/chart/chart.min.js"></script>
-            <script src="/admin/lib/easing/easing.min.js"></script>
-            <script src="/admin/lib/waypoints/waypoints.min.js"></script>
-            <script src="/admin/lib/owlcarousel/owl.carousel.min.js"></script>
-            <script src="/admin/lib/tempusdominus/js/moment.min.js"></script>
-            <script src="/admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
-            <script src="/admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-        
-            <!-- Template Javascript -->
-            <script src="js/main.js"></script>
-        </body>
-        
-        </html>
-
-       
+</html>

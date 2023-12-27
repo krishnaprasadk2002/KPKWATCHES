@@ -62,10 +62,18 @@
                     <a href="/admin/dashboard" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                   
                     <a href="/admin/alluser" class="nav-item nav-link"><i class="fa fa-th me-2"></i>All User</a>
-                    <a href="/admin/allproduct" class="nav-item nav-link"><i class="fa fa-th me-2"></i>All Product</a>
-
-                    <a href="/admin/addproduct" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Add Product</a>
-                    <a href="" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Category</a>
+                    <div class="nav-item dropdown">
+                        <a href="/admin/allproduct" class="nav-link dropdown-toggle "><i class="far fa-file-alt me-2"></i>All Product</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="/admin/addproduct" class="dropdown-item">Add Product</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="/admin/category" class="nav-link dropdown-toggle" ><i class="far fa-file-alt me-2"></i>Category</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="/admin/addcategory" class="dropdown-item">Add Category</a>
+                        </div>
+                    </div>
                     
                   
                 </div>

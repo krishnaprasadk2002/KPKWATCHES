@@ -59,13 +59,21 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="/admin/dashboard" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="/admin/dashboard" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                   
                     <a href="/admin/alluser" class="nav-item nav-link"><i class="fa fa-th me-2"></i>All User</a>
-                    <a href="/admin/allproduct" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>All Product</a>
-
-                    <a href="/admin/addproduct" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Add Product</a>
-                    <a href="" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Category</a>
+                    <div class="nav-item dropdown">
+                        <a href="/admin/allproduct" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>All Product</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="/admin/addproduct" class="dropdown-item" >Add Product</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="/admin/category" class="nav-link dropdown-toggle" ><i class="far fa-file-alt me-2"></i>Category</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="/admin/addcategory" class="dropdown-item">Add Category</a>
+                        </div>
+                    </div>
                     
                   
                 </div>
@@ -73,11 +81,25 @@
             </nav>
         </div>
         <!-- Sidebar End -->
+
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+               
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+               
+              
+            </nav>
+            <!-- Navbar End -->
                 <!-- Content Start -->
 
                 <!-- ... (previous HTML code) ... -->
 
-                <div class="content">
+
                     <table class="table">
                         <thead>
                             <tr>
@@ -86,10 +108,9 @@
                                 <th scope="col">Price</th>
                                 <th scope="col">Stock</th>
                                 <th scope="col">Images</th>
-                                <th scope="col">Edit</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Delete</th>
-                                <th scope="col">Product Listing</th>
+                                <th scope="col">Edit</th>
+                                <th scope="col">Product Delete</th>
 
                             </tr>
                         </thead>
@@ -101,14 +122,17 @@
                                     <td><%= result.price %></td>
                                     <td><%= result.quentity %></td>
                                     <td>
-                                        
-                                            <img src="/uploads/<%= result.image[0] %>" alt="Product Image" width="50" height="50">
-                                      
+                                        <% for (let i = 0; i < result.image.length; i++) { %>
+                                            <img src="/uploads/<%= result.image[i] %>" alt="Product Image" width="50" height="50">
+                                        <% } %>
                                     </td>
-                                    <td> <button class="btn btn-primary">Edit</button></td>
                                     <td><%= result.status %></td>
-                                    <td><button class="btn btn-primary">Delete</button></td>
-                                    <td><button class="btn btn-primary">List</button>  <button class="btn btn-primary">UnList</button></td>
+                                    <td><a href="/admin/editproduct/<%= result._id %>" class="btn btn-primary">Edit</a></td>
+                                   
+                                    <td>
+                                        <button  onclick="activeorblock('<%= result._id %>','active')" class="btn btn-success">Active</button>
+                                        <button onclick="activeorblock('<%= result._id %>','block')"  class="btn btn-danger">Block</button>
+                                    </td>
                                     
                                 </tr>
                             <% }); %>
@@ -116,8 +140,32 @@
                     </table>
                 </div>
 
-   <!-- Back to Top -->
-   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+                    <script>
+                       function activeorblock(productId, action) {
+                        fetch(`/admin/product${action}/${productId}`, {
+                            method: "POST",
+                            headers: {
+                           'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ productId, action }),
+                             })
+                            .then(response => response.json())
+                             .then(data => {
+                            const display = document.getElementById(`product_listing_${productId}`);
+                            display.innerHTML = data.status === "Active" ? "Active" : "Block";
+                            })
+                           .catch(error => {
+                            console.error('Error:', error);
+                              });
+                            }
+                    </script>
+                    
+
+
+
+ <!-- Back to Top -->
+ <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
 
 <!-- JavaScript /admin/Libraries -->

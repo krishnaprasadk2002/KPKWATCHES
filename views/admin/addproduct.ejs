@@ -29,7 +29,6 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
-    
 </head>
 
 <body>
@@ -43,7 +42,7 @@
         <!-- Spinner End -->
 
 
-       <!-- Sidebar Start -->
+        <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
                 <a href="index.html" class="navbar-brand mx-4 mb-3">
@@ -59,26 +58,24 @@
                         <span>Admin</span>
                     </div>
                 </div>
-
                 <div class="navbar-nav w-100">
-                    <a href="/admin/dashboard" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="/admin/dashboard" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                  
+                    <a href="/admin/alluser" class="nav-item nav-link"><i class="fa fa-th me-2"></i>All User</a>
                     <div class="nav-item dropdown">
-                        <a href="/admin/alluser" class="nav-item nav-link " ><i class="fa fa-laptop me-2"></i>All Users</a>
+                        <a href="/admin/allproduct" class="nav-link dropdown-toggle active"><i class="far fa-file-alt me-2"></i>All Product</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="/admin/addproduct" class="dropdown-item">Add Product</a>
+                        </div>
                     </div>
-
                     <div class="nav-item dropdown">
-                        <a href="/admin/allproduct" class="nav-item nav-link "><i class="fa fa-laptop me-2"></i>All Product</a>
+                        <a href="/admin/category" class="nav-link dropdown-toggle " ><i class="far fa-file-alt me-2"></i>Category</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="/admin/addcategory" class="dropdown-item">Add Category</a>
+                        </div>
                     </div>
-
-                    <div class="nav-item dropdown">
-                        <a href="/admin/addproduct" class="nav-item nav-link active" ><i class="fa fa-laptop me-2"></i>Add Product</a>
-                    </div>
-
-                    <div class="nav-item dropdown">
-                        <a href="/admin/category" class="nav-item nav-link " ><i class="fa fa-laptop me-2"></i>Category</a>
-                    </div>
-                   
                     
+                  
                 </div>
                 <a href="/admin/logout" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Logout</a>
             </nav>
@@ -86,8 +83,22 @@
         <!-- Sidebar End -->
 
 
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                
+              
+            </nav>
+
     <div class="container mt-5">
-        <h2 class="mb-4">Product Form</h2>
+        <h2 class="mb-4">Add Product</h2>
         <form id="productForm" action="/admin/addproduct" method="POST" novalidate enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="productName" class="form-label">Name</label>

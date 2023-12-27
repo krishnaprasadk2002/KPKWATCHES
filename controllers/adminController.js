@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const Products=require("../models/productModel")
+const category=require ("../models/categoryModel")
 const bcrypt = require("bcrypt");
 
 const loadLogin = async (req, res) => {
@@ -23,7 +24,7 @@ const verifyLogin = async (req, res) => {
                     res.render('login', { message: "email and password incorrect" });
                 } else {
                     req.session.user_id = userData.name;
-                    // res.redirect("/admin/dashboard");
+                    
                     res.render("")
                 }
             } else {
@@ -47,7 +48,7 @@ const loadDashboard = async (req, res) => {
 
 const loadAlluser=async(req,res)=>{
     try {
-        const userData=await User.find()
+        const userData=await User.find({is_verified:1})
         res.render('alluser',{userData});
     } catch (error) {
         console.log(error.message);
@@ -86,9 +87,7 @@ const loadAllproduct=async(req,res)=>{
     }
 }
 
-
-
-
+//load addproduct
 const loadAddproducts=async(req,res)=>{
     try {
         res.render("addproduct")
@@ -97,6 +96,67 @@ const loadAddproducts=async(req,res)=>{
     }
 }
 
+//loadCategory
+
+const loadCategory=async (req,res)=>{
+    try {
+        const categoryData=await category.find()
+        res.render("category",{categoryData})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const loadAddCategory=async(req,res)=>{
+    try {
+        res.render("addcategory")
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const insertCategory = async (req, res) => {
+    try {
+        const { name, description } = req.body;
+        const existingCategory = await category.findOne({ name });
+        if (existingCategory) {
+            return res.status(400).send("Category with the same name already exists");
+        }
+        const newCategory = new category({
+            name,
+            description,
+        });
+        await newCategory.save();
+        res.status(200).send("Category added successfully");
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+const activeCategory = async (req,res)=>{
+    try {
+        const categoryId=req.params.id
+        const check =await category.findByIdAndUpdate({_id:categoryId},{status:"Active"})
+        const status=check.status;
+        res.json({status:status})
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const blockCategory = async (req,res)=>{
+    try {
+        const categoryId=req.params.id
+        const check=await category.findByIdAndUpdate({_id:categoryId},{status:"Block"},{new:true})
+        const status=check.status;
+        res.json({status:status})
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 const adminLogout=async(req,res)=>{
@@ -111,4 +171,17 @@ const adminLogout=async(req,res)=>{
 
 
 
-module.exports = { loadLogin, verifyLogin, loadDashboard,loadAlluser,activeUser,blockUser,loadAllproduct,loadAddproducts,adminLogout };
+module.exports = { loadLogin,
+     verifyLogin,
+      loadDashboard,
+      loadAlluser,
+      activeUser,
+      blockUser,
+      loadAllproduct,
+      loadAddproducts,
+      loadCategory,
+      loadAddCategory,
+      insertCategory,
+      activeCategory,
+      blockCategory,
+      adminLogout };

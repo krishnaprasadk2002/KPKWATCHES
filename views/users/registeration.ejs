@@ -507,9 +507,9 @@
         });
 
         async function validateForm() {
-            var name = document.getElementById('register-name').value;
-            var mobile = document.getElementById('register-number').value;
-            var email = document.getElementById('register-email-2').value;
+            var name = document.getElementById('register-name').trim().value;
+            var mobile = document.getElementById('register-number').trim().value;
+            var email = document.getElementById('register-email-2').trim().value;
             var password = document.getElementById('register-password-2').value;
             var policyCheckbox = document.getElementById('register-policy-2');
 
