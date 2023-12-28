@@ -3,8 +3,9 @@ const productController=express()
 const multer=require('multer')
 const path=require("path")
 const Products=require("../models/productModel")
-const { deleteOne, findByIdAndDelete } = require("../models/userModel")
-
+const User= require("../models/userModel")
+const Category = require("../models/categoryModel")
+const fs = require('fs/promises')
 
 
 const insertProduct = async (req, res) => {
@@ -66,7 +67,20 @@ const productBlock = async (req, res) => {
     }
 };
 
+const loadEditProduct = async (req, res) => {
+    try {
+        const productId = req.query.id; 
+        const product = await Products.findById(productId);  
+        const categories = await Category.find(); 
+
+        res.render("editproduct", { product, categories });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 
-module.exports={insertProduct,productActive,productBlock}
+
+
+module.exports={insertProduct,productActive,productBlock,loadEditProduct}

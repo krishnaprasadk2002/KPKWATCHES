@@ -96,6 +96,8 @@ const loadAddproducts=async(req,res)=>{
     }
 }
 
+
+
 //loadCategory
 
 const loadCategory=async (req,res)=>{
@@ -158,6 +160,44 @@ const blockCategory = async (req,res)=>{
     }
 }
 
+// Edit category load
+
+const loadEditCategory = async (req, res) => {
+    try {
+        const categoryId = req.query.id;
+        const Category = await category.findById(categoryId);  
+        res.render("editcategory", { Category });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//Updating category 
+
+const updateCategory = async (req, res) => {
+    try {
+        const categoryId = req.body.id;  
+        const { name, description } = req.body;
+
+        const existingCategory = await category.findOne({ name: { $regex: new RegExp("^" + name + "$", "i") }, _id: { $ne: categoryId } });
+        if (existingCategory) {
+            return res.send("Category name already exists")
+        }
+        // Update the category
+        const updatedCategory = await category.findByIdAndUpdate(categoryId, { name, description }, { new: true });
+        if (!updatedCategory) {
+            console.log("Category not found");
+        }
+        res.redirect("/admin/category");
+    } catch (error) {
+        console.log(error.message);
+        res.send("Category name already exists")
+    }
+};
+
+
+
+
 
 const adminLogout=async(req,res)=>{
     try {
@@ -171,8 +211,9 @@ const adminLogout=async(req,res)=>{
 
 
 
-module.exports = { loadLogin,
-     verifyLogin,
+module.exports = { 
+      loadLogin,
+      verifyLogin,
       loadDashboard,
       loadAlluser,
       activeUser,
@@ -184,4 +225,7 @@ module.exports = { loadLogin,
       insertCategory,
       activeCategory,
       blockCategory,
-      adminLogout };
+      loadEditCategory,
+      updateCategory,
+      adminLogout
+    };

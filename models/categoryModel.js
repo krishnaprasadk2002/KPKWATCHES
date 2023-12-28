@@ -3,7 +3,8 @@ const productCategory=mongoose.Schema({
 
     name:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     description:{
         type:String,
@@ -12,7 +13,7 @@ const productCategory=mongoose.Schema({
     status:{
         type:String,
         enum:["active","blocked"],
-        default:"active"              // set default active
+        default:"active"              
     }
 
 })

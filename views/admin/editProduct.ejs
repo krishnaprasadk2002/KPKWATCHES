@@ -95,79 +95,84 @@
               
             </nav>
             <!-- Navbar End -->
-                <!-- Content Start -->
-
-                <!-- ... (previous HTML code) ... -->
 
 
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Stock</th>
-                                <th scope="col">Images</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Edit</th>
-                                <th scope="col">Product Delete</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% productData.forEach((result) => { %>
-                                <tr>
-                                    <td><%= result.name %></td>
-                                    <td><%= result.description %></td>
-                                    <td><%= result.price %></td>
-                                    <td><%= result.quentity %></td>
-                                    <td>
-                                        <% for (let i = 0; i < result.image.length; i++) { %>
-                                            <img src="/uploads/<%= result.image[i] %>" alt="Product Image" width="50" height="50">
-                                        <% } %>
-                                    </td>
-                                    <td><%= result.status %></td>
-                                    <td>
-                                        <a href="/admin/editproduct?id=<%= result._id %>" class="btn btn-primary">Edit</a>
-                                    </td>
-                                   
-                                    <td>
-                                        <button  onclick="activeorblock('<%= result._id %>','active')" class="btn btn-success">Active</button>
-                                        <button onclick="activeorblock('<%= result._id %>','block')"  class="btn btn-danger">Block</button>
-                                    </td>
-                                    
-                                </tr>
-                            <% }); %>
-                        </tbody>
-                    </table>
+    <div class="container mt-5">
+        <h2 class="mb-4">Edit Product</h2>
+        <form id="productForm" action="/admin/editproduct/<%= product._id %>" method="POST" novalidate enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="productName" class="form-label">Name</label>
+                <input type="text" class="form-control" style="background-color: white;" placeholder="ProductName" id="productName" name="name" value="<%= product.name %>" required>
+                <div class="invalid-feedback">
+                    Please enter the product name.
                 </div>
+            </div>
+            <div class="mb-3">
+                <label for="productDescription" class="form-label">Description</label>
+                <textarea class="form-control" style="background-color: white;" id="productDescription" placeholder="ProductDescription" name="description" required><%= product.description %></textarea>
+                <div class="invalid-feedback">
+                    Please enter the product description.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="productPrice" class="form-label">Price</label>
+                <input type="number" style="background-color: white;" class="form-control" id="productPrice" placeholder="EnterPrice" name="price" min="0" value="<%= product.price %>" required>
+                <div class="invalid-feedback">
+                    Please enter a valid price.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="productOfferPrice" class="form-label">Offer Price</label>
+                <input type="number" style="background-color: white;" class="form-control" id="productOfferPrice" placeholder="Enter offerprice" name="offerprice" min="0" value="<%= product.offerprice %>" required>
+                <div class="invalid-feedback">
+                    Please enter a valid offer price.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="productCategory" class="form-label">Category</label>
+                <select class="form-select" style="background-color: white;" id="productCategory" name="category" required>
+                    <% categories.forEach(category => { %>
+                        <option value="<%= category._id %>" <%= product.category && product.category.equals(category._id) ? 'selected' : '' %>><%= category.name %></option>
+                    <% }); %>
+                </select>
+                <div class="invalid-feedback">
+                    Please select the product category.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="productQuantity" class="form-label">Quantity</label>
+                <input type="number" style="background-color: white;" class="form-control" id="productQuantity" placeholder="Quantity" name="quentity" min="0" value="<%= product.quentity %>"  required>
+                <div class="invalid-feedback">
+                    Please enter a valid quantity.
+                </div>
+            </div>
+           
+            <div class="mb-3">
+                <label for="currentProductImage" class="form-label">Image</label>
+                <% for (let i = 0; i < product.image.length; i++) { %>
+                   <div class="col-3 mt-2"> <img src="/uploads/<%= product.image[i] %>" alt="Current Product Image" class="img-thumbnail" style="max-width: 250px; max-height: 250px;"></div>
+                    <button type="button" class="btn btn-danger mt-2">Delete</button>
+                <% } %>
+            </div>
+            
+            
+            <div class="mb-3">
+                <label for="newProductImage" class="form-label">New Images</label>
+                <input type="file" class="form-control" id="newProductImage" name="newImage" accept="image/*" multiple>
+                <div class="invalid-feedback">
+                    Please select at least one new image.
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update Product</button>
+        </form>
+    </div>
+</div>
 
 
-                    <script>
-                       function activeorblock(productId, action) {
-                        fetch(`/admin/product${action}/${productId}`, {
-                            method: "POST",
-                            headers: {
-                           'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ productId, action }),
-                             })
-                            .then(response => response.json())
-                             .then(data => {
-                            const display = document.getElementById(`product_listing_${productId}`);
-                            display.innerHTML = data.status === "Active" ? "Active" : "Block";
-                            })
-                           .catch(error => {
-                            console.error('Error:', error);
-                              });
-                            }
-                    </script>
-                    
 
-
-
- <!-- Back to Top -->
- <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+<a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
 
 <!-- JavaScript /admin/Libraries -->

@@ -26,7 +26,7 @@ const adminAuth=require("../middleware/adminAuth")
 adminRoute.get("/",adminController.loadLogin)
 adminRoute.post("/",adminController.verifyLogin)
 
-
+//dashboard
 adminRoute.post("/dashboard",adminController.loadDashboard);
 adminRoute.get("/dashboard",adminController.loadDashboard);
 
@@ -39,11 +39,9 @@ adminRoute.post('/blockuser/:id', adminController.blockUser);
 
 //All product
 adminRoute.get('/allproduct',adminController.loadAllproduct)
-
-
+//product Status
 adminRoute.post("/productactive/:id", productController.productActive);
 adminRoute.post("/productblock/:id", productController.productBlock);
-
 //Add product
 adminRoute.get('/addproduct',adminController.loadAddproducts)
 const storage = multer.diskStorage({
@@ -60,8 +58,11 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 adminRoute.post("/addproduct", upload.array('image', 5),productController.insertProduct);
+//Loaad editProduct
+adminRoute.get("/editproduct", productController.loadEditProduct)
 
-//Edit product
+
+
 
 
 //load Category
@@ -69,11 +70,12 @@ adminRoute.get("/category",adminController.loadCategory)
 adminRoute.get("/addcategory",adminController.loadAddCategory)
 //insert Category
 adminRoute.post("/addcategory",adminController.insertCategory)
-
+//category status
 adminRoute.post("/categoryactive/:id", adminController.activeCategory);
 adminRoute.post("/categoryblock/:id", adminController.blockCategory);
-
-
+//edit category
+adminRoute.get("/editcategory",adminController.loadEditCategory)
+adminRoute.post('/editcategory', adminController.updateCategory);
 
 
 
@@ -82,6 +84,7 @@ adminRoute.get("/logout",adminController.adminLogout)
 adminRoute.get("*",(req,res)=>{
     res.redirect('/admin')
   })
+ 
 
 
 module.exports=adminRoute
