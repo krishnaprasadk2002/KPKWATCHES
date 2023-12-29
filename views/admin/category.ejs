@@ -96,7 +96,7 @@
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
-                <th scope="col">Status</th>
+                <th scope="col">Category listing</th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
@@ -106,14 +106,14 @@
                     <td><%= result.name %></td>
                     <td><%= result.description %></td>
                    
-                    <td id="status_<%=result._id%>" > <%=result.status%></td>
+                    <td id="is_listed<%=result._id%>" > <%= result.is_listed %></td>
 
                     <td>
                         <a class='btn btn-danger' href="/admin/editcategory?id=<%= result._id %>">Edit</a>
                     
                        <!-- Add a data attribute to store the user ID -->
-                       <button onclick="showConfirmation('<%= result._id %>', 'active')" class="btn btn-success">Active</button>
-                       <button onclick="showConfirmation('<%= result._id %>', 'block')" class="btn btn-danger">Block</button>
+                       <button onclick="showConfirmation('<%= result._id %>', 'list')" class="btn btn-success">List</button>
+                       <button onclick="showConfirmation('<%= result._id %>', 'unlist')" class="btn btn-danger">Unlist</button>
 
                     </td>
                 </tr>
@@ -135,39 +135,42 @@
         });
 
         if (confirmed.isConfirmed) {
-            await activeOrBlockCategory(categoryId, action);
+            await listOrUnlistCategory(categoryId, action);
         }
     }
 
-    async function activeOrBlockCategory(categoryId, action) {
-        try {
-            const response = await fetch(`/admin/category${action}/${categoryId}`, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ action, categoryId })
-            });
+    async function listOrUnlistCategory(categoryId, action) {
+    try {
+        const response = await fetch(`/admin/category${action}/${categoryId}`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ action, categoryId })
+        });
 
-            const data = await response.json();
+        const data = await response.json();
+        console.log('Response Data:', data);
 
-            const statusElement = document.getElementById(`status_${categoryId}`);
-            statusElement.innerHTML = data.status === "Active" ? "Active" : "Block";
+        const statusElement = document.getElementById(`is_listed${categoryId}`);
+        
+        // Toggle between "Listed" and "Unlisted" based on the current status
+        statusElement.innerHTML = data.is_listed === "Listed" ? "Listed" : "Unlisted";
 
-            Swal.fire({
-                title: 'Success',
-                text: `Category ${action}d successfully!`,
-                icon: 'success',
-            });
-        } catch (error) {
-            console.error('Error:', error);
-            Swal.fire({
-                title: 'Error',
-                text: `Error ${action}ing category!`,
-                icon: 'error',
-            });
-        }
+        Swal.fire({
+            title: 'Success',
+            text: `Category ${action}d successfully!`,
+            icon: 'success',
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            title: 'Error',
+            text: `Error ${action}ing category!`,
+            icon: 'error',
+        });
     }
+}
 </script>
 
    <!-- Back to Top -->

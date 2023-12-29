@@ -44,8 +44,9 @@ const productSchema = new mongoose.Schema({
         required:true
     },
     is_listed:{
-        type:Number,
-        default:1
+        type:String,
+        enum:["Listed","Unlisted"],
+        default:"Listed",
     }
 
 });

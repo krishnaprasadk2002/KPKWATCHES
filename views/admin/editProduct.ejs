@@ -99,7 +99,7 @@
 
     <div class="container mt-5">
         <h2 class="mb-4">Edit Product</h2>
-        <form id="productForm" action="/admin/editproduct/<%= product._id %>" method="POST" novalidate enctype="multipart/form-data">
+        <form id="productForm" action="/admin/editproduct" method="POST" novalidate enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="productName" class="form-label">Name</label>
                 <input type="text" class="form-control" style="background-color: white;" placeholder="ProductName" id="productName" name="name" value="<%= product.name %>" required>
@@ -152,7 +152,7 @@
                 <label for="currentProductImage" class="form-label">Image</label>
                 <% for (let i = 0; i < product.image.length; i++) { %>
                    <div class="col-3 mt-2"> <img src="/uploads/<%= product.image[i] %>" alt="Current Product Image" class="img-thumbnail" style="max-width: 250px; max-height: 250px;"></div>
-                    <button type="button" class="btn btn-danger mt-2">Delete</button>
+                   <button type="button" class="btn btn-danger mt-2" onclick="deleteImage('<%= product._id %>', '<%= product.image[i] %>')">Delete</button>
                 <% } %>
             </div>
             
@@ -169,6 +169,18 @@
         </form>
     </div>
 </div>
+
+<script>
+    const deletedImageIds = new Set();
+
+    function deleteImage(productId, imageName) {
+        // Add the image ID to the set
+        deletedImageIds.add(`${productId}_${imageName}`);
+
+        // Update the hidden field with the comma-separated list of deleted image IDs
+        document.getElementById('deletedImageIds').value = Array.from(deletedImageIds).join(',');
+    }
+</script>
 
 
 

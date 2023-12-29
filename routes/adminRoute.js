@@ -40,8 +40,8 @@ adminRoute.post('/blockuser/:id', adminController.blockUser);
 //All product
 adminRoute.get('/allproduct',adminController.loadAllproduct)
 //product Status
-adminRoute.post("/productactive/:id", productController.productActive);
-adminRoute.post("/productblock/:id", productController.productBlock);
+adminRoute.post("/productlist/:id", productController.productList);
+adminRoute.post("/productunlist/:id", productController.productUnlist);
 //Add product
 adminRoute.get('/addproduct',adminController.loadAddproducts)
 const storage = multer.diskStorage({
@@ -60,6 +60,7 @@ const upload = multer({ storage: storage });
 adminRoute.post("/addproduct", upload.array('image', 5),productController.insertProduct);
 //Loaad editProduct
 adminRoute.get("/editproduct", productController.loadEditProduct)
+adminRoute.post("/editproduct",productController.editProduct)
 
 
 
@@ -71,8 +72,8 @@ adminRoute.get("/addcategory",adminController.loadAddCategory)
 //insert Category
 adminRoute.post("/addcategory",adminController.insertCategory)
 //category status
-adminRoute.post("/categoryactive/:id", adminController.activeCategory);
-adminRoute.post("/categoryblock/:id", adminController.blockCategory);
+adminRoute.post("/categorylist/:id", adminController.listCategory);
+adminRoute.post("/categoryunlist/:id", adminController.unlistCategory);
 //edit category
 adminRoute.get("/editcategory",adminController.loadEditCategory)
 adminRoute.post('/editcategory', adminController.updateCategory);

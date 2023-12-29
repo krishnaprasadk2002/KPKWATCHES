@@ -136,29 +136,29 @@ const insertCategory = async (req, res) => {
     }
 };
 
-const activeCategory = async (req,res)=>{
+const listCategory = async (req, res) => {
     try {
-        const categoryId=req.params.id
-        const check =await category.findByIdAndUpdate({_id:categoryId},{status:"Active"})
-        const status=check.status;
-        res.json({status:status})
-
-    } catch (error) {
-        console.log(error.message)
-    }
-}
-
-const blockCategory = async (req,res)=>{
-    try {
-        const categoryId=req.params.id
-        const check=await category.findByIdAndUpdate({_id:categoryId},{status:"Block"},{new:true})
-        const status=check.status;
-        res.json({status:status})
-
+        const categoryId = req.params.id;
+        const check = await category.findByIdAndUpdate({ _id: categoryId }, { is_listed: "Listed" });
+        const is_listed = check.is_listed;
+        res.json({ is_listed: is_listed });
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ error: error.message });
     }
-}
+};
+
+const unlistCategory = async (req, res) => {
+    try {
+        const categoryId = req.params.id;
+        const check = await category.findByIdAndUpdate({ _id: categoryId }, { is_listed: "Unlisted" }, { new: true });
+        const is_listed = check.is_listed;
+        res.json({ is_listed: is_listed });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ error: error.message });
+    }
+};
 
 // Edit category load
 
@@ -223,8 +223,8 @@ module.exports = {
       loadCategory,
       loadAddCategory,
       insertCategory,
-      activeCategory,
-      blockCategory,
+      listCategory,
+      unlistCategory,
       loadEditCategory,
       updateCategory,
       adminLogout

@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
+const Products=require("../models/productModel")
+const category=require("../models/categoryModel")
 const userOtpVerification = require("../models/otpModel")
 const nodemailer = require("nodemailer");
 
@@ -221,6 +223,15 @@ const loadProduct = (req, res) => {
     console.log(error.message)
   }
 }
+
+// const listProduct=async(req,res)=>{
+//   try {
+//     const product=await Products.find({is_listed:true})
+//     const 
+//   } catch (error) {
+    
+//   }
+// }
 
 const userLogout = async (req, res) => {
   try {
