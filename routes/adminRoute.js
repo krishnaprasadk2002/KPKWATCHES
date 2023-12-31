@@ -5,6 +5,7 @@ const multer=require("multer")
 // const { join } = require('path'); // Import the join function from the path module
 const path =require("path")
 const productController=require("../controllers/productController")
+const Categories=require("../models/categoryModel")
 const session=require("express-session")
 const config=require("../config/config")
 
@@ -58,9 +59,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 adminRoute.post("/addproduct", upload.array('image', 5),productController.insertProduct);
 
+
+
+
 //Loaad editProduct
 adminRoute.get("/editproduct", productController.loadEditProduct)
 
+adminRoute.post('/editproduct/:id', upload.array('image', 5), productController.handleEditProduct);
 
 
 
