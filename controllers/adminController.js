@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const Products=require("../models/productModel")
 const category=require ("../models/categoryModel")
 const bcrypt = require("bcrypt");
+const Category = require("../models/categoryModel");
 
 const loadLogin = async (req, res) => {
     try {
@@ -55,27 +56,25 @@ const loadAlluser=async(req,res)=>{
     }
 }
 
-const activeUser = async (req, res) => {
+const listUnlistUser=async (req,res)=>{
     try {
-        const user_id = req.params.id;
-        const check = await User.findByIdAndUpdate({ _id: user_id }, { status: "Active" });
-        const status = check.status;
-        res.json({ status: status });
-    } catch (error) {
+        const id=req.query.id
+        const user = await User.findOne({_id:id})
+        if(user){
+            const newStatus=user.status === "Active" ? "Block" : "Active";
+            const updatedUser=await User.findByIdAndUpdate(id,{$set:{status:newStatus}},{new:true})
+            const alluser=await User.find();
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
+            res.redirect("/admin/alluser")
+        }else{
+            res.send("listing and unlisting")
+        }
+        }catch (error) {
         console.log(error.message);
     }
-};
-
-const blockUser = async (req, res) => {
-    try {
-        const user_id = req.params.id;
-        const check = await User.findByIdAndUpdate({ _id: user_id }, { status: "Block" });
-        const status = check.status;
-        res.json({ status: status });
-    } catch (error) {
-        console.log(error.message);
-    }
-};
+}
 
 
 const loadAllproduct=async(req,res)=>{
@@ -136,29 +135,31 @@ const insertCategory = async (req, res) => {
     }
 };
 
-const listCategory = async (req, res) => {
+const listUnlistCategory = async (req, res) => {
     try {
-        const categoryId = req.params.id;
-        const check = await category.findByIdAndUpdate({ _id: categoryId }, { is_listed: "Listed" });
-        const is_listed = check.is_listed;
-        res.json({ is_listed: is_listed });
+        const id = req.query.id;
+        const category = await Category.findOne({ _id: id });
+
+        if (category) {
+            const newStatus = category.is_listed === "Listed" ? "Unlisted" : "Listed";
+            await Category.findByIdAndUpdate(id, { $set: { is_listed: newStatus } });
+            const allCategory = await Category.find();
+
+            // Set caching headers
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
+
+            res.redirect('/admin/category'); 
+        } else {
+            res.send("Category not found");
+        }
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ error: error.message });
+        res.status(500).send("Internal Server Error");
     }
 };
 
-const unlistCategory = async (req, res) => {
-    try {
-        const categoryId = req.params.id;
-        const check = await category.findByIdAndUpdate({ _id: categoryId }, { is_listed: "Unlisted" }, { new: true });
-        const is_listed = check.is_listed;
-        res.json({ is_listed: is_listed });
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).json({ error: error.message });
-    }
-};
 
 // Edit category load
 
@@ -216,15 +217,13 @@ module.exports = {
       verifyLogin,
       loadDashboard,
       loadAlluser,
-      activeUser,
-      blockUser,
+      listUnlistUser,
       loadAllproduct,
       loadAddproducts,
       loadCategory,
       loadAddCategory,
       insertCategory,
-      listCategory,
-      unlistCategory,
+      listUnlistCategory,
       loadEditCategory,
       updateCategory,
       adminLogout
