@@ -41,6 +41,7 @@ adminRoute.get("/alluserlist",adminController.listUnlistUser)
 adminRoute.get('/allproduct',adminController.loadAllproduct)
 //product Status
 adminRoute.get("/productlist",productController.listunlistProduct)
+adminRoute.get("/addproduct",adminController.addproductCategory)
 
 //Add product
 adminRoute.get('/addproduct',adminController.loadAddproducts)
@@ -64,10 +65,7 @@ adminRoute.post("/addproduct", upload.array('image', 5),productController.insert
 
 //Loaad editProduct
 adminRoute.get("/editproduct", productController.loadEditProduct)
-
 adminRoute.post('/editproduct/:id', upload.array('image', 5), productController.handleEditProduct);
-
-
 
 
 

@@ -7,6 +7,7 @@ const User= require("../models/userModel")
 const Categories = require("../models/categoryModel")
 const sharp=require("sharp")
 const upload = multer({ dest: '/public/uploads/' });
+const fs=require("fs")
 
 const insertProduct = async (req, res) => {
     try {
@@ -78,10 +79,11 @@ const loadEditProduct = async (req, res) => {
 }
 
 //edit product 
+
 const handleEditProduct = async (req, res) => {
     try {
         const productId = req.params.id;
-        const { name, description, price, Category, quentity } = req.body;
+        const { name, description, price,offerprice, Category, quentity } = req.body;
         const images = req.files ? req.files.map(file => file.filename) : [];
 
         // Find the existing product by ID
@@ -96,7 +98,7 @@ const handleEditProduct = async (req, res) => {
         if (images.length > 0) {
             for (let i = 0; i < images.length; i++) {
                 const originalImagePath = path.join(__dirname, '../public/uploads', images[i]);
-                const resizedPath = path.join(__dirname, '../public/uploads', `resized_${images[i]}`); // Use a different filename for the resized image
+                const resizedPath = path.join(__dirname, '../public/uploads', `resized_${images[i]}`); 
 
                 // Resize image using sharp
                 await sharp(originalImagePath)
@@ -108,10 +110,19 @@ const handleEditProduct = async (req, res) => {
             }
         }
 
+        // Delete images if marked for deletion
+        const deletedImageIds = req.body.deletedImage ? req.body.deletedImage.split(',') : [];
+        deletedImageIds.forEach(async (deletedImageId) => {
+            // Delete the image file from the server
+            const deletedImagePath = path.join(__dirname, '../public/uploads', deletedImageId);
+            fs.unlinkSync(deletedImagePath);
+        });
+
         // Update product details
         existingProduct.name = name;
         existingProduct.description = description;
         existingProduct.price = price;
+        existingProduct.offerprice = offerprice;
         existingProduct.Category = Category;
         existingProduct.quentity = quentity;
         existingProduct.image = imageData.length > 0 ? imageData : existingProduct.image;
@@ -119,12 +130,15 @@ const handleEditProduct = async (req, res) => {
         // Save the updated product
         await existingProduct.save();
 
-        res.status(200).send('Product updated successfully');
+        res.redirect("/admin/allproduct")
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal Server Error');
     }
 };
+
+
+
 
 
 module.exports={insertProduct,listunlistProduct,loadEditProduct,handleEditProduct}

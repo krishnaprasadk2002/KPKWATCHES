@@ -4,6 +4,7 @@ const Products=require("../models/productModel")
 const category=require("../models/categoryModel")
 const userOtpVerification = require("../models/otpModel")
 const nodemailer = require("nodemailer");
+const Category = require("../models/categoryModel");
 
 
 
@@ -201,37 +202,35 @@ const verifyLogin = async (req, res) => {
   }
 };
 
+
+
 const loadHome = async (req, res) => {
   const username = req.session.user_id;
   try {
+    const productData=await Products.find({is_listed:"Listed"})
+      const categories=await Category.find({is_listed:"Listed"})
     if (req.session.user_id) {
-      res.render("home", { username });
+      res.render("home", { username,productData:productData,Category:categories });
     } else {
-      res.render("home")
+      res.render("home",{productData:productData,Category:categories})
     }
   } catch (error) {
     console.log(error.message);
   }
 }
 
-//  Product list
 
-const loadProduct = (req, res) => {
+//  Product page load
+const loadProduct = async (req, res) => {
   try {
-    res.render("allproduct")
+    const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }).populate('Category').exec();
+    const filteredProducts = productData.filter((product) => product.is_listed !== "Unlisted");
+    res.render("allproduct", { filteredProducts });
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
 }
 
-// const listProduct=async(req,res)=>{
-//   try {
-//     const product=await Products.find({is_listed:true})
-//     const 
-//   } catch (error) {
-    
-//   }
-// }
 
 const userLogout = async (req, res) => {
   try {

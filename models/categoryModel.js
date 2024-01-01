@@ -10,16 +10,11 @@ const productCategory=mongoose.Schema({
         type:String,
         required:true
     },
-    status:{
-        type:String,
-        enum:["active","blocked"],
-        default:"active"              
-    },
-    is_listed:{
-        type:String,
-        enum:["Listed","Unlisted"],
-        default:"Listed",
-    }
+    is_listed: {
+        type: String,
+        enum: ['Listed', 'Unlisted'],
+        default: 'Listed',
+      },
 
 })
 

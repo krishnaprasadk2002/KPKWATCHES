@@ -134,11 +134,15 @@
             
             <div class="mb-3">
                 <label for="productCategory" class="form-label">Category</label>
-                <input type="text" style="background-color: white;" class="form-control" id="productCategory" placeholder="Category" name="category" required>
+                <select class="form-select" style="background-color: white;" id="productCategory" name="category" required>
+                    <% categories.forEach(category => { %>
+                        <option value="<%= category._id %>"><%= category.name %></option>
+                    <% }); %>
+                </select>
                 <div class="invalid-feedback">
-                    Please enter the product category.
+                    Please select a product category.
                 </div>
-            </div>     
+            </div> 
 
 
             <div class="mb-3">

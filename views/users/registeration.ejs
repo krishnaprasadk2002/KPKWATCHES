@@ -71,17 +71,11 @@
                     <nav class="main-nav">
                         <ul class="menu sf-arrows">
                             <li class="megamenu-container active">
-                                <a href="index.html" class="sf-with-ul">Home</a>
+                                <a href="/" class="sf-with-ul">Home</a>
 
-                              
                             </li>
                             <li>
-                                <a href="category.html" class="sf-with-ul">Shop</a>
-
-                              
-                            </li>
-                            <li>
-                                <a href="product.html" class="sf-with-ul">Product</a>
+                                <a href="/product" class="sf-with-ul">Product</a>
 
                             </li>
                             <li>
@@ -89,11 +83,11 @@
 
                             </li>
                             <li>
-                                <a href="blog.html" class="sf-with-ul">Blog</a>
+                                <a href="#" class="sf-with-ul">Blog</a>
 
                             </li>
                             <li>
-                                <a href="elements-list.html" class="sf-with-ul">Contact</a>
+                                <a href="#" class="sf-with-ul">Contact</a>
                             </li>
                         </ul><!-- End .menu -->
                     </nav><!-- End .main-nav -->
@@ -300,11 +294,11 @@
                             <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
 
                             <ul class="widget-list">
-                                <li><a href="about.html">About Molla</a></li>
+                                <li><a href="#">About Molla</a></li>
                                 <li><a href="#">How to shop on Molla</a></li>
                                 <li><a href="#">FAQ</a></li>
-                                <li><a href="contact.html">Contact us</a></li>
-                                <li><a href="login.html">Log in</a></li>
+                                <li><a href="#">Contact us</a></li>
+                                <li><a href="#">Log in</a></li>
                             </ul><!-- End .widget-list -->
                         </div><!-- End .widget -->
                     </div><!-- End .col-sm-6 col-lg-3 -->
@@ -330,7 +324,7 @@
 
                             <ul class="widget-list">
                                 <li><a href="#">Sign In</a></li>
-                                <li><a href="cart.html">View Cart</a></li>
+                                <li><a href="#">View Cart</a></li>
                                 <li><a href="#">My Wishlist</a></li>
                                 <li><a href="#">Track My Order</a></li>
                                 <li><a href="#">Help</a></li>
@@ -369,13 +363,13 @@
         <nav class="mobile-nav">
             <ul class="mobile-menu">
                 <li class="active">
-                    <a href="index.html">Home</a>
+                    <a href="/">Home</a>
                 </li>
                 <li>
-                    <a href="category.html">Shop</a>
+                    <a href="#">Shop</a>
                 </li>
                 <li>
-                    <a href="product.html" class="sf-with-ul">Product</a>
+                    <a href="/" class="sf-with-ul">Product</a>
                 </li>
                 <li>
                     <a href="#">About</a>
@@ -545,14 +539,14 @@
                 return false;
             }
 
-            return true; // Form is valid
+            return true; 
         }
 
         function isValidEmail(email) {
-            // Simple email validation regex
+            
             var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            // Check if the email contains the domain "@gmail.com" or "@outlook.com"
+            
             if (!email.includes('@gmail.com') && !email.includes('@outlook.com')) {
                 showError('Please enter a valid Gmail or Outlook address.');
                 return false;
@@ -562,11 +556,10 @@
         }
 
         async function isEmailAlreadyEntered(email) {
-            // Use fetch to make an asynchronous request to your server-side endpoint
+            
             var response = await fetch(`/check-email?email=${email}`);
             var result = await response.json();
 
-            // Return true if the email is already in the database, otherwise false
             return result.exists;
         }
 

@@ -154,7 +154,7 @@
                     <div class="col-3 mt-2">
                         <img src="/uploads/<%= product.image[i] %>"  class="img-thumbnail" style="max-width: 250px; max-height: 250px;">
                        
-                        <button type="button" class="btn btn-danger mt-2" onclick="deleteImage('<%= product._id %>', '<%= product.image[i] %>')">Delete</button>
+                        <button type="button" class="btn btn-danger mt-2" ('<%= product._id %>', '<%= product.image[i] %>')">Delete</button>
                     </div>
                 <% } %>
                 
@@ -174,34 +174,7 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-    async function deleteImage(productId, imageName) {
-        try {
-            // Send a fetch request to the server to delete the image
-            const response = await fetch('/delete-image', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ productId, imageName }),
-            });
 
-            if (response.ok) {
-                // Handle success (e.g., remove the image container from the UI)
-                console.log('Image deleted successfully');
-                // Optionally, you can remove the image container from the UI
-                // const imageContainer = document.querySelector(`[data-image-name="${imageName}"]`);
-                // imageContainer.remove();
-            } else {
-                // Handle non-successful response
-                console.error(`Failed to delete image: ${response.statusText}`);
-            }
-        } catch (error) {
-            // Handle network or other errors
-            console.error('Error deleting image:', error);
-        }
-    }
-</script>
 
 
 

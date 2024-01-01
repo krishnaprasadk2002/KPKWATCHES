@@ -95,6 +95,17 @@ const loadAddproducts=async(req,res)=>{
     }
 }
 
+//Adding dropdownbutton in a add product category
+
+const addproductCategory=async(req,res)=>{
+    try {
+        const categories=await Category.find()
+        res.render("addproduct",{categories})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 
 //loadCategory
@@ -220,6 +231,7 @@ module.exports = {
       listUnlistUser,
       loadAllproduct,
       loadAddproducts,
+      addproductCategory,
       loadCategory,
       loadAddCategory,
       insertCategory,

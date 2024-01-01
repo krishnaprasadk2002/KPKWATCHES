@@ -25,11 +25,6 @@ const productSchema = new mongoose.Schema({
         ref: 'Categories', 
     },
     
-    status: {
-        type: String,
-        enum: ['Active', 'Block'],
-        default: 'Active',
-    },
     quentity:{
         type: Number,
         min:0,

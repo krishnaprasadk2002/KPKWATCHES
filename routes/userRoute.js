@@ -19,6 +19,11 @@ userRoute.use(bodyparser.urlencoded({extended:true}))
 
 const UserAuth=require("../middleware/userAuth")
 
+// userRoute.use((req, res, next) => {
+//   console.log(req.url, req.method);
+//   next();
+// })
+
 //sign up
 const userController=require("../controllers/userControllers")
 userRoute.get("/register",userController.loadRegister)
@@ -34,7 +39,8 @@ userRoute.post("/login",userController.verifyLogin)
 userRoute.get("/login",UserAuth.isLogin,userController.verifyLogin)
 
 //home
-userRoute.get("/",UserAuth.isLogout,userController.loadHome)
+userRoute.get("/",userController.loadHome)
+userRoute.get("/home",userController.loadHome)
 
 //product
 userRoute.get("/product",userController.loadProduct)
