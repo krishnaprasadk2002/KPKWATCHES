@@ -163,7 +163,7 @@ const singleProduct = async (req, res) => {
             _id: {
                 $ne: viewProduct._id
             }
-        }).limit(4)
+        });
 
         res.render("eachproduct", {
             products: viewProduct, 
