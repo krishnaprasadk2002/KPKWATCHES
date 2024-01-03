@@ -86,11 +86,11 @@
 
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
-                                <li class="megamenu-container active">
+                                <li class="megamenu-container ">
                                     <a href="/" >Home</a>
 
                                 </li>
-                                <li>
+                                <li class="active">
                                     <a href="/product" >Product</a>
 
                                 </li>
@@ -217,7 +217,7 @@
                                         <div id="product-zoom-gallery" class="product-image-gallery">
                                             <% for(let i=0;i<products.image.length;i++){ %>
                                             <a class="product-gallery-item active" href="#" data-image="/uploads/<%= products.image[i]%>" data-zoom-image="/uploads/<%= products.image[i]%>">
-                                                <img src="/uploads/<%= products.image[i]%>" alt="product side">
+                                                <img src="/uploads/<%= products.image[i]%>" alt="product side" >
                                                 <%}%>
                                             </a>
                                         </div><!-- End .product-image-gallery -->
@@ -230,7 +230,7 @@
 
                             <div class="col-md-6">
                                 <div class="product-details">
-                                    <h1 class="product-title"><%= products.name %></h1><!-- End .product-title -->
+                                    <h1 class="product-title"><b><%= products.name %></b></h1><!-- End .product-title -->
 
                                     <div class="ratings-container">
                                         <div class="ratings">
@@ -241,16 +241,17 @@
 
                                     <div class="product-price">
                                         <% if (products.offerprice <= products.price) { %>
-                                            <span class="original-price"><%= products.price %></span>
+                                            <span class="original-price">₹<%= products.price %></span>  
                                             <br>
-                                            <span class="offer-price"><%= products.offerprice %></span>
+                                            <span class="offer-price">₹<%= products.offerprice %></span>
                                         <% } else { %>
-                                            <%= products.price %>
+                                            ₹<%= products.price %>
                                         <% } %>
-                                    </div><!-- End .product-price -->
+                                    </div>
+                                    
 
                                     <div class="product-content">
-                                        <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. Morbi purus libero, faucibus adipiscing. Sed lectus. </p>
+                                        <p><%= products.description %></p>
                                     </div><!-- End .product-content -->
 
                                     
@@ -367,13 +368,13 @@
                             <div class="product product-7 text-center">
                                 <figure class="product-media">
                                     <a href="/eachproduct?id=<%= product._id %>">
-                                        <img src="/uploads/<%= product.image[0] %>" alt="Product image" class="product-image" style="width: 100%; height: 300px; object-fit: cover;">
+                                        <img src="/uploads/<%= product.image[0] %>" alt="Product image" class="product-image" style="width: 100%; height: 300px">
                                     </a>
                         
                                     <div class="product-action-vertical">
                                         <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>Add to wishlist</span></a>
                                         <a href="#" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                        <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                                       
                                     </div><!-- End .product-action-vertical -->
                         
                                     <div class="product-action">
@@ -385,10 +386,17 @@
                                     <div class="product-cat">
                                         <a href="#"><%= product.category.name %></a>
                                     </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="/eachproduct?id=<%= product._id %>"><%= product.name %></a></h3><!-- End .product-title -->
+                                    <h3 class="product-title"><a href="/eachproduct?id=<%= product._id %>"><b><%= product.name %></b></a></h3><!-- End .product-title -->
                                     <div class="product-price">
-                                        <%= product.offerprice ? '₹' + product.offerprice : '₹' + product.price %>
-                                    </div><!-- End .product-price -->
+                                        <% if (product.offerprice <= product.price) { %>
+                                            <span class="original-price">₹<%= product.price %></span>
+                                            <br>
+                                            <span class="offer-price">₹<%= product.offerprice %></span>
+                                        <% } else { %>
+                                            ₹<%= product.price %>
+                                        <% } %>
+                                    </div>
+                                    
                                     <div class="ratings-container">
                                         <div class="ratings">
                                             <!-- You may use the actual rating value from the product if available -->

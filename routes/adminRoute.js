@@ -66,7 +66,8 @@ adminRoute.post("/addproduct", upload.array('image', 5),productController.insert
 //Loaad editProduct
 adminRoute.get("/editproduct", productController.loadEditProduct)
 adminRoute.post('/editproduct/:id', upload.array('image', 5), productController.handleEditProduct);
-
+adminRoute.get('/deleteimage',productController.deleteimage)
+adminRoute.get("/deleteproduct",productController.productDelete)
 
 
 //load Category
@@ -79,6 +80,9 @@ adminRoute.get("/listcategory", adminController.listUnlistCategory);
 //edit category
 adminRoute.get("/editcategory",adminController.loadEditCategory)
 adminRoute.post('/editcategory', adminController.updateCategory);
+//deleteCategory
+adminRoute.get("/deletecategory",adminController.deleteCategory)
+
 
 
 

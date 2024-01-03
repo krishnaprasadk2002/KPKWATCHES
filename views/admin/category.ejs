@@ -97,8 +97,8 @@
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
                 <th scope="col">Status</th>
-                <th scope="col">Actions</th>
                 <th scope="col">Listing and Unlisting </th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -109,9 +109,7 @@
                    
                     <td id="is_listed<%=result._id%>" > <%= result.is_listed %></td>
 
-                    <td>
-                        <a class='btn btn-danger' href="/admin/editcategory?id=<%= result._id %>">Edit</a>
-                    </td>
+                    
                     <td>
                         <a href="#" class="btn btn-primary" onclick="toggleCategory('<%= result._id %>', '<%= result.is_listed %>')">
                             <% if(result.is_listed === "Listed") { %>
@@ -122,6 +120,11 @@
                         </a>
                     </td>
 
+
+                    <td>
+                        <a class="btn btn-primary" href="/admin/editcategory?id=<%= result._id %>">Edit</a>
+                        
+                        <a class="btn btn-primary" href="/admin/deletecategory?id=<%= result._id %>">Delete</a>
                     </td>
                 </tr>
             <% }); %>

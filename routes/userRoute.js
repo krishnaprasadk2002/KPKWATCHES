@@ -32,6 +32,7 @@ userRoute.post("/register",userController.insertUser)
 
 userRoute.get("/otp",userController.loadotp)
 userRoute.post('/otp',userController.verifyOtp);
+userRoute.post('/resendOtp',userController.resendOtp)
 
 
 //login

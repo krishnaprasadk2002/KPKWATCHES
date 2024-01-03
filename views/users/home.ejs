@@ -298,33 +298,33 @@
                        <div class="products-container">
                           <div class="row">
                              <% productData.forEach(product => { %>
-                                <div class="col-6 col-md-4">
-                                   <div class="product product-4" style="width: 300px; height: 500px;">
+                                <div class="col-6 col-md-3">
+                                   <div class="product product-4" style="width: 280px; height: 500px;">
                                       <figure class="product-media">
                                          <a href="/eachproduct/?id=<%= product._id%>">
-                                            <img src="/uploads/<%= product.image[0] %>" alt="Product image" class="product-image" style="width: 100%; height: 200px;">
+                                            <img src="/uploads/<%= product.image[0] %>" alt="Product image" class="product-image" style="width: 100%; height: 300px">
                                          </a>
                                          <div class="product-action">
                                             <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
                                          </div>
                                       </figure>
                                       <div class="product-body">
-                                         <h3 class="product-title"><a href="/eachproduct"><b><%=product.name%></a></b></h3>
+                                         <h3 class="product-title"><a href="/eachproduct/?id=<%= product._id%>"><b><%=product.name%></a></b></h3>
                                          <div class="product-description">
-                                            <a href="#"><%= product.description %></a>
+                                            <a href="/eachproduct/?id=<%= product._id%>"><%= product.description %></a>
                                          </div>
                                          <div class="product-cat">
                                             <p><%= product.category.name %></p>
                                          </div>
                                          <div class="product-price">
                                             <% if (product.offerprice <= product.price) { %>
-                                               <span class="original-price"><%= product.price %></span>
-                                               <br>
-                                               <span class="offer-price"><%= product.offerprice %></span>
+                                                <span class="original-price">₹<%= product.price %></span>
+                                                <br>
+                                                <span class="offer-price">₹<%= product.offerprice %></span>
                                             <% } else { %>
-                                               <%= product.price %>
+                                                ₹<%= product.price %>
                                             <% } %>
-                                         </div>
+                                        </div>
                                       </div>
                                    </div>
                                 </div>

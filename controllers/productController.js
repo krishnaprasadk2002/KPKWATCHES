@@ -97,56 +97,83 @@ const loadEditProduct = async (req, res) => {
 const handleEditProduct = async (req, res) => {
     try {
         const productId = req.params.id;
-        const { name, description, price,offerprice, category, quentity } = req.body;
+        const { name, description, price, offerprice, category, quentity } = req.body;
         const images = req.files ? req.files.map(file => file.filename) : [];
 
-        // Find the existing product by ID
         const existingProduct = await Products.findById(productId);
 
         if (!existingProduct) {
             return res.status(404).send('Product not found');
         }
 
-        // Check if a new image is uploaded
-        let imageData = [];
+     
         if (images.length > 0) {
-            for (let i = 0; i < images.length; i++) {
-                const originalImagePath = path.join(__dirname, '../public/uploads', images[i]);
-                const resizedPath = path.join(__dirname, '../public/uploads', `resized_${images[i]}`); 
-
+           
+            const remainingSlots = 5 - existingProduct.image.length;
+            const imagesToPush = images.slice(0, remainingSlots);
+            for (let i = 0; i < imagesToPush.length; i++) {
+                const originalImagePath = path.join(__dirname, '../public/uploads', imagesToPush[i]);
+                const resizedPath = path.join(__dirname, '../public/uploads', `resized_${imagesToPush[i]}`);
                 // Resize image using sharp
                 await sharp(originalImagePath)
                     .resize(800, 1200, { fit: 'fill' })
                     .toFile(resizedPath);
-
                 // Push the resized filename to the array
-                imageData.push(`resized_${images[i]}`);
+                existingProduct.image.push(`resized_${imagesToPush[i]}`);
             }
         }
-
-        // Delete images if marked for deletion
-        const deletedImageIds = req.body.deletedImage ? req.body.deletedImage.split(',') : [];
-        deletedImageIds.forEach(async (deletedImageId) => {
-            // Delete the image file from the server
-            const deletedImagePath = path.join(__dirname, '../public/uploads', deletedImageId);
-            fs.unlinkSync(deletedImagePath);
-        });
-
-        // Update product details
+        // Update other product details
         existingProduct.name = name;
         existingProduct.description = description;
         existingProduct.price = price;
         existingProduct.offerprice = offerprice;
         existingProduct.category = category;
         existingProduct.quentity = quentity;
-        existingProduct.image = imageData.length > 0 ? imageData : existingProduct.image;
-
         // Save the updated product
         await existingProduct.save();
-
-        res.redirect("/admin/allproduct")
+        res.redirect("/admin/allproduct");
     } catch (error) {
         console.error(error.message);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+
+//delete image
+
+const deleteimage = async (req, res) => {
+    try {
+        const index = req.query.index;
+
+        // Assuming you have a product object with an 'image' property
+        const product = await Products.findOne({ _id: req.query.id });
+
+        // Check if the product is found
+        if (!product) {
+            return res.status(404).send('Product not found');
+        }
+
+        // Check if the index is valid
+        if (index >= 0 && index < product.image.length) {
+            // Get the filename of the image at the specified index
+            const filenameToDelete = product.image[index];
+
+            // Construct the file path
+            const filePath = path.join(__dirname, '../public/uploads', filenameToDelete);
+
+            // Delete the file
+            fs.unlinkSync(filePath);
+
+            // Update the database to remove the image reference
+            await Products.findByIdAndUpdate(product._id, { $pull: { image: filenameToDelete } });
+
+            // Send a success response
+            res.redirect(`/admin/editproduct?id=${req.query.id}`);
+        } else {
+            res.status(400).send('Invalid index');
+        }
+    } catch (error) {
+        console.log(error.message);
         res.status(500).send('Internal Server Error');
     }
 };
@@ -176,5 +203,19 @@ const singleProduct = async (req, res) => {
     }
 };
 
+const productDelete = async (req, res) => {
+    try {
+        const productId = req.query.id; // Assuming req.query.id contains the correct product ID
+        const deleteProduct = await Products.findByIdAndDelete(productId);
+        res.redirect("/admin/allproduct");
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
-module.exports={insertProduct,listunlistProduct,loadEditProduct,handleEditProduct,singleProduct}
+
+
+
+
+module.exports={insertProduct,listunlistProduct,loadEditProduct,handleEditProduct,singleProduct,deleteimage,productDelete}

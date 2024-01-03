@@ -149,15 +149,55 @@
             </div>
            
             <div class="mb-3">
-                <label for="currentProductImage" class="form-label">Image</label>
-                <% for (let i = 0; i < product.image.length; i++) { %>
-                    <div class="col-3 mt-2">
-                        <img src="/uploads/<%= product.image[i] %>"  class="img-thumbnail" style="max-width: 250px; max-height: 250px;">
-                       
-                        <button type="button" class="btn btn-danger mt-2" ('<%= product._id %>', '<%= product.image[i] %>')">Delete</button>
+                <label for="currentProductImage" class="form-label">Current Images</label>
+                <div class="row">
+                    <% for (let i = 0; i < product.image.length; i++) { %>
+                        <div class="col-3 mt-2">
+                            <img src="/uploads/<%= product.image[i] %>" class="img-thumbnail" style="max-width: 250px; max-height: 250px;">
+                        </div>
+                        
+                    <% } %>
+                </div>
+            </div>
+    
+            <!-- Delete Images Section -->
+            <div class="mb-4">
+                <label class="form-label">Images</label>
+                <% product.image.forEach((image, index) => { %>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="d-flex align-items-center">
+                            <img src="/uploads/<%= image %>" alt="Product Image" style="width: 30px; height: 30px; margin-right: 10px;">
+                            <span><%= image %></span> <!-- Display image name or any other relevant information -->
+                        </div>
+                        <a href="#" onclick="confirmDelete('<%= index %>', '<%= product._id %>')" class="btn btn-danger btn-sm">Delete</a>
                     </div>
-                <% } %>
-                
+                <% }) %>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+            <script>
+                function confirmDelete(index, productId) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'You won\'t be able to revert this!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // If confirmed, trigger the deletion by redirecting to the delete URL
+                            window.location.href = `/admin/deleteimage?index=${index}&id=${productId}`;
+                        }
+                    });
+                }
+            </script>
+
+            
+    
             
             
             <div class="mb-3">

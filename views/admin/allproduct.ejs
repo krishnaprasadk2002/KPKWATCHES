@@ -111,6 +111,7 @@
                                 <th scope="col">Status</th>
                                 <th scope="col">Edit</th>
                                 <th scope="col">Product Listing</th>
+                                <th scope="col">Product Deleting</th>
 
                             </tr>
                         </thead>
@@ -140,6 +141,11 @@
                                             <% } %>
                                         </a>
                                     </td>
+
+                                    <td>
+                                        <a class="btn btn-primary" href="#" onclick="confirmDelete('<%= result._id %>')">Delete</a>
+                        
+                                    </td>
                                     
                                 </tr>
                             <% }); %>
@@ -165,6 +171,27 @@
                     }
                 </script>
 
+                <!-- deleting product -->
+
+                <script>
+                    function confirmDelete(productId) {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: 'You won\'t be able to revert this!',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // If confirmed, redirect to the delete URL
+                                window.location.href = `/admin/deleteproduct?id=${productId}`;
+                            }
+                        });
+                    }
+                </script>
+
 
 
  <!-- Back to Top -->
@@ -182,6 +209,7 @@
 <script src="/admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
 <script src="/admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <!-- Template Javascript -->
 <script src="js/main.js"></script>

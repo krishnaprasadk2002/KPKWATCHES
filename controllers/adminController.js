@@ -207,6 +207,18 @@ const updateCategory = async (req, res) => {
     }
 };
 
+//deleteing category
+
+const deleteCategory = async (req, res) => {
+    try {
+        const categoryId = req.query.id;
+        const deletingCategory = await Category.findByIdAndDelete(categoryId);
+        res.redirect('/admin/category'); 
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
 
 
@@ -238,5 +250,6 @@ module.exports = {
       listUnlistCategory,
       loadEditCategory,
       updateCategory,
+      deleteCategory,
       adminLogout
     };

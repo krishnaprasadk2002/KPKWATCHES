@@ -154,6 +154,18 @@ const verifyOtp = async (req, res) => {
   }
 };
 
+//Resend otp
+
+const resendOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    await userOtpVerification.findOne({ email });
+  }
+  catch{
+    console.log(error.message);
+  }
+}
+
 // login page
 
 const loginLoad = async (req, res) => {
@@ -246,6 +258,7 @@ module.exports = {
   insertUser,
   loadotp,
   verifyOtp,
+  resendOtp,
   loginLoad,
   verifyLogin,
   loadHome,

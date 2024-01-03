@@ -228,20 +228,23 @@
                         
                                         <div class="product-body">
                                             <h3 class="product-title">
-                                                <a href="/eachproduct"><%= productData.name %></a>
+                                                <a href="/eachproduct?id=<%= productData._id %>"><b><%= productData.name %></b></a>
                                             </h3><!-- End .product-title -->
                                             <div class="product-cat">
-                                                <a href="#"><%= productData.category.name %></a>
+                                                <a href="/eachproduct?id=<%= productData._id %>"><%= productData.category.name %></a>
                                             </div><!-- End .product-cat -->
+
                                             <div class="product-price">
                                                 <% if (productData.offerprice <= productData.price) { %>
-                                                    <span class="original-price"><%= productData.price %></span>
                                                     <br>
-                                                    <span class="offer-price"><%= productData.offerprice %></span>
+                                                    <span class="original-price">₹<%= productData.price %></span>
+                                                    <br><br>
+                                                    <span class="offer-price">₹<%= productData.offerprice %></span>
                                                 <% } else { %>
-                                                    <%= productData.price %>
+                                                    ₹<%= productData.price %>
                                                 <% } %>
-                                            </div><!-- End .product-price -->
+                                            </div>
+                                            
                                             <div class="Description">
                                                 <%= productData.description %>
                                             </div>
@@ -268,75 +271,24 @@
                                     </a>
                                 </h3><!-- End .widget-title -->
 
+                                <% filteredProducts.forEach((productData) => {%>
+
                                 <div class="collapse show" id="widget-1">
                                     <div class="widget-body">
                                         <div class="filter-items filter-items-count">
                                             <div class="filter-item">
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input" id="cat-1">
-                                                    <label class="custom-control-label" for="cat-1">Dresses</label>
+                                                    
+                                                    <label class="custom-control-label" for="cat-1"><%= productData.category.name %></label>
+                                                    
                                                 </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">3</span>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-2">
-                                                    <label class="custom-control-label" for="cat-2">T-shirts</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">0</span>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-3">
-                                                    <label class="custom-control-label" for="cat-3">Bags</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">4</span>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-4">
-                                                    <label class="custom-control-label" for="cat-4">Jackets</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">2</span>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-5">
-                                                    <label class="custom-control-label" for="cat-5">Shoes</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">2</span>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-6">
-                                                    <label class="custom-control-label" for="cat-6">Jumpers</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">1</span>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-7">
-                                                    <label class="custom-control-label" for="cat-7">Jeans</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">1</span>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-8">
-                                                    <label class="custom-control-label" for="cat-8">Sportwear</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">0</span>
+                                                <span class="item-count"></span>
                                             </div><!-- End .filter-item -->
                                         </div><!-- End .filter-items -->
                                     </div><!-- End .widget-body -->
                                 </div><!-- End .collapse -->
+                                <%})%>
                             </div><!-- End .widget -->
 
                             <div class="widget widget-collapsible">
