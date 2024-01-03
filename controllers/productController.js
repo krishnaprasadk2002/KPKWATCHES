@@ -8,21 +8,23 @@ const Categories = require("../models/categoryModel")
 const sharp=require("sharp")
 const upload = multer({ dest: '/public/uploads/' });
 const fs=require("fs")
+const Category = require("../models/categoryModel")
+
+
 
 const insertProduct = async (req, res) => {
     try {
-        
+        // Extract the uploaded images
         const images = req.files.map(file => file.filename);
 
-       
-        const { name, description, price, offerprice, Category, status, quentity, date } = req.body;
+        const { name, description, price, offerprice, category, status, quentity, date } = req.body;
 
         const newProduct = new Products({
             name,
             description,
             price,
             offerprice,
-            Category,
+            category,
             status,
             quentity,
             date,
@@ -32,12 +34,24 @@ const insertProduct = async (req, res) => {
        
         await newProduct.save();
 
+        const promises = images.map(async (image) => {
+            const originalImagePath = path.join(__dirname, '../public/uploads', image);
+            const resizedPath = path.join(__dirname, '../public/uploads', 'resized_' + image);
+
+            await sharp(originalImagePath)
+                .resize(800, 1200, { fit: 'fill' })
+                .toFile(resizedPath);
+        });
+
+        await Promise.all(promises);
+
         res.status(200).send("Product added successfully");
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 
 //listing and unlisting Product
@@ -83,7 +97,7 @@ const loadEditProduct = async (req, res) => {
 const handleEditProduct = async (req, res) => {
     try {
         const productId = req.params.id;
-        const { name, description, price,offerprice, Category, quentity } = req.body;
+        const { name, description, price,offerprice, category, quentity } = req.body;
         const images = req.files ? req.files.map(file => file.filename) : [];
 
         // Find the existing product by ID
@@ -123,7 +137,7 @@ const handleEditProduct = async (req, res) => {
         existingProduct.description = description;
         existingProduct.price = price;
         existingProduct.offerprice = offerprice;
-        existingProduct.Category = Category;
+        existingProduct.category = category;
         existingProduct.quentity = quentity;
         existingProduct.image = imageData.length > 0 ? imageData : existingProduct.image;
 
@@ -137,8 +151,30 @@ const handleEditProduct = async (req, res) => {
     }
 };
 
+//single product
+
+const singleProduct = async (req, res) => {
+    try {
+        const queryProduct = req.query.id;
+        const viewProduct = await Products.findById(queryProduct).populate('category').exec(); 
+
+        const relatedProduct = await Products.find({
+            category: viewProduct.category,
+            _id: {
+                $ne: viewProduct._id
+            }
+        }).limit(4)
+
+        res.render("eachproduct", {
+            products: viewProduct, 
+            viewProduct,
+            relatedProduct: relatedProduct 
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
 
-
-
-module.exports={insertProduct,listunlistProduct,loadEditProduct,handleEditProduct}
+module.exports={insertProduct,listunlistProduct,loadEditProduct,handleEditProduct,singleProduct}

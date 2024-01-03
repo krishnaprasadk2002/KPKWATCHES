@@ -20,9 +20,9 @@ const productSchema = new mongoose.Schema({
         min:0,
         required: true,
     },
-    Category: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Categories', 
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Categories'
     },
     
     quentity:{

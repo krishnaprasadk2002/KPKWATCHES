@@ -207,7 +207,7 @@ const verifyLogin = async (req, res) => {
 const loadHome = async (req, res) => {
   const username = req.session.user_id;
   try {
-    const productData=await Products.find({is_listed:"Listed"})
+    const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }).populate('category').exec();
       const categories=await Category.find({is_listed:"Listed"})
     if (req.session.user_id) {
       res.render("home", { username,productData:productData,Category:categories });
@@ -223,13 +223,13 @@ const loadHome = async (req, res) => {
 //  Product page load
 const loadProduct = async (req, res) => {
   try {
-    const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }).populate('Category').exec();
-    const filteredProducts = productData.filter((product) => product.is_listed !== "Unlisted");
+    const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }).populate('category').exec();
+    const filteredProducts = productData.filter((product) => product.category.is_listed !== "Unlisted");
     res.render("allproduct", { filteredProducts });
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
 
 const userLogout = async (req, res) => {

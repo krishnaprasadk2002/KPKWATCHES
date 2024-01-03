@@ -43,7 +43,9 @@ userRoute.get("/",userController.loadHome)
 userRoute.get("/home",userController.loadHome)
 
 //product
+const productController=require("../controllers/productController")
 userRoute.get("/product",userController.loadProduct)
+userRoute.get("/eachproduct",productController.singleProduct)
 
 //logout
 userRoute.get("/logout",userController.userLogout)
