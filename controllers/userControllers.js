@@ -120,7 +120,7 @@ const verifyOtp = async (req, res) => {
 
     if (!userVerification) {
       console.log("otp expired");
-      res.redirect('/register');
+      res.redirect('/register?failed=otp verifcation failed. Please try again.');
       return;
     }
 
@@ -144,7 +144,7 @@ const verifyOtp = async (req, res) => {
       await userOtpVerification.deleteOne({ email });
 
 
-      res.redirect('/register?success=Registration successful!');
+      res.redirect('/login?success=Registration successful!');
     } else {
       res.redirect('/register?failed=Registration failed. Please try again.');
     }
@@ -158,13 +158,26 @@ const verifyOtp = async (req, res) => {
 
 const resendOtp = async (req, res) => {
   try {
-    const { email } = req.body;
-    await userOtpVerification.findOne({ email });
+
+      const userEmail = req.query.email;
+      await userOtpVerification.deleteMany({email: userEmail});
+      console.log(userOtpVerification)
+      console.log("User Email:", userEmail);
+      if (userEmail) {
+          sendOTPverificationEmail({
+              email: userEmail
+          }, res);
+      } else {
+
+          console.log("User email not provided in the query");
+
+      }
+
+  } catch (error) {
+      console.log(error);
+
   }
-  catch{
-    console.log(error.message);
-  }
-}
+} 
 
 // login page
 
@@ -188,9 +201,9 @@ const verifyLogin = async (req, res) => {
 
       if (passwordMatch) {
         if (userData.status === 'Active' && userData.is_verified == 1) {
-          // User is active, allow login
+          
           if (req.session) {
-            req.session.user_id = userData.name;
+            req.session.user_id = userData;
             return res.redirect('/');
           } else {
             console.error('req.session is undefined');
@@ -217,14 +230,23 @@ const verifyLogin = async (req, res) => {
 
 
 const loadHome = async (req, res) => {
-  const username = req.session.user_id;
+  
   try {
+   
+    const username = req.session.user_id;
     const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }).populate('category').exec();
-      const categories=await Category.find({is_listed:"Listed"})
-    if (req.session.user_id) {
-      res.render("home", { username,productData:productData,Category:categories });
+      // const categories=await Category.find({is_listed:"Listed"})
+      const filteredProducts = productData.filter((product) => product.category.is_listed !== "Unlisted");
+    if (req.session.user_id ) {
+      const checkUser=await User.findOne({_id:req.session.user_id,status:"Block"})
+      if(checkUser){
+        req.session.user_id=null
+      }
+      res.render("home", { username,filteredProducts });
+      // res.render("home", { username,productData:productData,Category:categories });
     } else {
-      res.render("home",{productData:productData,Category:categories})
+      res.render("home",{filteredProducts})
+      // res.render("home", { productData:productData,Category:categories });
     }
   } catch (error) {
     console.log(error.message);
@@ -232,16 +254,39 @@ const loadHome = async (req, res) => {
 }
 
 
-//  Product page load
 const loadProduct = async (req, res) => {
   try {
-    const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }).populate('category').exec();
-    const filteredProducts = productData.filter((product) => product.category.is_listed !== "Unlisted");
-    res.render("allproduct", { filteredProducts });
+      const selectedCategory = req.query.category;
+      let productss;
+
+      if (selectedCategory) {
+          const category = await Category.findById(selectedCategory);
+
+          if (category && category.is_listed) {
+              const products = await Products.find({ category: selectedCategory, is_listed: "Listed" }).populate('category').exec();
+              res.render("allproduct", { filteredProducts: products, allcategory: [] }); // Pass products directly to the view
+              return; // End the function to prevent further execution
+          } else {
+              productss = [];
+          }
+      } else {
+          const listedCategoryIds = (await Category.find({ is_listed: "Listed" })).map(category => category._id);
+          productss = await Products.find({
+              'category': { $in: listedCategoryIds },
+              is_listed: "Listed"
+          }).populate('category');
+      }
+
+      const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }).populate('category').exec();
+      const filteredProducts = productData.filter((product) => product.category.is_listed !== "Unlisted");
+      const allcategory = await Category.find({ is_listed: "Listed" });
+
+      res.render("allproduct", { filteredProducts, allcategory });
   } catch (error) {
-    console.log(error.message);
+      console.log(error.message);
   }
 };
+
 
 
 const userLogout = async (req, res) => {

@@ -187,79 +187,173 @@
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
-                                <form action="/login" method="Post">
+                                <form action="/login" method="post" id="login-form">
                                     <div class="form-group">
                                         <label for="singin-email-2">Username or email address *</label>
                                         <input type="text" class="form-control" id="singin-email-2" name="email" required>
                                     </div><!-- End .form-group -->
-
+                        
                                     <div class="form-group">
                                         <label for="singin-password-2">Password *</label>
                                         <input type="password" class="form-control" id="singin-password-2" name="password" required>
                                     </div><!-- End .form-group -->
-
+                        
                                     <div class="form-footer">
-                                        <button type="submit" class="btn btn-outline-primary-2">
+                                        <button type="submit" class="btn btn-outline-primary-2" onclick="validateLoginForm(event)">
                                             <span>LOG IN</span>
                                             <i class="icon-long-arrow-right"></i>
                                         </button>
-
+                        
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input" id="signin-remember-2">
                                             <label class="custom-control-label" for="signin-remember-2">Remember Me</label>
                                         </div><!-- End .custom-checkbox -->
-
+                        
                                         <a href="#" class="forgot-link">Forgot Your Password?</a>
                                     </div><!-- End .form-footer -->
                                 </form>
                             </div><!-- .End .tab-pane -->
+                        
+                        
+                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+                        
+                        <script>
+                            function validateLoginForm(event) {
+                                var email = document.getElementById('singin-email-2').value.trim();
+                                var password = document.getElementById('singin-password-2').value;
+                        
+                                if (email === '') {
+                                    showError('Please enter your username or email address.');
+                                    event.preventDefault();
+                                    return false;
+                                }
+                        
+                                if (password === '') {
+                                    showError('Please enter your password.');
+                                    event.preventDefault();
+                                    return false;
+                                }
+                        
+                                // Add additional validation logic if needed
+                        
+                                return true;
+                            }
+                        
+                            function showError(message) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: message,
+                                });
+                            }
+                        </script>
+                        
 
 
                             <div class="tab-pane fade show active" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
                                 <form id="register-form" action="/register" method="post">
-
+                            
                                     <div class="form-group">
-                                        <label for="register-email-2">Name</label>
+                                        <label for="register-name">Name</label>
                                         <input type="text" class="form-control" id="register-name" name="name" required>
                                     </div>
-
+                            
                                     <div class="form-group">
                                         <label for="register-number">Mobile Number</label>
-                                        <input type="number" class="form-control" id="register-number" name="mobile" required>
+                                        <input type="tel" class="form-control" id="register-number" name="mobile" required>
                                     </div>
-                                    
+                            
                                     <div class="form-group">
                                         <label for="register-email-2">Your email address *</label>
                                         <input type="email" class="form-control" id="register-email-2" name="email" required>
-                                    </div><!-- End .form-group -->
-
+                                    </div>
+                            
                                     <div class="form-group">
                                         <label for="register-password-2">Password *</label>
                                         <input type="password" class="form-control" id="register-password-2" name="password" required>
-                                    </div><!-- End .form-group -->
-
+                                    </div>
+                            
                                     <div class="form-footer">
-                                        <button type="submit" class="btn btn-outline-primary-2">
+                                        <button type="submit" class="btn btn-outline-primary-2" onclick="validateForm(event)">
                                             <span>SIGN UP</span>
                                             <i class="icon-long-arrow-right"></i>
                                         </button>
-
+                            
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input" id="register-policy-2" required>
                                             <label class="custom-control-label" for="register-policy-2">I agree to the <a href="#">privacy policy</a> *</label>
                                         </div><!-- End .custom-checkbox -->
                                     </div><!-- End .form-footer -->
+                            
                                 </form>
-                              
-                                  <% if (locals.message) { %>
+                            
+                                <% if (locals.message) { %>
                                     <div class="success-message" style="color: green;">
-                                      <%= message %>
+                                        <%= message %>
                                     </div>
-                                  <% } else if (locals.errorMessage) { %>
+                                <% } else if (locals.errorMessage) { %>
                                     <div class="error-message" style="color: red;">
-                                      <%= errorMessage %>
+                                        <%= errorMessage %>
                                     </div>
-                                  <% } %>
+                                <% } %>
+                            </div>
+                            
+                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+                            
+                            <script>
+                                function validateForm(event) {
+                                    var name = document.getElementById('register-name').value.trim();
+                                    var mobile = document.getElementById('register-number').value.trim();
+                                    var email = document.getElementById('register-email-2').value.trim();
+                                    var password = document.getElementById('register-password-2').value;
+                                    var policyCheckbox = document.getElementById('register-policy-2');
+                            
+                                    if (name === '') {
+                                        showError('Please enter your name.');
+                                        event.preventDefault();
+                                        return false;
+                                    }
+                            
+                                    if (mobile === '' || isNaN(mobile) || mobile.length !== 10) {
+                                        showError('Please enter a valid 10-digit mobile number.');
+                                        event.preventDefault();
+                                        return false;
+                                    }
+                            
+                                    if (email === '' || !isValidEmail(email)) {
+                                        showError('Please enter a valid email address.');
+                                        event.preventDefault();
+                                        return false;
+                                    }
+                            
+                                    if (password.length < 8) {
+                                        showError('Password must be at least 8 characters long.');
+                                        event.preventDefault();
+                                        return false;
+                                    }
+                            
+                                    if (!policyCheckbox.checked) {
+                                        showError('Please agree to the privacy policy.');
+                                        event.preventDefault();
+                                        return false;
+                                    }
+                            
+                                    return true;
+                                }
+                            
+                                function isValidEmail(email) {
+                                    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                    return emailRegex.test(email);
+                                }
+                            
+                                function showError(message) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: message,
+                                    });
+                                }
+                            </script>                            
 
                                  
                             </div><!-- .End .tab-pane -->
@@ -490,7 +584,7 @@
 <!-- Include SweetAlert library -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-<script>
+<!-- <script>
     document.addEventListener('DOMContentLoaded', function () {
         var registerForm = document.getElementById('register-form');
 
@@ -572,4 +666,4 @@
         }
     });
 </script>
-
+ -->

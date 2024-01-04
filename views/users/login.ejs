@@ -187,72 +187,65 @@
                         <div class="tab-content">
 
 
-                            <div class="tab-pane fade show active" id="#signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
+                            <div class="tab-pane fade show active" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
                                 <form id="loginForm" action="/login" method="post" onsubmit="return validateForm()">
                                     <div class="form-group">
                                         <label for="singin-email-2">Username or email address *</label>
                                         <input type="text" class="form-control" id="singin-email-2" name="email" required>
                                     </div><!-- End .form-group -->
-
+                            
                                     <div class="form-group">
                                         <label for="singin-password-2">Password *</label>
                                         <input type="password" class="form-control" id="singin-password-2" name="password" required>
                                     </div><!-- End .form-group -->
-
+                            
                                     <div class="form-footer">
                                         <button type="submit" class="btn btn-outline-primary-2">
                                             <span>LOG IN</span>
                                             <i class="icon-long-arrow-right"></i>
                                         </button>
-
+                            
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input" id="signin-remember-2">
                                             <label class="custom-control-label" for="signin-remember-2">Remember Me</label>
                                         </div><!-- End .custom-checkbox -->
-
+                            
                                         <a href="#" class="forgot-link">Forgot Your Password?</a>
                                     </div><!-- End .form-footer -->
-
-                                    <script>
-                                        function validateForm() {
-                                            // Clear previous error messages
-                                            document.getElementById('emailError').innerHTML = '';
-                                            document.getElementById('passwordError').innerHTML = '';
-                                
-                                            // Get form inputs
-                                            var email = document.getElementById('singin-email').value.trim();
-                                            var password = document.getElementById('singin-password').value;
-                                
-                                            // Validate email
-                                            if (!email) {
-                                                displayError('emailError', 'Email is required.');
-                                                return false;
-                                            } else if (!isValidEmail(email)) {
-                                                displayError('emailError', 'Please enter a valid email address.');
-                                                return false;
-                                            }
-                                
-                                            // Validate password
-                                            if (!password) {
-                                                displayError('passwordError', 'Password is required.');
-                                                return false;
-                                            }
-                                
-                                            // The form is valid, continue with submission
-                                            return true;
-                                        }
-                                
-                                        function isValidEmail(email) {
-                                            // You can implement a more sophisticated email validation if needed
-                                            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                                            return emailRegex.test(email);
-                                        }
-                                
-                                        function displayError(elementId, message) {
-                                            // Display error messages next to the form fields
-                                            document.getElementById(elementId).innerHTML = message;
-                                        }
-                                    </script>
+                                </form>
+                            </div>
+                            
+                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+                            
+                            <script>
+                                function validateForm() {
+                                    var email = document.getElementById('singin-email-2').value.trim();
+                                    var password = document.getElementById('singin-password-2').value;
+                            
+                                    if (email === '') {
+                                        showError('Please enter your username or email address.');
+                                        return false;
+                                    }
+                            
+                                    if (password === '') {
+                                        showError('Please enter your password.');
+                                        return false;
+                                    }
+                            
+                                    // Add additional validation logic if needed
+                            
+                                    return true;
+                                }
+                            
+                                function showError(message) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: message,
+                                    });
+                                }
+                            </script>
+                            
     
                                 </form>
                                 <a href="/register">Don't have an account?</a>
@@ -459,6 +452,52 @@
         </div><!-- End .modal-content -->
     </div><!-- End .modal-dialog -->
 </div><!-- End .modal -->
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var loginForm = document.querySelector('form');
+
+        loginForm.addEventListener('submit', function (event) {
+            var emailInput = document.getElementById('singin-email');
+            var passwordInput = document.getElementById('singin-password');
+
+            // Trim only the email value
+            var email = emailInput.value.trim();
+
+            // Update the email input value with the trimmed value
+            emailInput.value = email;
+
+            // Basic validation - you can add more complex validation as needed
+            if (email === '' || passwordInput.value === '') {
+                showError('Please enter both email and password.');
+                event.preventDefault(); // Prevent form submission
+            }
+
+            // You can add more validation rules if needed
+
+            // For now, let's just display a success message
+            showSuccess('Login successful!');
+        });
+
+        function showError(message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: message,
+            });
+        }
+
+        function showSuccess(message) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: message,
+            });
+        }
+    });
+</script>
 
 <!-- Plugins JS File -->
 <script src="user/assets/js/jquery.min.js"></script>

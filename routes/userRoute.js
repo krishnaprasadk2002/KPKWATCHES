@@ -26,13 +26,14 @@ const UserAuth=require("../middleware/userAuth")
 
 //sign up
 const userController=require("../controllers/userControllers")
-userRoute.get("/register",userController.loadRegister)
+userRoute.get("/register",UserAuth.isLogout,userController.loadRegister)
 userRoute.post("/register",userController.insertUser)
 
 
-userRoute.get("/otp",userController.loadotp)
+userRoute.get("/otp",UserAuth.isLogout,userController.loadotp)
 userRoute.post('/otp',userController.verifyOtp);
-userRoute.post('/resendOtp',userController.resendOtp)
+userRoute.get('/resendOtp',userController.resendOtp)
+
 
 
 //login

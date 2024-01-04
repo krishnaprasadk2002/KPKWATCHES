@@ -8,11 +8,14 @@ const productController=require("../controllers/productController")
 const Categories=require("../models/categoryModel")
 const session=require("express-session")
 const config=require("../config/config")
+const flash = require('express-flash');
+adminRoute.use(flash());
 
 adminRoute.use(session({secret: config.sessionSecret,
     resave: false, 
     saveUninitialized: true  
   }));
+
 
   const bodyparser=require("body-parser")
   adminRoute.use(bodyparser.json())
@@ -24,24 +27,24 @@ adminRoute.set('views','./views/admin')
 const adminController=require("../controllers/adminController")
 const adminAuth=require("../middleware/adminAuth")
 
-adminRoute.get("/",adminController.loadLogin)
-adminRoute.post("/",adminController.verifyLogin)
+adminRoute.get("/",adminAuth.isLogin,adminController.loadLogin)
+adminRoute.post("/login",adminAuth.isLogin,adminController.verifyLogin)
 
 //dashboard
-adminRoute.post("/dashboard",adminController.loadDashboard);
-adminRoute.get("/dashboard",adminController.loadDashboard);
+adminRoute.post("/dashboard",adminAuth.verify,adminController.loadDashboard);
+adminRoute.get("/dashboard",adminAuth.verify,adminController.loadDashboard);
 
 // All user
-adminRoute.get("/alluser",adminController.loadAlluser)
+adminRoute.get("/alluser",adminAuth.verify,adminController.loadAlluser)
 
 //Admin status
-adminRoute.get("/alluserlist",adminController.listUnlistUser)
+adminRoute.get("/alluserlist",adminAuth.verify,adminController.listUnlistUser)
 
 //All product
-adminRoute.get('/allproduct',adminController.loadAllproduct)
+adminRoute.get('/allproduct',adminAuth.verify,adminController.loadAllproduct)
 //product Status
-adminRoute.get("/productlist",productController.listunlistProduct)
-adminRoute.get("/addproduct",adminController.addproductCategory)
+adminRoute.get("/productlist",adminAuth.verify,productController.listunlistProduct)
+adminRoute.get("/addproduct",adminAuth.verify,adminController.addproductCategory)
 
 //Add product
 adminRoute.get('/addproduct',adminController.loadAddproducts)
@@ -64,24 +67,24 @@ adminRoute.post("/addproduct", upload.array('image', 5),productController.insert
 
 
 //Loaad editProduct
-adminRoute.get("/editproduct", productController.loadEditProduct)
+adminRoute.get("/editproduct",adminAuth.verify, productController.loadEditProduct)
 adminRoute.post('/editproduct/:id', upload.array('image', 5), productController.handleEditProduct);
-adminRoute.get('/deleteimage',productController.deleteimage)
-adminRoute.get("/deleteproduct",productController.productDelete)
+adminRoute.get('/deleteimage',adminAuth.verify,productController.deleteimage)
+adminRoute.get("/deleteproduct",adminAuth.verify,productController.productDelete)
 
 
 //load Category
-adminRoute.get("/category",adminController.loadCategory)
-adminRoute.get("/addcategory",adminController.loadAddCategory)
+adminRoute.get("/category",adminAuth.verify,adminController.loadCategory)
+adminRoute.get("/addcategory",adminAuth.verify,adminController.loadAddCategory)
 //insert Category
-adminRoute.post("/addcategory",adminController.insertCategory)
+adminRoute.post("/addcategory",adminAuth.verify,adminController.insertCategory)
 //category status
-adminRoute.get("/listcategory", adminController.listUnlistCategory);
+adminRoute.get("/listcategory",adminAuth.verify, adminController.listUnlistCategory);
 //edit category
-adminRoute.get("/editcategory",adminController.loadEditCategory)
-adminRoute.post('/editcategory', adminController.updateCategory);
+adminRoute.get("/editcategory",adminAuth.verify,adminController.loadEditCategory)
+adminRoute.post('/editcategory',adminAuth.verify, adminController.updateCategory);
 //deleteCategory
-adminRoute.get("/deletecategory",adminController.deleteCategory)
+adminRoute.get("/deletecategory",adminAuth.verify,adminController.deleteCategory)
 
 
 

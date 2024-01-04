@@ -163,6 +163,7 @@ const deleteimage = async (req, res) => {
 
             // Delete the file
             fs.unlinkSync(filePath);
+             // fs.promises.unlink(filePath)
 
             // Update the database to remove the image reference
             await Products.findByIdAndUpdate(product._id, { $pull: { image: filenameToDelete } });

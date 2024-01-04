@@ -124,7 +124,7 @@
                     <td>
                         <a class="btn btn-primary" href="/admin/editcategory?id=<%= result._id %>">Edit</a>
                         
-                        <a class="btn btn-primary" href="/admin/deletecategory?id=<%= result._id %>">Delete</a>
+                        <a class="btn btn-primary" href="#" onclick="confirmDelete('<%= result._id %>')">Delete</a>
                     </td>
                 </tr>
             <% }); %>
@@ -145,6 +145,28 @@
             if (result.isConfirmed) {
                 // Correct the function name here
                 window.location.href = `/admin/listcategory?id=${categoryId}`;
+            }
+        });
+    }
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmDelete(categoryId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If confirmed, trigger the deletion by redirecting to the delete URL
+                window.location.href = `/admin/deletecategory?id=${categoryId}`;
             }
         });
     }

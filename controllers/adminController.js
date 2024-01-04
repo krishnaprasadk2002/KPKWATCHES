@@ -12,33 +12,26 @@ const loadLogin = async (req, res) => {
     }
 };
 
-const verifyLogin = async (req, res) => {
+const verifyLogin = (req, res) => {
     try {
-        const email = req.body.email;
-        const password = req.body.password;
+        const email = process.env.adminEmail;
+        const password = process.env.adminPassword;
+        const name = process.env.adminName;
 
-        const userData = await User.findOne({ email: email });
-        if (userData) {
-            const passwordMatch = await bcrypt.compare(password, userData.password);
-            if (passwordMatch) {
-                if (userData.is_admin === 0) {
-                    res.render('login', { message: "email and password incorrect" });
-                } else {
-                    req.session.user_id = userData.name;
-                    
-                    res.render("")
-                }
-            } else {
-                res.render('login', { message: "Email and password incorrect" });
-            }
+        if (email == req.body.email && password == req.body.password) {
+            req.session.admin = name;
+            res.redirect("/admin/dashboard");
         } else {
-            res.render('login', { message: "Email and password incorrect" });
+            const errormsg = "Admin not found";
+            req.flash("err", errormsg);
+            res.redirect("/admin");
+          }
+        } catch (err) {
+          console.log(err);
         }
-    } catch (error) {
-        console.log(error.message);
-    }
-};
+      };
 
+ 
 const loadDashboard = async (req, res) => {
    try {
     res.render("dashboard")
@@ -139,7 +132,7 @@ const insertCategory = async (req, res) => {
             description,
         });
         await newCategory.save();
-        res.status(200).send("Category added successfully");
+        res.redirect("/admin/category")
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Internal Server Error");
@@ -225,7 +218,8 @@ const deleteCategory = async (req, res) => {
 
 const adminLogout=async(req,res)=>{
     try {
-        res.session.destroy()
+        req.session.destroy()
+        res.redirect('/admin')
     } catch (error) {
         console.log(error.message);
     }

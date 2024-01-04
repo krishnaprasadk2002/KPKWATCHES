@@ -151,7 +151,7 @@
                             <div class="ml-5"> <!-- Adjusted margin -->
                                 <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <%= username %>
+                                        <%= username.name %>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <a class="dropdown-item" href="/logout">Logout</a>
@@ -184,14 +184,14 @@
         <main class="main">
             <div class="intro-slider-container mb-3 mb-lg-5">
                 <div class="intro-slider owl-carousel owl-theme owl-nav-inside owl-light" data-toggle="owl" data-owl-options='{"dots": true, "nav": false}'>
-                    <div class="intro-slide" style="background-image: url(../user/assets/images/demos/demo-18/slider/slide-1.jpg);">
+                    <div class="intro-slide" style="background-image: url( ../user/assets/images/banners/countdown-begins-antique-timer-sand-flowing-endlessly-generated-by-ai.jpg)">
                         <div class="container">
                             <div class="intro-content text-center">
                                 <h3 class="intro-subtitle cross-txt text-primary">SEASONAL PICKS</h3><!-- End .h3 intro-subtitle -->
                                 <h1 class="intro-title text-white">Summer Sale</h1><!-- End .intro-title -->
                                 <div class="intro-text text-white">up to 70% off</div><!-- End .intro-text -->
                                 <div class="intro-action cross-txt">
-                                    <a href="category.html" class="btn btn-outline-white">
+                                    <a href="#" class="btn btn-outline-white">
                                         <span>Discover More</span>
                                     </a>
                                 </div>
@@ -223,11 +223,13 @@
                     <div class="col-lg-6">
                         <div class="banner banner-hover">
                             <a href="#">
-                                <img src="../user/assets/images/demos/demo-18/banners/banner-1.jpg" alt="Banner">
-                            </a>
+                                <img src=" ../user/assets/images/banners/BannerWatches.jpg  " alt="Banner"></a>
+                                <br> 
+                               <a href="#"> <img src="../user/assets/images/banners/watche2.jpg" alt="Banner"></a>
+                            
 
                             <div class="banner-content">
-                                <h3 class="banner-title text-white"><a href="#">Sweatshirts & Hoodies</a></h3><!-- End .banner-title -->
+                                <h3 class="banner-title text-white"><a href="#">Omega Speedmaster Silver Snoopy Award 50th Anniversary</a></h3><!-- End .banner-title -->
                                 <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
                             </div><!-- End .banner-content -->
                         </div><!-- End .banner -->
@@ -236,11 +238,11 @@
                     <div class="col-sm-6 col-lg-3">
                         <div class="banner banner-hover">
                             <a href="#">
-                                <img src="../user/assets/images/demos/demo-18/banners/banner-2.jpg" alt="Banner">
+                                <img src="../user/assets/images/Hublot.jpg" alt="Banner" style="height: 540px;">
                             </a>
 
                             <div class="banner-content">
-                                <h3 class="banner-title text-white"><a href="#">Men’s Jacket</a></h3><!-- End .banner-title -->
+                                <h3 class="banner-title text-white"><a href="#">MP-15 TAKASHI MURAKAMI TOURBILLON SAPPHIRE</a></h3><!-- End .banner-title -->
                                 <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
                             </div><!-- End .banner-content -->
                         </div><!-- End .banner -->
@@ -249,22 +251,22 @@
                     <div class="col-sm-6 col-lg-3">
                         <div class="banner banner-hover">
                             <a href="#">
-                                <img src="../user/assets/images/demos/demo-18/banners/banner-3.jpg" alt="Banner">
+                                <img src="../user/assets/images/banners/watches 3.jpg" alt="Banner" style="height: 260px;">
                             </a>
 
                             <div class="banner-content">
-                                <h3 class="banner-title text-white"><a href="#">Women’s jackets</a></h3><!-- End .banner-title -->
+                                <h3 class="banner-title text-white"><a href="#">Premium Collections</a></h3><!-- End .banner-title -->
                                 <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
                             </div><!-- End .banner-content -->
                         </div><!-- End .banner -->
 
                         <div class="banner banner-hover">
                             <a href="#">
-                                <img src="../user/assets/images/demos/demo-18/banners/banner-4.jpg" alt="Banner">
+                                <img src="../user/assets/images/banners/04-Internal-Banner1050X466-1.jpg" alt="Banner" style="height: 260px;">
                             </a>
 
                             <div class="banner-content">
-                                <h3 class="banner-title text-white"><a href="#">Accessories</a></h3><!-- End .banner-title -->
+                                <h3 class="banner-title text-white"><a href="#">Parmigiani Fleurier Toric Tourbillon Slate Edition</a></h3><!-- End .banner-title -->
                                 <a href="#" class="banner-link">Shop Now <i class="icon-long-arrow-right"></i></a>
                             </div><!-- End .banner-content -->
                         </div><!-- End .banner -->
@@ -292,53 +294,50 @@
                 </style>
                 
                
-               
-                    <div class="row">
-                       <h2 class="title mb-4">Recent Arrivals</h2>
-                       <div class="products-container">
-                          <div class="row">
-                             <% productData.forEach(product => { %>
-                                <div class="col-6 col-md-3">
-                                   <div class="product product-4" style="width: 280px; height: 500px;">
-                                      <figure class="product-media">
-                                         <a href="/eachproduct/?id=<%= product._id%>">
-                                            <img src="/uploads/<%= product.image[0] %>" alt="Product image" class="product-image" style="width: 100%; height: 300px">
-                                         </a>
-                                         <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                         </div>
-                                      </figure>
-                                      <div class="product-body">
-                                         <h3 class="product-title"><a href="/eachproduct/?id=<%= product._id%>"><b><%=product.name%></a></b></h3>
-                                         <div class="product-description">
-                                            <a href="/eachproduct/?id=<%= product._id%>"><%= product.description %></a>
-                                         </div>
-                                         <div class="product-cat">
-                                            <p><%= product.category.name %></p>
-                                         </div>
-                                         <div class="product-price">
-                                            <% if (product.offerprice <= product.price) { %>
-                                                <span class="original-price">₹<%= product.price %></span>
-                                                <br>
-                                                <span class="offer-price">₹<%= product.offerprice %></span>
-                                            <% } else { %>
-                                                ₹<%= product.price %>
-                                            <% } %>
+                <div class="row">
+                    <div class="text-center">
+                        <h2 class="title mb-4">Recent Arrivals</h2>
+                    </div>
+                </div>
+                    <div class="products-container">
+                                <div class="row">
+                                    <% filteredProducts.forEach(product => { %>
+                                        <div class="col-6 col-md-3 mb-4">
+                                            <div class="product product-4" style="width: 280px; height: 500px;">
+                                                <figure class="product-media">
+                                                    <a href="/eachproduct/?id=<%= product._id%>">
+                                                        <img src="/uploads/<%= product.image[0] %>" alt="Product image" class="product-image" style="width: 100%; height: 300px">
+                                                    </a>
+                                                    <div class="product-action">
+                                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                                    </div>
+                                                </figure>
+                                                <div class="product-body">
+                                                    <h3 class="product-title"><a href="/eachproduct/?id=<%= product._id%>"><b><%=product.name%></a></b></h3>
+                                                    <div class="product-cat">
+                                                        <p><%= product.category.name %></p>
+                                                    </div>
+                                                    <div class="product-price">
+                                                        <% if (product.offerprice <= product.price) { %>
+                                                            <span class="original-price">₹<%= product.price %></span>
+                                                            <br>
+                                                            <span class="offer-price">₹<%= product.offerprice %></span>
+                                                        <% } else { %>
+                                                            ₹<%= product.price %>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                      </div>
-                                   </div>
+                                    <% }) %>
                                 </div>
-                             <% }) %>
-                          </div>
-                       </div>
-                    </div>
-              
-                    <div class="more-container text-center mt-0 mb-0">
-                       <a href="category.html" class="btn btn-outline-primary-2 btn-more">
-                          <span>View more Products</span>
-                       </a>
-                    </div>
-                 </div>
+                                
+                
+                <div class="more-container text-center mt-0 mb-0">
+                    <a href="category.html" class="btn btn-outline-primary-2 btn-more">
+                        <span>View more Products</span>
+                    </a>
+                </div>
                     
 
                 <hr class="mt-0 mb-4">

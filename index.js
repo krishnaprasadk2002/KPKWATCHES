@@ -4,6 +4,17 @@ mongoose.connect("mongodb://127.0.0.1:27017/Ecommerce-Project")
 const express=require("express")
 const app=express()
 
+require('dotenv').config();
+const flash=require("express-flash")
+const session=require("express-session")
+const config = require('./config/config');
+app.use(session({secret: config.sessionSecret,
+    resave: false, 
+    saveUninitialized: true  
+  }));
+  
+  app.use(flash())
+
 const nocache=require("nocache")
 app.use(nocache())
 
