@@ -40,14 +40,18 @@ adminRoute.get("/alluser",adminAuth.verify,adminController.loadAlluser)
 //Admin status
 adminRoute.get("/alluserlist",adminAuth.verify,adminController.listUnlistUser)
 
+
+
+//===================================================================product controller=========================================================
+
 //All product
-adminRoute.get('/allproduct',adminAuth.verify,adminController.loadAllproduct)
+adminRoute.get('/allproduct',adminAuth.verify,productController.loadAllproduct)
 //product Status
 adminRoute.get("/productlist",adminAuth.verify,productController.listunlistProduct)
-adminRoute.get("/addproduct",adminAuth.verify,adminController.addproductCategory)
+adminRoute.get("/addproduct",adminAuth.verify,productController.addproductCategory)
 
 //Add product
-adminRoute.get('/addproduct',adminController.loadAddproducts)
+adminRoute.get('/addproduct',productController.loadAddproducts)
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname, '../public/uploads'));
@@ -63,28 +67,27 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 adminRoute.post("/addproduct", upload.array('image', 5),productController.insertProduct);
 
-
-
-
 //Loaad editProduct
 adminRoute.get("/editproduct",adminAuth.verify, productController.loadEditProduct)
 adminRoute.post('/editproduct/:id', upload.array('image', 5), productController.handleEditProduct);
 adminRoute.get('/deleteimage',adminAuth.verify,productController.deleteimage)
 adminRoute.get("/deleteproduct",adminAuth.verify,productController.productDelete)
 
+//===================================================================================category Controller=============================================================
+const categoryController=require("../controllers/categoryController")
 
 //load Category
-adminRoute.get("/category",adminAuth.verify,adminController.loadCategory)
-adminRoute.get("/addcategory",adminAuth.verify,adminController.loadAddCategory)
+adminRoute.get("/category",adminAuth.verify,categoryController.loadCategory)
+adminRoute.get("/addcategory",adminAuth.verify,categoryController.loadAddCategory)
 //insert Category
-adminRoute.post("/addcategory",adminAuth.verify,adminController.insertCategory)
+adminRoute.post("/addcategory",adminAuth.verify,categoryController.insertCategory)
 //category status
-adminRoute.get("/listcategory",adminAuth.verify, adminController.listUnlistCategory);
+adminRoute.get("/listcategory",adminAuth.verify, categoryController.listUnlistCategory);
 //edit category
-adminRoute.get("/editcategory",adminAuth.verify,adminController.loadEditCategory)
-adminRoute.post('/editcategory',adminAuth.verify, adminController.updateCategory);
+adminRoute.get("/editcategory",adminAuth.verify,categoryController.loadEditCategory)
+adminRoute.post('/editcategory',adminAuth.verify, categoryController.updateCategory);
 //deleteCategory
-adminRoute.get("/deletecategory",adminAuth.verify,adminController.deleteCategory)
+adminRoute.get("/deletecategory",adminAuth.verify,categoryController.deleteCategory)
 
 
 

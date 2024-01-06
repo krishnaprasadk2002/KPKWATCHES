@@ -42,7 +42,7 @@ userRoute.get("/login",UserAuth.isLogin,userController.verifyLogin)
 
 //home
 userRoute.get("/",userController.loadHome)
-userRoute.get("/home",userController.loadHome)
+userRoute.get("/home",UserAuth.isLogin,userController.loadHome)
 
 //product
 const productController=require("../controllers/productController")

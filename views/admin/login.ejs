@@ -53,7 +53,8 @@
                             </a>
                            
                         </div>
-                        <form action="/admin/login" method="post">
+                        <form action="/admin/login" method="post" onsubmit="return validateForm()">
+
                         <div class="form-floating mb-3">
                             <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com">
                             <label for="floatingInput">Email address</label>
@@ -81,6 +82,29 @@
         </div>
         <!-- Sign In End -->
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        async function validateForm() {
+            const email = document.getElementById('floatingInput').trim().value;
+            const password = document.getElementById('floatingPassword').value;
+    
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Email',
+                    text: 'Please enter a valid email address.',
+                });
+                return false;
+            }
+    
+    
+            return true; 
+        }
+    </script>
+    
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

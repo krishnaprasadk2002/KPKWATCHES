@@ -229,24 +229,47 @@ const verifyLogin = async (req, res) => {
 
 
 
-const loadHome = async (req, res) => {
+// const loadHome = async (req, res) => {
   
-  try {
+//   try {
    
+//     const username = req.session.user_id;
+//     const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }).populate('category').exec();
+//       // const categories=await Category.find({is_listed:"Listed"})
+//       const filteredProducts = productData.filter((product) => product.category.is_listed !== "Unlisted");
+//     if (req.session.user_id ) {
+//       const checkUser=await User.findOne({_id:req.session.user_id,status:"Block"})
+//       if(checkUser){
+//         req.session.user_id=null
+//       }
+//       res.render("home", { username,filteredProducts });
+//       // res.render("home", { username,productData:productData,Category:categories });
+//     } else {
+//       res.render("home",{filteredProducts})
+//       // res.render("home", { productData:productData,Category:categories });
+//     }
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// }
+
+const loadHome = async (req, res) => {
+  try {
     const username = req.session.user_id;
     const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }).populate('category').exec();
-      // const categories=await Category.find({is_listed:"Listed"})
-      const filteredProducts = productData.filter((product) => product.category.is_listed !== "Unlisted");
-    if (req.session.user_id ) {
-      const checkUser=await User.findOne({_id:req.session.user_id,status:"Block"})
-      if(checkUser){
-        req.session.user_id=null
-      }
-      res.render("home", { username,filteredProducts });
-      // res.render("home", { username,productData:productData,Category:categories });
+    const filteredProducts = productData.filter((product) => product.category.is_listed !== "Unlisted");
+
+    // Always check for a blocked user
+    const checkUser = await User.findOne({ _id: req.session.user_id, status: "Block" });
+    if (checkUser) {
+      req.session.user_id = null;
+    }
+
+    // Render the home page
+    if (req.session.user_id) {
+      res.render("home", { username, filteredProducts });
     } else {
-      res.render("home",{filteredProducts})
-      // res.render("home", { productData:productData,Category:categories });
+      res.render("home", { filteredProducts });
     }
   } catch (error) {
     console.log(error.message);

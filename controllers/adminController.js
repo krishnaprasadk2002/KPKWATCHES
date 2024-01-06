@@ -69,153 +69,6 @@ const listUnlistUser=async (req,res)=>{
     }
 }
 
-
-const loadAllproduct=async(req,res)=>{
-    try {
-        const productData=await Products.find()
-        res.render('allproduct',{productData})
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-//load addproduct
-const loadAddproducts=async(req,res)=>{
-    try {
-        res.render("addproduct")
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-//Adding dropdownbutton in a add product category
-
-const addproductCategory=async(req,res)=>{
-    try {
-        const categories=await Category.find()
-        res.render("addproduct",{categories})
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-
-
-//loadCategory
-
-const loadCategory=async (req,res)=>{
-    try {
-        const categoryData=await category.find()
-        res.render("category",{categoryData})
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const loadAddCategory=async(req,res)=>{
-    try {
-        res.render("addcategory")
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const insertCategory = async (req, res) => {
-    try {
-        const { name, description } = req.body;
-        const existingCategory = await category.findOne({ name });
-        if (existingCategory) {
-            return res.status(400).send("Category with the same name already exists");
-        }
-        const newCategory = new category({
-            name,
-            description,
-        });
-        await newCategory.save();
-        res.redirect("/admin/category")
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).send("Internal Server Error");
-    }
-};
-
-const listUnlistCategory = async (req, res) => {
-    try {
-        const id = req.query.id;
-        const category = await Category.findOne({ _id: id });
-
-        if (category) {
-            const newStatus = category.is_listed === "Listed" ? "Unlisted" : "Listed";
-            await Category.findByIdAndUpdate(id, { $set: { is_listed: newStatus } });
-            const allCategory = await Category.find();
-
-            // Set caching headers
-            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-            res.setHeader('Pragma', 'no-cache');
-            res.setHeader('Expires', '0');
-
-            res.redirect('/admin/category'); 
-        } else {
-            res.send("Category not found");
-        }
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).send("Internal Server Error");
-    }
-};
-
-
-// Edit category load
-
-const loadEditCategory = async (req, res) => {
-    try {
-        const categoryId = req.query.id;
-        const Category = await category.findById(categoryId);  
-        res.render("editcategory", { Category });
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-//Updating category 
-
-const updateCategory = async (req, res) => {
-    try {
-        const categoryId = req.body.id;  
-        const { name, description } = req.body;
-
-        const existingCategory = await category.findOne({ name: { $regex: new RegExp("^" + name + "$", "i") }, _id: { $ne: categoryId } });
-        if (existingCategory) {
-            return res.send("Category name already exists")
-        }
-        // Update the category
-        const updatedCategory = await category.findByIdAndUpdate(categoryId, { name, description }, { new: true });
-        if (!updatedCategory) {
-            console.log("Category not found");
-        }
-        res.redirect("/admin/category");
-    } catch (error) {
-        console.log(error.message);
-        res.send("Category name already exists")
-    }
-};
-
-//deleteing category
-
-const deleteCategory = async (req, res) => {
-    try {
-        const categoryId = req.query.id;
-        const deletingCategory = await Category.findByIdAndDelete(categoryId);
-        res.redirect('/admin/category'); 
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).send('Internal Server Error');
-    }
-};
-
-
-
-
 const adminLogout=async(req,res)=>{
     try {
         req.session.destroy()
@@ -225,25 +78,11 @@ const adminLogout=async(req,res)=>{
     }
 }
 
-
-
-
-
 module.exports = { 
       loadLogin,
       verifyLogin,
       loadDashboard,
       loadAlluser,
       listUnlistUser,
-      loadAllproduct,
-      loadAddproducts,
-      addproductCategory,
-      loadCategory,
-      loadAddCategory,
-      insertCategory,
-      listUnlistCategory,
-      loadEditCategory,
-      updateCategory,
-      deleteCategory,
       adminLogout
     };

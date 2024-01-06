@@ -38,9 +38,9 @@ const insertProduct = async (req, res) => {
             const originalImagePath = path.join(__dirname, '../public/uploads', image);
             const resizedPath = path.join(__dirname, '../public/uploads', 'resized_' + image);
 
-            await sharp(originalImagePath)
-                .resize(800, 1200, { fit: 'fill' })
-                .toFile(resizedPath);
+            // await sharp(originalImagePath)
+            //     .resize(800, 1200, { fit: 'fill' })
+            //     .toFile(resizedPath);
         });
 
         await Promise.all(promises);
@@ -52,6 +52,37 @@ const insertProduct = async (req, res) => {
     }
 };
 
+
+const loadAllproduct=async(req,res)=>{
+    try {
+        const productData=await Products.find()
+        res.render('allproduct',{productData})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
+//load addproduct
+const loadAddproducts=async(req,res)=>{
+    try {
+        res.render("addproduct")
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//Adding dropdownbutton in a add product category
+
+const addproductCategory=async(req,res)=>{
+    try {
+        const categories=await Category.find()
+        res.render("addproduct",{categories})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 //listing and unlisting Product
@@ -191,7 +222,7 @@ const singleProduct = async (req, res) => {
             _id: {
                 $ne: viewProduct._id
             }
-        });
+        }).limit(4);
 
         res.render("eachproduct", {
             products: viewProduct, 
@@ -219,4 +250,15 @@ const productDelete = async (req, res) => {
 
 
 
-module.exports={insertProduct,listunlistProduct,loadEditProduct,handleEditProduct,singleProduct,deleteimage,productDelete}
+module.exports={
+    insertProduct,
+    loadAllproduct,
+    loadAddproducts,
+    addproductCategory,
+    listunlistProduct,
+    loadEditProduct,
+    handleEditProduct,
+    singleProduct,
+    deleteimage,
+    productDelete
+}
