@@ -3,6 +3,7 @@ const userRoute=express()
 
 userRoute.set('view engine','ejs')
 userRoute.set('views','./views/users')
+const flash=require("express-flash")
 
 const session=require("express-session")
 const config=require("../config/config")
@@ -10,7 +11,8 @@ userRoute.use(session({secret: config.sessionSecret,
     resave: false, 
     saveUninitialized: true  
   }));
-  const flash=require("express-flash")
+
+  
   userRoute.use(flash())
 
 const bodyparser=require("body-parser")
@@ -51,5 +53,21 @@ userRoute.get("/eachproduct",productController.singleProduct)
 
 //logout
 userRoute.get("/logout",userController.userLogout)
+
+// userRoute.get('*', (req, res)=>{
+//     res.status(404).render('404');
+//   });
+
+
+
+
+
+//=========================================================Cart handling========================================================
+const cartController=require("../controllers/cartController")
+
+userRoute.get("/cart",cartController.loadCart)
+userRoute.post("/addingcart/:productid/:quantity",cartController.addToCart)
+userRoute.get("/addtocart",cartController.addToCart)
+// userRoute.get("/checkout",cartController.loadCheckout)
 
 module.exports=userRoute

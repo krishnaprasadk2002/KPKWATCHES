@@ -26,8 +26,8 @@ const verifyLogin = (req, res) => {
             req.flash("err", errormsg);
             res.redirect("/admin");
           }
-        } catch (err) {
-          console.log(err);
+        } catch (error) {
+          console.log(error.message);
         }
       };
 
@@ -84,5 +84,6 @@ module.exports = {
       loadDashboard,
       loadAlluser,
       listUnlistUser,
-      adminLogout
+      adminLogout,
+      
     };

@@ -8,14 +8,15 @@ const productController=require("../controllers/productController")
 const Categories=require("../models/categoryModel")
 const session=require("express-session")
 const config=require("../config/config")
-const flash = require('express-flash');
-adminRoute.use(flash());
+// const flash = require('express-flash');
+const flash = require('connect-flash');
+
 
 adminRoute.use(session({secret: config.sessionSecret,
     resave: false, 
     saveUninitialized: true  
   }));
-
+  adminRoute.use(flash());
 
   const bodyparser=require("body-parser")
   adminRoute.use(bodyparser.json())
@@ -39,6 +40,8 @@ adminRoute.get("/alluser",adminAuth.verify,adminController.loadAlluser)
 
 //Admin status
 adminRoute.get("/alluserlist",adminAuth.verify,adminController.listUnlistUser)
+
+
 
 
 
@@ -94,6 +97,7 @@ adminRoute.get("/deletecategory",adminAuth.verify,categoryController.deleteCateg
 
 //Logout
 adminRoute.get("/logout",adminController.adminLogout)
+
 adminRoute.get("*",(req,res)=>{
     res.redirect('/admin')
   })

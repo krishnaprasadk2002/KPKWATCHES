@@ -175,8 +175,8 @@
                                 </div><!-- End .dropdown-cart-total -->
 
                                 <div class="dropdown-cart-action">
-                                    <a href="cart.html" class="btn btn-primary">View Cart</a>
-                                    <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                    <a href="/cart" class="btn btn-primary">View Cart</a>
+                                    <a href="/checkout" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
                                 </div><!-- End .dropdown-cart-total -->
                             </div><!-- End .dropdown-menu -->
                         </div><!-- End .cart-dropdown -->
@@ -185,155 +185,123 @@
             </div><!-- End .header-middle -->
         </header><!-- End .header -->
 
+ 
+        
         <main class="main">
-            <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
-                <div class="container d-flex align-items-center">
-                   
-                    <nav class="product-pager ml-auto" aria-label="Product">
-                       
-                    </nav><!-- End .pager-nav -->
-                </div><!-- End .container -->
-            </nav><!-- End .breadcrumb-nav -->
-
-            <div class="page-content">
+            <div class="page-content mt-4">
                 <div class="container">
                     <div class="product-details-top">
                         <div class="row">
-                           
                             <div class="col-md-6">
-                                
                                 <div class="product-gallery product-gallery-vertical">
                                     <div class="row">
                                         <figure class="product-main-image">
-                                            <img id="product-zoom" src="/uploads/<%= products.image[0]%>" data-zoom-image="/uploads/<%= products.image[0]%>" alt="product image" >
-
+                                            <img id="product-zoom" src="/uploads/<%= products.image[0] %>" data-zoom-image="/uploads/<%= products.image[0] %>" alt="product image">
                                             <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                                 <i class="icon-arrows"></i>
                                             </a>
                                         </figure><!-- End .product-main-image -->
-
-                                       
-                              
+        
                                         <div id="product-zoom-gallery" class="product-image-gallery">
-                                            <% for(let i=0;i<products.image.length;i++){ %>
-                                            <a class="product-gallery-item active" href="#" data-image="/uploads/<%= products.image[i]%>" data-zoom-image="/uploads/<%= products.image[i]%>">
-                                                <img src="/uploads/<%= products.image[i]%>" alt="product side" >
-                                                <%}%>
-                                            </a>
+                                            <% for(let i=0; i < products.image.length; i++) { %>
+                                                <a class="product-gallery-item active" href="#" data-image="/uploads/<%= products.image[i] %>" data-zoom-image="/uploads/<%= products.image[i] %>">
+                                                    <img src="/uploads/<%= products.image[i] %>" alt="product side">
+                                                </a>
+                                            <% } %>
                                         </div><!-- End .product-image-gallery -->
-                                        
-                                      
                                     </div><!-- End .row -->
-                                   
                                 </div><!-- End .product-gallery -->
-                                
                             </div><!-- End .col-md-6 -->
-
+        
                             <div class="col-md-6">
                                 <div class="product-details">
                                     <h1 class="product-title"><b><%= products.name %></b></h1><!-- End .product-title -->
-
+        
                                     <div class="ratings-container">
                                         <div class="ratings">
                                             <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
                                         </div><!-- End .ratings -->
                                         <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a>
                                     </div><!-- End .rating-container -->
-
+        
                                     <div class="product-price">
                                         <% if (products.offerprice <= products.price) { %>
-                                            <span class="original-price">₹<%= products.price %></span>  
-                                            <br>
+                                            <span class="original-price">₹<%= products.price %></span><br>
                                             <span class="offer-price">₹<%= products.offerprice %></span>
                                         <% } else { %>
                                             ₹<%= products.price %>
                                         <% } %>
                                     </div>
-                                    
-
+        
                                     <div class="product-content">
                                         <p><%= products.description %></p>
                                     </div><!-- End .product-content -->
-
-                                    
+        
                                     <div class="details-filter-row details-row-size">
                                         <label for="size">Size:</label>
                                         <div class="select-custom">
                                             <select name="size" id="size" class="form-control">
                                                 <option value="#" selected="selected">Select a size</option>
-                                                <option value="s"><34mm Small (women's,Kids)</option>
-                                                <option value="m">34mm – 38mm Midsize (unisex)</option>
-                                                <option value="l">39mm – 42mm Standard (men's)</option>
-                                                <option value="xl">43mm – 46mm XL/Oversize (men's)</option>
-                                                <option value="xxl">>47mm XXL (men's)</option>
+                                                <!-- Add size options here -->
                                             </select>
                                         </div><!-- End .select-custom -->
                                     </div><!-- End .details-filter-row -->
-
+        
                                     <div class="details-filter-row details-row-size">
                                         <label for="qty">Qty:</label>
                                         <div class="product-details-quantity">
-                                            <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                                            <input type="number" id="qty" class="form-control" value="1" min="1" max="<%=products.quantity%>" step="1" data-decimals="0" required>
                                         </div><!-- End .product-details-quantity -->
                                     </div><!-- End .details-filter-row -->
-
+        
                                     <div class="product-details-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        <a href="#" class="btn-product btn-cart" onclick="addtoCart('<%=products._id%>')"><span>add to cart</span></a>
 
+        
                                         <div class="details-action-wrapper">
                                             <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
                                         </div><!-- End .details-action-wrapper -->
                                     </div><!-- End .product-details-action -->
-                                    
+        
                                     <div class="product-details-footer">
                                         <div class="product-cat">
                                             <span>Category:</span>
                                             <a href="#"><%= viewProduct.category.name %></a>
                                         </div><!-- End .product-cat -->
-                                    </div>
-
                                     </div><!-- End .product-details-footer -->
                                 </div><!-- End .product-details -->
                             </div><!-- End .col-md-6 -->
-                           
                         </div><!-- End .row -->
                     </div><!-- End .product-details-top -->
-
+        
                     <div class="product-details-tab">
                         <ul class="nav nav-pills justify-content-center" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
                             </li>
-                           
                             <li class="nav-item">
                                 <a class="nav-link" id="product-shipping-link" data-toggle="tab" href="#product-shipping-tab" role="tab" aria-controls="product-shipping-tab" aria-selected="false">Shipping & Returns</a>
                             </li>
-                           
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
                                 <div class="product-desc-content">
                                     <h3>Product Information</h3>
                                     <p><%= products.description %> </p>
-                                   
                                 </div><!-- End .product-desc-content -->
                             </div><!-- .End .tab-pane -->
-                           
                             <div class="tab-pane fade" id="product-shipping-tab" role="tabpanel" aria-labelledby="product-shipping-link">
                                 <div class="product-desc-content">
                                     <h3>Delivery & returns</h3>
                                     <p>We deliver to over 100 countries around the world. For full details of the delivery options we offer, please view our <a href="#">Delivery information</a><br>
-                                    We hope you’ll love every purchase, but if you ever need to return an item you can do so within a month of receipt. For full details of how to make a return, please view our <a href="#">Returns information</a></p>
+                                        We hope you’ll love every purchase, but if you ever need to return an item you can do so within a month of receipt. For full details of how to make a return, please view our <a href="#">Returns information</a></p>
                                 </div><!-- End .product-desc-content -->
                             </div><!-- .End .tab-pane -->
-                           
                         </div><!-- End .tab-content -->
                     </div><!-- End .product-details-tab -->
-
-                    
-
+        
                     <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
-                    
+        
                     <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
                         data-owl-options='{
                             "nav": false, 
@@ -360,29 +328,20 @@
                                 }
                             }
                         }'>
-
-
-                       
-
-
                         <% relatedProduct.forEach((product) => { %>
                             <div class="product product-7 text-center">
                                 <figure class="product-media">
                                     <a href="/eachproduct?id=<%= product._id %>">
                                         <img src="/uploads/<%= product.image[0] %>" alt="Product image" class="product-image" style="width: 100%; height: 300px">
                                     </a>
-                        
                                     <div class="product-action-vertical">
                                         <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>Add to wishlist</span></a>
                                         <a href="#" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                       
                                     </div><!-- End .product-action-vertical -->
-                        
                                     <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>Add to cart</span></a>
+                                        <a href="#" class="btn-product btn-cart" onclick="addtoCart('<%=products._id%>')"><span>Add to cart</span></a>
                                     </div><!-- End .product-action -->
                                 </figure><!-- End .product-media -->
-                        
                                 <div class="product-body">
                                     <div class="product-cat">
                                         <a href="#"><%= product.category.name %></a>
@@ -397,7 +356,6 @@
                                             ₹<%= product.price %>
                                         <% } %>
                                     </div>
-                                    
                                     <div class="ratings-container">
                                         <div class="ratings">
                                             <!-- You may use the actual rating value from the product if available -->
@@ -408,15 +366,52 @@
                                 </div><!-- End .product-body -->
                             </div><!-- End .product -->
                         <% }) %>
-                        
-                        </div><!-- End .product -->
-
-
-
                     </div><!-- End .owl-carousel -->
                 </div><!-- End .container -->
             </div><!-- End .page-content -->
         </main><!-- End .main -->
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+        <script>
+            function addtoCart(proid, userid) {
+                const quantity = document.getElementById('qty').value;
+        
+                // Make an AJAX request to the backend
+                fetch(`/addingcart/${proid}/${quantity}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        quantity: quantity,
+                    }),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        // Handle the response from the backend
+                        console.log('Response from backend:', data);
+        
+                        // Display SweetAlert notification
+                        Swal.fire({ icon: 'success',
+                        title: 'Product added to cart!',
+                        showConfirmButton: false,
+                        timer: 1500, // Display the notification for 1.5 seconds
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+    
+                    // Display SweetAlert error notification
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error adding to cart',
+                        text: 'An error occurred while adding the product to the cart.',
+                    });
+                });
+        }
+    </script>
+        
 
         <footer class="footer">
         	<div class="footer-middle">
@@ -802,3 +797,4 @@
 
 <!-- molla/product.html  22 Nov 2019 09:55:05 GMT -->
 </html>
+

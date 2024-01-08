@@ -13,10 +13,10 @@ app.use(session({secret: config.sessionSecret,
     saveUninitialized: true  
   }));
   
-  app.use(flash())
-
 const nocache=require("nocache")
 app.use(nocache())
+
+app.use(flash())
 
 const PORT=process.env.PORT || 4000
 const path=require("path")

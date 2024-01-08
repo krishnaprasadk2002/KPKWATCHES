@@ -4,7 +4,6 @@ const category=require ("../models/categoryModel")
 const bcrypt = require("bcrypt");
 const Category = require("../models/categoryModel");
 
-
 //loadCategory
 
 const loadCategory=async (req,res)=>{
@@ -97,6 +96,7 @@ const updateCategory = async (req, res) => {
         if (!updatedCategory) {
             console.log("Category not found");
         }
+        req.flash('success', 'Login successful!');
         res.redirect("/admin/category");
     } catch (error) {
         console.log(error.message);

@@ -38,9 +38,9 @@ const insertProduct = async (req, res) => {
             const originalImagePath = path.join(__dirname, '../public/uploads', image);
             const resizedPath = path.join(__dirname, '../public/uploads', 'resized_' + image);
 
-            // await sharp(originalImagePath)
-            //     .resize(800, 1200, { fit: 'fill' })
-            //     .toFile(resizedPath);
+            await sharp(originalImagePath)
+                .resize(800, 1200, { fit: 'fill' })
+                .toFile(resizedPath);
         });
 
         await Promise.all(promises);
@@ -206,7 +206,7 @@ const deleteimage = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.status(500).send('Internal Server Error');
+        res.status(500)
     }
 };
 
@@ -250,8 +250,7 @@ const productDelete = async (req, res) => {
 
 
 
-module.exports={
-    insertProduct,
+module.exports={insertProduct,
     loadAllproduct,
     loadAddproducts,
     addproductCategory,
@@ -260,5 +259,4 @@ module.exports={
     handleEditProduct,
     singleProduct,
     deleteimage,
-    productDelete
-}
+    productDelete}
