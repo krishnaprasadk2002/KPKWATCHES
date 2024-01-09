@@ -1,3 +1,6 @@
+cart
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -66,7 +69,7 @@
                                     <li><a href="wishlist.html"><i class="icon-heart-o"></i>Wishlist <span>(3)</span></a></li>
                                     <li><a href="about.html">About Us</a></li>
                                     <li><a href="contact.html">Contact Us</a></li>
-                                    <li><a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>Login</a></li>
+                                    <li><a href="/login" data-toggle="modal"><i class="icon-user"></i>Login</a></li>
                                 </ul>
                             </li>
                         </ul><!-- End .top-menu -->
@@ -146,7 +149,7 @@
                                         </div><!-- End .product-cart-details -->
 
                                         <figure class="product-image-container">
-                                            <a href="product.html" class="product-image">
+                                            <a href="/cart" class="product-image">
                                                 <img src="../user/assets/images/products/cart/product-2.jpg" alt="product">
                                             </a>
                                         </figure>
@@ -196,35 +199,39 @@
 									</thead>
 
                                     <tbody>
-										<% if(cartData){%>
+										<% if(locals.cartData){%>
 										<% if (cartData.products && cartData.products.length > 0) { %>
 											<% cartData.products.forEach(product => { %>
 										  <tr data-product-id="<%= product.productId._id %>">
 											<td class="product-col">
 											  <div class="product">
 												<figure class="product-media">
-												  <a href="/eachproduct/<%= product.productId._id %>">
-													<img src="/uploads/<%= product.productId.images %>" alt="">
+												  <a href="/eachproduct/?id=<%= product.productId._id %>">
+													<img src="/uploads/<%= product.productId.image[0] %>" alt="">
+
 												  </a>
 												</figure>
 
 												<h3 class="product-title">
-												  <a href="/eachproduct/<%= product.productId._id %>">  <%= product.productId.name %> </a> 
+                                                    <a href="/eachproduct/?id=<%= product.productId._id %>">  <%= product.productId.name %> </a> 
 												</h3><!-- End .product-title -->
 											  </div><!-- End .product -->
 											</td>
 											<td class="price-col">₹ <%= product.productPrice %></td>
 											<td class="quantity-col">
-											  <!-- End .cart-product-quantity -->
-											  <div class="cart-product-quantity">
-												<input type="number" class="form-control" value="<%= product.quantity %>" min="1" max="<%= product.productId.Quantity %>" step="1" data-decimals="0" required id="<%= product.productId._id %>">
-											  </div>
-											</td>
-											<td class="total-col">₹<%= product.totalPrice %></td>
+                                                <!-- End .cart-product-quantity -->
+                                                <div class="cart-product-quantity">
+                                                    <input type="number" class="form-control" value="<%= product.quentity %>" min="1" max="<%= product.productId.quentity %>" step="1" data-decimals="0" required id="<%= product.productId._id %>" onchange="updateQuantity('<%= cartData._id %>', '<%= product.productId._id %>')">
+                                                </div>
+                                            </td>
+                                            <% let cartProduct=product.productPrice * product.quentity %>
+											<td class="total-col">₹<%= cartProduct %></td>
 											<input type="text" id="cartid" value="<%=cartData._id%>" hidden >
-											<td class="remove-col">
-											  <button class="btn-remove" onclick="removeFromCart('<%= product.productId._id %>')"><i class="icon-close"></i></button>
-											</td>
+                                            <td class="remove-col">
+                                                <button class="btn-remove" onclick="removeFromCart('<%= product.productId._id %>')">
+                                                    <i class="icon-close"></i>
+                                                </button>
+                                            </td>
 										  </tr>
 										  <% }); %>
 										  <%}%>
@@ -255,7 +262,7 @@
 	                					<tbody>
 	                						<tr class="summary-subtotal">
 	                							<td>Subtotal:</td>
-	                							<td><%= totalCost %></td>
+	                							<td><%= locals.totalPriceTotal %></td>
 	                						</tr><!-- End .summary-subtotal -->
 	                						<tr class="summary-shipping">
 	                							<td>Shipping:</td>
@@ -299,7 +306,7 @@
 
 	                						<tr class="summary-total">
 	                							<td>Total:</td>
-	                							<td><%= totalCost %></td>
+	                							<td><%= totalPriceTotal %></td>
 	                						</tr><!-- End .summary-total -->
 	                					</tbody>
 	                				</table><!-- End .table table-summary -->
@@ -403,6 +410,128 @@
         </footer><!-- End .footer -->
     </div><!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+
+<!-- Include SweetAlert library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+    function removeFromCart(productId) {
+        // confirmation alert
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You are about to remove this item from the cart.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, remove it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //removing product item
+                fetch('/removeFromCart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ productId: productId }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Product removed from the cart:', data);
+                   
+                    if (data.success) {
+                        // success 
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Product removed from the cart.',
+                            icon: 'success'
+                        }).then(() => {
+                            // Reloading the page 
+                            location.reload();
+                        });
+                    } else {
+                        // showing error
+                        Swal.fire({
+                            title: 'Error!',
+                            text: data.message || 'Something went wrong.',
+                            icon: 'error'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        });
+    }
+</script>
+
+<!-- <script>
+    function updateQuantity(cartId, productId) {
+        // Get the updated quantity from the input field
+        const updatedQuantity = document.getElementById(productId).value;
+
+        // Make a fetch request to update the quantity on the server
+        fetch('/updatequentity', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ cartId: cartId, productId: productId, quentity: updatedQuantity }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Quantity updated:', data);
+
+            // Check if the update was successful
+            if (data.success) {
+                // Reload the page
+                location.reload();
+            } else {
+                // Optionally, handle the case where the update failed
+                console.error('Failed to update quantity:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script> -->
+
+
+
+<script>
+    function updateQuantity(cartId, productId) {
+        // Get the updated quantity from the input field
+        const updatedQuantity = document.getElementById(productId).value;
+
+        // Make a fetch request to update the quantity on the server
+        fetch('/updatequentity', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ cartId: cartId, productId: productId, quentity: updatedQuantity }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Quantity updated:', data);
+
+            // Check if the update was successful
+            if (data.success) {
+                // Reload the page
+                location.reload();
+            } else {
+                // Optionally, handle the case where the update failed
+                console.error('Failed to update quantity:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+
 
     <!-- Mobile Menu -->
     <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->

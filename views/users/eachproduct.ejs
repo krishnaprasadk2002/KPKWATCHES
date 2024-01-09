@@ -250,7 +250,7 @@
                                     <div class="details-filter-row details-row-size">
                                         <label for="qty">Qty:</label>
                                         <div class="product-details-quantity">
-                                            <input type="number" id="qty" class="form-control" value="1" min="1" max="<%=products.quantity%>" step="1" data-decimals="0" required>
+                                            <input type="number" id="qty" class="form-control" value="1" min="1" max="<%=products.quentity%>" step="1" data-decimals="0" required>
                                         </div><!-- End .product-details-quantity -->
                                     </div><!-- End .details-filter-row -->
         
@@ -375,16 +375,16 @@
 
         <script>
             function addtoCart(proid, userid) {
-                const quantity = document.getElementById('qty').value;
+                const quentity = document.getElementById('qty').value;
         
                 // Make an AJAX request to the backend
-                fetch(`/addingcart/${proid}/${quantity}`, {
+                fetch(`/addingcart/${proid}/${quentity}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        quantity: quantity,
+                        quentity: quentity,
                     }),
                 })
                     .then((response) => response.json())

@@ -14,7 +14,7 @@ products:[
             ref:'Product',
             required:true
         },
-        quantity:{
+        quentity:{
             type:Number,
             default:1
         },

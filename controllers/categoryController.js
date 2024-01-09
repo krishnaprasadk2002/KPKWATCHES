@@ -99,8 +99,8 @@ const updateCategory = async (req, res) => {
         req.flash('success', 'Login successful!');
         res.redirect("/admin/category");
     } catch (error) {
-        console.log(error.message);
-        res.send("Category name already exists")
+        req.flash('error', 'An error occurred');
+        res.status(500).json({ error: "Internal server error" });
     }
 };
 

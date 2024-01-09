@@ -38,9 +38,9 @@ const insertProduct = async (req, res) => {
             const originalImagePath = path.join(__dirname, '../public/uploads', image);
             const resizedPath = path.join(__dirname, '../public/uploads', 'resized_' + image);
 
-            await sharp(originalImagePath)
-                .resize(800, 1200, { fit: 'fill' })
-                .toFile(resizedPath);
+            // await sharp(originalImagePath)
+            //     .resize(800, 1200, { fit: 'fill' })
+            //     .toFile(resizedPath);
         });
 
         await Promise.all(promises);
@@ -63,7 +63,6 @@ const loadAllproduct=async(req,res)=>{
 }
 
 
-
 //load addproduct
 const loadAddproducts=async(req,res)=>{
     try {
@@ -74,7 +73,6 @@ const loadAddproducts=async(req,res)=>{
 }
 
 //Adding dropdownbutton in a add product category
-
 const addproductCategory=async(req,res)=>{
     try {
         const categories=await Category.find()
@@ -86,7 +84,6 @@ const addproductCategory=async(req,res)=>{
 
 
 //listing and unlisting Product
-
 const listunlistProduct = async (req, res) => {
     try {
         const id = req.query.id;
@@ -111,7 +108,6 @@ const listunlistProduct = async (req, res) => {
 
 
 //Load edit product
-
 const loadEditProduct = async (req, res) => {
     try {
         const productId = req.query.id; 
@@ -149,6 +145,8 @@ const handleEditProduct = async (req, res) => {
                 await sharp(originalImagePath)
                     .resize(800, 1200, { fit: 'fill' })
                     .toFile(resizedPath);
+
+
                 // Push the resized filename to the array
                 existingProduct.image.push(`resized_${imagesToPush[i]}`);
             }
@@ -216,6 +214,7 @@ const singleProduct = async (req, res) => {
     try {
         const queryProduct = req.query.id;
         const viewProduct = await Products.findById(queryProduct).populate('category').exec(); 
+        console.log(viewProduct);
 
         const relatedProduct = await Products.find({
             category: viewProduct.category,
@@ -237,7 +236,7 @@ const singleProduct = async (req, res) => {
 
 const productDelete = async (req, res) => {
     try {
-        const productId = req.query.id; // Assuming req.query.id contains the correct product ID
+        const productId = req.query.id;
         const deleteProduct = await Products.findByIdAndDelete(productId);
         res.redirect("/admin/allproduct");
     } catch (error) {

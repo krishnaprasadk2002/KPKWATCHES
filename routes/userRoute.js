@@ -66,8 +66,10 @@ userRoute.get("/logout",userController.userLogout)
 const cartController=require("../controllers/cartController")
 
 userRoute.get("/cart",cartController.loadCart)
-userRoute.post("/addingcart/:productid/:quantity",cartController.addToCart)
+userRoute.post("/addingcart/:productid/:quentity",cartController.addToCart)
 userRoute.get("/addtocart",cartController.addToCart)
-// userRoute.get("/checkout",cartController.loadCheckout)
+userRoute.post('/removeFromCart',cartController.removeCart);
+userRoute.post('/updatequentity',cartController.updateQuentity)
+
 
 module.exports=userRoute
