@@ -20,6 +20,40 @@ const userSchema=new mongoose.Schema({
         type:String,
         required:true
     },
+
+    address:[
+        {
+         name:{
+            type:String,
+
+         },
+         mobile:
+         {
+            type:String,
+
+         },
+         pincode:
+         {
+            type:String,
+
+         },
+         address:
+         {
+            type:String,
+
+         },
+         city:
+         {
+            type:String
+
+         },
+         state:
+         {
+            type:String
+         }
+
+        }
+    ],
     is_admin:{
         type:Number,
         required:true

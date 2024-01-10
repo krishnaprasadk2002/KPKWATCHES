@@ -2,6 +2,7 @@ const User=require("../models/userModel")
 const Products=require("../models/productModel")
 const Category=require("../models/categoryModel")
 const Cart=require("../models/cartModel")
+const { response } = require("../routes/userRoute")
 
 //load Cart page
 
@@ -33,7 +34,6 @@ const loadCart=async (req,res)=>{
             else{
                 res.render("cartpage");
             }
-            
            
           }else{
       
@@ -52,10 +52,10 @@ const addToCart = async (req, res) => {
         const quentity = parseInt(req.params.quentity);
 
         const productToCart = await Products.findOne({ _id: product_id }); 
-        console.log("Product:", productToCart);
+        // console.log("Product:", productToCart);
 
         const cart = await Cart.findOne({ userid: user_id });
-        console.log("Cart:", cart);
+        // console.log("Cart:", cart);
 
         if (productToCart && user_id) {
             if (cart) {
@@ -79,7 +79,7 @@ const addToCart = async (req, res) => {
                 }
 
                 await cart.save();
-                console.log("Cart updated:", cart);
+                // console.log("Cart updated:", cart);
             } else {
                 const newCart = new Cart({
                     userid: user_id,
@@ -95,7 +95,7 @@ const addToCart = async (req, res) => {
                 });
 
                 await newCart.save();
-                console.log("New cart created:", newCart);
+                // console.log("New cart created:", newCart);
             }
 
             res.status(200).json({ message: "Product added to cart successfully." });
@@ -184,19 +184,65 @@ const loadCheckout = async (req, res) => {
         const user_id = req.session.user_id;
         const user = await User.findById(user_id); 
         console.log(user);
-        const cartData = await Cart.findOne({ userid: user_id }).populate({ path: 'products.productId', model: Products });
+
+        const cartData = await Cart.findOne({ userid: user }).populate({
+            path: "products.productId",
+            model: "Products", 
+          });
+          
         console.log(cartData);
 
         const totalPrice= cartData.products.reduce((total, product) => {
             return total + product.totalPrice;
         }, 0);
 
-        console.log(totalPrice);
-
-        res.render("checkout", { user, cartData, totalPrice });
+        res.render("checkout", { user, cartData , totalPrice });
     } catch (error) {
         console.log(error.message);
        
+    }
+};
+
+//add address page
+
+const loadAddAddress=async (req,res)=>{
+    try {
+        res.render("checkoutaddress")
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//Add address in checkoutPage
+const addAddress = async (req, res) => {
+    try {
+        const userId = req.session.user_id; 
+        console.log(userId);
+        const { name, mobile, pincode, address, city, state } = req.body;
+        
+        
+        const user = await User.findById(userId);
+        
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        user.address.push({
+            name,
+            mobile,
+            pincode,
+            address,
+            city,
+            state
+        });
+
+        const updatedUser = await user.save();
+        
+        res.redirect("/checkout");
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send('Internal Server Error');
     }
 };
 
@@ -207,4 +253,6 @@ module.exports={
     removeCart,
     updateQuentity,
     loadCheckout,
+    loadAddAddress,
+    addAddress,
 }

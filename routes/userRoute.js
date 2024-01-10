@@ -71,5 +71,10 @@ userRoute.get("/addtocart",cartController.addToCart)
 userRoute.post('/removeFromCart',cartController.removeCart);
 userRoute.post('/updatequentity',cartController.updateQuentity)
 
+//========================================================Checkouts============================================================
+userRoute.get("/checkout",cartController.loadCheckout)
+userRoute.get("/address",cartController.loadAddAddress)
+userRoute.post("/address",cartController.addAddress)
+
 
 module.exports=userRoute
