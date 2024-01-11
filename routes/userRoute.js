@@ -40,7 +40,7 @@ userRoute.get('/resendOtp',userController.resendOtp)
 
 //login
 userRoute.post("/login",userController.verifyLogin)
-userRoute.get("/login",UserAuth.isLogin,userController.verifyLogin)
+userRoute.get("/login",UserAuth.isLogin,userController.loginLoad)
 
 //home
 userRoute.get("/",userController.loadHome)
@@ -76,5 +76,9 @@ userRoute.get("/checkout",cartController.loadCheckout)
 userRoute.get("/address",cartController.loadAddAddress)
 userRoute.post("/address",cartController.addAddress)
 
+const orderController=require("../controllers/orderController")
+userRoute.post("/placeorder",orderController.placeOrder)
 
+//===================================================User profile==============================================
+userRoute.get("/profile",userController.userProfile)
 module.exports=userRoute

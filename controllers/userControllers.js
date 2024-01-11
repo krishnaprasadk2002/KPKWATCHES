@@ -183,7 +183,8 @@ const resendOtp = async (req, res) => {
 
 const loginLoad = async (req, res) => {
   try {
-    res.render('login');
+    let message 
+    res.render('login',{message});
   } catch (error) {
     console.log(error.message);
   }
@@ -210,16 +211,19 @@ const verifyLogin = async (req, res) => {
             return res.status(500).send('Internal Server Error');
           }
         } else {
-          // User is blocked
-          return res.render('login', { message: 'User account is blocked' });
+          req.flash('er','User Have blocked ' )
+      // User not found
+      return res.render('login', { message:req.flash('er')});
         }
       } else {
-        // Incorrect password
-        return res.render('login', { message: 'Email and password are incorrect' });
+        req.flash('er','Incorrect username and password' )
+      // User not found
+      return res.render('login', { message:req.flash('er')});
       }
     } else {
+      req.flash('er','please signup your not an user' )
       // User not found
-      return res.render('login', { message2: '' });
+      return res.render('login', { message:req.flash('er')});
     }
   } catch (error) {
     console.error(error);
@@ -321,6 +325,66 @@ const userLogout = async (req, res) => {
   }
 }
 
+
+//===========================================================================User Profile===============================================================================
+
+//Load Userprofile
+
+const userProfile=async (req,res)=>{
+  try {
+    const userId=req.session.user_id
+    const user=await User.findById(userId)
+    res.render("userprofile",{user})
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+
+
+//Load editProfile
+
+const loadEditProfile=async (req,res)=>{
+  try {
+    const userId=req.session.user_id
+    const userEditProfile=await User.findById(userId)
+
+    res.rnder("editProfile",{userEditProfile})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+//Edit profile
+
+const editProfile=async (req,res)=>{
+  try {
+
+    const email=req.body.email
+    const newName=req.body.name;
+    const newMobile=req.body.mobile;
+
+    const findUserNameExist=await User.find({name:newName})
+
+    if(findUserNameExist.length>0){
+      res.json({edited: false});
+    }else{
+      const user=await User.findByIdAndUpdate({
+        email:email
+      },
+      {
+        $set:{
+          name:newName,
+          mobile:newMobile
+
+        }
+      },{new:true})
+      res.json({edited: true, user: user});
+    }
+  } catch (error) {
+    res.json({edited: true, user: user});
+  }
+}
+
 module.exports = {
   loadRegister,
   insertUser,
@@ -331,5 +395,6 @@ module.exports = {
   verifyLogin,
   loadHome,
   loadProduct,
-  userLogout
+  userLogout,
+  userProfile
 }

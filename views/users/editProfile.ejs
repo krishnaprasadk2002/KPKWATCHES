@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- molla/index-18.html  22 Nov 2019 10:00:41 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Molla - Bootstrap eCommerce Template</title>
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Molla - Bootstrap eCommerce Template">
+    <meta name="author" content="p-themes">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../user/assets/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../user/assets/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../user/assets/images/icons/favicon-16x16.png">
+    <link rel="manifest" href="../user/assets/images/icons/site.html">
+    <link rel="mask-icon" href="../user/assets/images/icons/safari-pinned-tab.svg" color="#666666">
+    <link rel="shortcut icon" href="../user/assets/images/icons/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="Molla">
+    <meta name="application-name" content="Molla">
+    <meta name="msapplication-TileColor" content="#cc9966">
+    <meta name="msapplication-config" content="../user/assets/images/icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Plugins CSS File -->
+    <link rel="stylesheet" href="../user/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../user/assets/css/plugins/owl-carousel/owl.carousel.css">
+    <link rel="stylesheet" href="../user/assets/css/plugins/magnific-popup/magnific-popup.css">
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="../user/assets/css/style.css">
+    <link rel="stylesheet" href="../user/assets/css/demos/demo-18.css">
+</head>
+<body>
+
+    <main class="main">
+        <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url(../user/assets/images/banners/countdown-begins-antique-timer-sand-flowing-endlessly-generated-by-ai.jpg)">
+            <div class="container">
+                <div class="form-box">
+                    <div class="form-tab">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="update-profile" role="tabpanel" aria-labelledby="update-profile-tab">
+                                <form id="profileForm" action="#" method="post" onsubmit="return submitForm()">
+                                    <div class="form-container">
+                                        <h2 class="checkout-title">Update Profile</h2>
+    
+                                        <div class="form-group">
+                                            <label>Name *</label>
+                                            <input type="text" class="form-control" id="name" name="name" required>
+                                        </div>
+    
+    
+                                        <div class="form-group">
+                                            <label>Mobile Number *</label>
+                                            <input type="tel" class="form-control" id="mobile" name="mobile" required>
+                                        </div>
+    
+                                        <button type="submit" class="btn btn-outline-primary btn-block">
+                                            Update Profile
+                                        </button>
+                                    </div><!-- End .form-container -->
+                                </form>
+    
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+                                <script>
+                                    function submitForm() {
+                                        // Get input values and trim them
+                                        const name = document.getElementById('name').value.trim();
+                                        const email = document.getElementById('email').value.trim();
+                                        const mobile = document.getElementById('mobile').value.trim();
+    
+                                        // Perform validation
+                                        if (!name || !email || !mobile) {
+                                            // Display SweetAlert for validation error
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Validation Error',
+                                                text: 'All fields are required.',
+                                            });
+    
+                                            return false;  // Prevent form submission
+                                        }
+    
+                                        
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Success!',
+                                            text: 'Profile updated successfully.',
+                                        });
+    
+                                        return true;  
+                                    }
+                                </script>
+                            </div><!-- End .tab-pane -->
+                        </div><!-- End .tab-content -->
+                    </div><!-- End .form-tab -->
+                </div><!-- End .form-box -->
+            </div><!-- End .container -->
+        </div><!-- End .login-page section-bg -->
+    </main><!-- End .main -->
+
+    
+</body>
+</html>

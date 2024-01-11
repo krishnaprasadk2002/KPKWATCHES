@@ -183,20 +183,23 @@ const loadCheckout = async (req, res) => {
     try {
         const user_id = req.session.user_id;
         const user = await User.findById(user_id); 
-        console.log(user);
-
+        // console.log(user);
+         if(!req.session.user_id){
+            res.redirect("/")
+         }else{
         const cartData = await Cart.findOne({ userid: user }).populate({
             path: "products.productId",
             model: "Products", 
           });
           
-        console.log(cartData);
+        // console.log(cartData);
 
         const totalPrice= cartData.products.reduce((total, product) => {
             return total + product.totalPrice;
         }, 0);
 
         res.render("checkout", { user, cartData , totalPrice });
+    }
     } catch (error) {
         console.log(error.message);
        
@@ -218,7 +221,7 @@ const loadAddAddress=async (req,res)=>{
 const addAddress = async (req, res) => {
     try {
         const userId = req.session.user_id; 
-        console.log(userId);
+        // console.log(userId);
         const { name, mobile, pincode, address, city, state } = req.body;
         
         
