@@ -95,6 +95,11 @@ adminRoute.get("/deletecategory",adminAuth.verify,categoryController.deleteCateg
 
 
 
+const orderController=require("../controllers/orderController")
+
+adminRoute.get("/orders",adminAuth.verify,orderController.loadOrder)
+adminRoute.put('/updateStatus/:orderId',adminAuth.verify,orderController.changeStatus)
+
 //Logout
 adminRoute.get("/logout",adminController.adminLogout)
 
@@ -102,6 +107,5 @@ adminRoute.get("*",(req,res)=>{
     res.redirect('/admin')
   })
  
-
 
 module.exports=adminRoute

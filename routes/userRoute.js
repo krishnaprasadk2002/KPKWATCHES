@@ -85,6 +85,7 @@ userRoute.post("/submitprofile",userController.editProfile)
 userRoute.post('/changepassword',userController.changePassword)
 // userRoute.post("/cancelOrder/:orderId/:productId",orderController.cancelOrPlacedOrder)
 userRoute.delete('/removeaddress/:id', userController.removeAddress);
+userRoute.post('/addAddressProfile',userController.addAddressProfile)
 userRoute.post('/updateaddress/:id',userController.editAddress)
 userRoute.post('/cancelOrder/:orderId/:productId',orderController.cancelOrPlacedOrder)
 

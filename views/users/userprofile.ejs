@@ -124,6 +124,21 @@
                 </div><!-- End .container -->
             </nav><!-- End .breadcrumb-nav -->
 
+            <style>
+                #addressModal .modal-body {
+                    padding: 20px; 
+                }
+                
+                #addressModal .form-group {
+                    margin-bottom: 20px; 
+                }
+                
+                #addressModal .modal-dialog {
+                    margin: 50px auto; 
+                }
+            </style>
+            
+
             <div class="page-content">
             	<div class="dashboard">
 	                <div class="container">
@@ -280,7 +295,7 @@
                     
                                           <a hidden href="/" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
 
- <!-- ----------------------------------------------------------------------- section---------------------------------------------------------------------------------- -->
+ <!-- -----------------------------------------------------------------------Address section---------------------------------------------------------------------------------- -->
                                             
 			
 
@@ -367,10 +382,10 @@
                                                                             <label for="editState<%= address._id %>">State</label>
                                                                             <select class="form-control" id="editState<%= address._id %>" name="state" >
                                                                                 <option value="<%= address.state %>" selected><%= address.state %></option>
-                                                                                <option value="Tamil Nadu">Tamil Nadu</option>
-                                                                                <option value="Karnataka">Karnataka</option>
-                                                                                <option value="Goa">Goa</option>
-                                                                                <option value="Mumbai">Mumbai</option>
+                                                                                <option value="<%= address.state %>">Tamil Nadu</option>
+                                                                                <option value="<%= address.state %>">Karnataka</option>
+                                                                                <option value="<%= address.state %>">Goa</option>
+                                                                                <option value="<%= address.state %>">Mumbai</option>
                                                                             </select>
                                                                         </div>
                                                                         </div>
@@ -387,10 +402,82 @@
                                             </div>
                                             <!-- End Edit Modal -->
                                            
-								    
+                                            
+                                            
+                                            <!-- Address Form Modal -->
+                                            <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="addressModalLabel">Delivery Address</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form id="addressForm" onsubmit="return submitForm()">
+                                                                <div class="form-group">
+                                                                    <label for="name">Name *</label>
+                                                                    <input type="text" class="form-control" id="name" name="name" required>
+                                                                </div>
+                                            
+                                                                <div class="row">
+                                                                    <div class="col-sm-6">
+                                                                        <div class="form-group">
+                                                                            <label for="mobile">Mobile Number *</label>
+                                                                            <input type="tel" class="form-control" id="mobile" name="mobile" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <div class="form-group">
+                                                                            <label for="pincode">Pincode *</label>
+                                                                            <input type="text" class="form-control" id="pincode" name="pincode" required>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                            
+                                                                <div class="form-group">
+                                                                    <label for="Address1">Address *</label>
+                                                                    <input type="text" class="form-control" id="Address1" name="address" placeholder="Enter your address" required>
+                                                                </div>
+                                            
+                                                                <div class="row">
+                                                                    <div class="col-sm-6">
+                                                                        <div class="form-group">
+                                                                            <label for="City">City *</label>
+                                                                            <input type="text" class="form-control" id="City" name="city" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <div class="form-group">
+                                                                            <label for="state">State *</label>
+                                                                            <select class="form-control" id="state" name="state" required>
+                                                                                <option value="" selected disabled>Select your state</option>
+                                                                                <option value="Kerala">Kerala</option>
+                                                                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                                                                <option value="Karnataka">Karnataka</option>
+                                                                                <option value="Goa">Goa</option>
+                                                                                <option value="Mumbai">Mumbai</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                            
+                                                                <button type="submit" class="btn btn-outline-primary btn-block">
+                                                                    Submit Address
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addressModal">
+                                                            Add Address
+                                                            </button>
+                                                    </div>
+                                                </div>
+                                            </div>
 								    	</div><!-- End .row -->
                                         <%})%>
 								    </div><!-- .End .tab-pane -->
+                                
 
 
                                    
@@ -998,50 +1085,9 @@ function reloadAddressTab() {
 
 
 
-<script>
-    function saveEdit(addressId) {
-        // Get the values from the modal form
-        const name = document.getElementById(`editName${addressId}`).value;
-        const mobile = document.getElementById(`editMobile${addressId}`).value;
-        const pincode = document.getElementById(`editPincode${addressId}`).value;
-        const address = document.getElementById(`editAddress${addressId}`).value;
-        const city = document.getElementById(`editCity${addressId}`).value;
-        const state = document.getElementById(`editState${addressId}`).value;
-
-        // Prepare the data to be sent in the request body
-        const formData = {
-            name: name,
-            mobile: mobile,
-            pincode: pincode,
-            address: address,
-            city: city,
-            state: state
-        };
-
-        // Send a PUT or PATCH request to update the address
-        fetch(`/updateaddress/${addressId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            console.log('Address updated successfully');
-            // Call a function to reload or update the address tab if needed
-        })
-        .catch(error => {
-            console.error('Error updating address:', error);
-        });
-
-        $(`#editModal${addressId}`).modal('hide');
-    }
-</script>
 
 
+//================================================================= Cancel order ================================================
 
 <script>
     ///// deleting the order product
@@ -1096,5 +1142,82 @@ function reloadAddressTab() {
                     });
             }
         });
+    }
+</script>
+
+
+//add address
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    async function submitForm() {
+        // Get input values and trim them
+        const name = document.getElementById('name').value.trim();
+        const mobile = document.getElementById('mobile').value.trim();
+        const pincode = document.getElementById('pincode').value.trim();
+        const address = document.getElementById('Address1').value.trim();
+        const city = document.getElementById('City').value.trim();
+        const state = document.getElementById('state').value.trim();
+
+        // Perform validation
+        if (!name || !mobile || !pincode || !address || !city || !state) {
+            // Display SweetAlert for validation error
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error',
+                text: 'All fields are required.',
+            });
+
+            return false;  // Prevent form submission
+        }
+
+        // Prepare the data to be sent in the request body
+        const formData = {
+            name,
+            mobile,
+            pincode,
+            address,
+            city,
+            state
+        };
+
+        try {
+            // Make a fetch request to submit the form data
+            const response = await fetch('/addAddressProfile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            // Display SweetAlert for successful submission
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Address submitted successfully.',
+            }).then(() => {
+                // Reload the page
+                window.location.reload();
+            });
+
+            return true;  // Allow form submission
+        } catch (error) {
+            console.error('Error submitting address:', error);
+
+            // Display SweetAlert for submission error
+            Swal.fire({
+                icon: 'error',
+                title: 'Submission Error',
+                text: 'There was an error submitting the address.',
+            });
+
+            return false;  // Prevent form submission
+        }
     }
 </script>

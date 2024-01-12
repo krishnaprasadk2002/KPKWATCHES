@@ -283,7 +283,12 @@ const loadHome = async (req, res) => {
 
 
 const loadProduct = async (req, res) => {
-  try {
+  try {let totalproducts=await Products.find({is_listed: "Listed"}).count()
+  let totalPages=Math.ceil(totalproducts/12)
+  let currentPage = parseInt(req.query.page, 10) || 1;
+  const skip=(currentPage-1)*12
+
+
       const selectedCategory = req.query.category;
       let productss;
 
@@ -291,8 +296,11 @@ const loadProduct = async (req, res) => {
           const category = await Category.findById(selectedCategory);
 
           if (category && category.is_listed) {
-              const products = await Products.find({ category: selectedCategory, is_listed: "Listed" }).populate('category').exec();
-              res.render("allproduct", { filteredProducts: products, allcategory: [] }); // Pass products directly to the view
+              const products = await Products.find({ category: selectedCategory, is_listed: "Listed" }).populate('category')
+              .skip(skip)
+              .limit(12)
+              .exec();
+              res.render("allproduct", { filteredProducts: products, allcategory: [],totalPages,currentPage }); // Pass products directly to the view
               return; // End the function to prevent further execution
           } else {
               productss = [];
@@ -305,11 +313,16 @@ const loadProduct = async (req, res) => {
           }).populate('category');
       }
 
-      const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }).populate('category').exec();
+      const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }).populate('category')
+              .skip(skip)
+              .limit(12)
+              .exec();
       const filteredProducts = productData.filter((product) => product.category.is_listed !== "Unlisted");
       const allcategory = await Category.find({ is_listed: "Listed" });
 
-      res.render("allproduct", { filteredProducts, allcategory });
+      
+
+      res.render("allproduct", { filteredProducts, allcategory,totalPages,currentPage });
   } catch (error) {
       console.log(error.message);
   }
@@ -335,9 +348,9 @@ const userProfile = async (req, res) => {
   try {
     const userId = req.session.user_id;
 
-    // if (!userId) {
-    //   res.redirect("/")
-    // }
+    if (!userId) {
+      res.redirect("/")
+    }
 
     const user = await User.findById(userId);
     const orders = await Orders.find({ user: userId })
@@ -347,69 +360,80 @@ const userProfile = async (req, res) => {
       })
       .exec();
 
-    console.log(orders);
+    // console.log(orders);
     res.render("userprofile", { user, orders });
   } catch (error) {
     console.log(error.message);
   }
 };
 
+//Add address
 
+const addAddressProfile = async (req, res) => {
+  try {
+      const userId = req.session.user_id; 
+      // console.log(userId);
+      const { name, mobile, pincode, address, city, state } = req.body;
+      
+      
+      const user = await User.findById(userId);
+      
+      if (!user) {
+          return res.status(404).send('User not found');
+      }
+
+      user.address.push({
+          name,
+          mobile,
+          pincode,
+          address,
+          city,
+          state
+      });
+
+      const updatedUser = await user.save();
+      
+  } catch (error) {
+      console.log(error.message);
+      res.status(500).send('Internal Server Error');
+  }
+};
 
 // Edit Address
 
-const editAddress=async (req,res)=>{
+const editAddress = async (req, res) => {
   try {
-    const userId=req.session.user_id
-    const user = await User.findById(userId)
+    const userId = req.session.user_id;
+    const { name, mobile, pincode, address, city, state } = req.body;
 
-    if(!user){
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: userId },
+      {
+        $set: {
+          'address.$.name': name,
+          'address.$.mobile': mobile,
+          'address.$.pincode': pincode,
+          'address.$.address': address,
+          'address.$.city': city,
+          'address.$.state': state,
+        },
+      },
+      { new: true } // This option returns the modified document instead of the original one
+    );
 
-    const specificaddress = user.address.find((add) => add.address === req.body.address);
-    console.log(specificaddress);
-    if(specificaddress){
-      specificaddress.name=req.body.name
-      specificaddress.mobile=req.body.mobile
-      specificaddress.pincode=req.body.pincode
-      specificaddress.address=req.body.address
-      specificaddress.city=req.body.city
-      specificaddress.state=req.body.state
-
-      console.log('userId:', userId);
-      console.log(user.address);
-      
-      try {
-        await User.findByIdAndUpdate({ email: req.session.email, 'address.address': req.body.address },
-          
-          {
-            $set: {
-              'address.$.name': req.body.name,
-              'address.$.mobile': req.body.mobile,
-              'address.$.pincode': req.body.pincode,
-              'address.$.address': req.body.address,
-              'address.$.city': req.body.city,
-              'address.$.state': req.body.state,
-            },
-          }
-        );
-          console.log('Address updated successfully');
-        res.status(200).json({ message: 'Address updated successfully' });
-      } catch (error) {
-        console.error('Error updating address:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
-      }
+    if (updatedUser) {
+      console.log('Address updated successfully');
+      res.status(200).json({ success: true, message: 'Address updated successfully' });
     } else {
-      console.log('Specific address not found');
-      // Handle the case where the specific address is not found
-      res.status(404).json({ message: 'Specific address not found' });
+      console.log('User or address not found');
+      res.status(404).json({ success: false, message: 'User or address not found' });
     }
   } catch (error) {
     console.error('Error updating address:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 };
+
 
 
 //Edit profile
@@ -514,5 +538,6 @@ module.exports = {
   editProfile,
   changePassword,
   removeAddress,
-  editAddress
+  addAddressProfile,
+  editAddress,
 }

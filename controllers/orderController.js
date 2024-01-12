@@ -66,8 +66,6 @@ const placeOrder = async (req, res) => {
         const orderId = req.params.orderId;
         const productId = req.params.productId
 
-        console.log('orderId:', orderId);
-        console.log('productId:', productId);
 
         const updatedOrder=await Orders.updateOne({
             _id: orderId,
@@ -91,10 +89,72 @@ const placeOrder = async (req, res) => {
     
     }
   }
+
+//=======================================================================Admin side Order======================================================
+  //Load Order in Admin side
+
+  const loadOrder=async(req,res)=>{
+    try {
+        const admin=req.session.admin
+        const allOrders=await Orders.find()
+        .populate({
+            path: "Products.productId",
+            model: "Products", 
+          })
+          .populate('user','name').exec();
+        res.render("orders",{allOrders})
+    } catch (error) {
+        console.log(error.message);
+    }
+  }
+
+
+  //change status
+
+  const changeStatus = async (req, res) => {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    try {
+        const updatedOrder = await Orders.updateOne(
+            {
+                _id: orderId,
+                'Products': {
+                    $elemMatch: {
+                        'orderStatus': { $ne: status }
+                    }
+                }
+            },
+            {
+                $set: {
+ // Update all products in the array
+                    'Products.$[].orderStatus': status,  
+                    'orderStatus': status,  // Update the overall order status
+                },
+            }
+        );
+
+        console.log('result:', updatedOrder);
+
+        if (updatedOrder.nModified === 0) {
+            return res.status(404).json({ error: 'Order not found or status already updated' });
+        }
+
+        // Send a response indicating success
+        res.json({ success: true, message: 'Status updated successfully' });
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
  
   
   module.exports = {
     placeOrder,
-    cancelOrPlacedOrder
+    cancelOrPlacedOrder,
+    loadOrder,
+    changeStatus
   };
   
