@@ -161,22 +161,128 @@
                                                     Email : <%=user.email%><br>
                                                     Mobile : <%= user.mobile %><br>
                                                     
-                                                    <a href="#">Edit <i class="icon-edit"></i></a></p>
+                                                    <a href="#" data-toggle="modal" data-target="#editModal">Edit <i class="icon-edit"></i></a></p>
                                                 </div><!-- End .card-body -->
                                             </div><!-- End .card-dashboard -->
                                         </div><!-- End .col-lg-6 -->
 
 								    </div><!-- .End .tab-pane -->
 
-								    <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
-								    	<p>No order has been made yet.</p>
-								    	<a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
-								    </div><!-- .End .tab-pane -->
 
-								    <div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-link">
-								    	<p>No downloads available yet.</p>
-								    	<a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
-								    </div><!-- .End .tab-pane -->
+                                    	 <!-- Edit Modal -->
+                                         <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editModalLabel">Edit User Details</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <!-- Input fields for editing user details -->
+                                                        <form id="editForm" style="border: 1px solid #ccc; padding: 15px; border-radius: 8px;">
+                                                            <div class="mb-3">
+                                                                <label for="editName" class="form-label">Name:</label>
+                                                                <input type="text" class="form-control" id="editName" value="<%= user.name %>" name="name" required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="editMobile" class="form-label">Mobile:</label>
+                                                                <input type="number" class="form-control" id="editMobile" value="<%= user.mobile %>" name="mobile" required>
+                                                            </div>
+                                                            <!-- Add more input fields as needed -->
+                                                            <div class="text-center">
+                                                                <button type="button" class="btn btn-primary" onclick="submitForm()">Save Changes</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+
+<!-- -----------------------------------------------------------------------Orders section---------------------------------------------------------------------------------- -->
+
+
+                                        <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                                            <section class="vh-100 gradient-custom-2">
+                                                <div class="container py-5 ">
+                                                  <% orders.forEach(order => { %>
+                                                    <div class="row align-items-center h-100">
+                                                      <div class="col-md-10 col-lg-8 col-xl-6">
+                                                        <div class="card card-stepper " style="border-radius: 16px;">
+                                                          <div class="card-header p-4">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                              <div>
+                                                                <p class="text-muted mb-2"> Order ID <span class="fw-bold text-body"><%= order._id %></span></p>
+                                                                <p class="text-muted mb-0"> Place On <span class="fw-bold text-body"> <%= order.date.toLocaleDateString('en-US',
+                                                                    {
+                                                                    year:'numeric',
+                                                                    month: 'short'
+                                                                    ,
+                                                                    day: '2-digit'
+                                                                    }).replace(/\//g, '-'
+                                                                    )
+                                                                    %></span> </p>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                          <div class="card-body p-4 ">
+                                                            <% order.Products.forEach(product => { %>
+                                                              <div class="d-flex flex-row mb-4 pb-2 mt-4 ">
+                                                                <div class="flex-fill">
+                                                                  <h5 class="bold"> <a href="/eachproduct/<%=product._id%>"><%= product.name %></a></h5>
+                                                                  <p class="text-muted"> Qt: <%= product.quentity %> item</p>
+                                                                  <h4 class="mb-3"> ₹ <%= product.total %> <span class="small text-muted"> <br> via (<%=order.paymentMode%>) </span></h4>
+                                                                </div>
+                                                                <div>
+                                                                  <img class="align-self-center img-fluid" src="/uploads/<%=product.image%>" width="250">
+                                                                </div>
+                                                              </div>
+                                                              <% if(product.orderStatus=="placed"){%>
+                                                                    <p class="text-primary"><%=product.orderStatus%></p>
+                                                              <div class="card-footer p-4">
+                                                                <div class="d-flex justify-content-between">
+                                                                  <h5 class="fw-normal mb-0">
+                                                                    <a href="#" class="mb-4" onclick="removefromorder('<%=order._id%>' , '<%=product._id%>')">Cancel</a>
+                                                                  </h5>
+                                                                  <div class="border-start h-100"></div>
+                                                                </div>
+                                                              </div>
+                                                              <%}%>
+                                                                <%if(product.orderStatus=="shipped"){%>
+                                                                <h6 class="text-primary " style="margin-left: 20px; margin-bottom: 30px;" ><%=product.orderStatus%></h6>
+                                                                <div class="card-footer p-4">
+                                                                    <div class="d-flex justify-content-between">
+                                                                      <h5 class="fw-normal mb-0">
+                                                                        <a href="#" class="mb-4" onclick="removefromorder('<%=order._id%>' , '<%=product._id%>')">Cancel</a>
+                                                                      </h5>
+                                                                      <div class="border-start h-100"></div>
+                                                                    </div>
+                                                                  </div>
+                                                                <%}%>
+                                                                <%if(product.orderStatus=="delivered"){%>
+                                                                    <h6 class="text-success"><%=product.orderStatus%></h6>
+                                                                    <%}%>
+                                                                    <%if(product.orderStatus=="cancelled"){%>
+                                                                        <h6 class="text-danger " ><%=product.orderStatus%></h6>
+                                                                        <%}%>
+                                                            <% }); %>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  <% }); %>
+                                                </div>
+                                              </section>
+                    
+                                          </div>
+                    
+                                          <a hidden href="/" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+
+ <!-- ----------------------------------------------------------------------- section---------------------------------------------------------------------------------- -->
+                                            
+			
 
 								    <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
                                         <h3 class="card-title">Delivery Address</h3><!-- End .card-title -->
@@ -198,57 +304,116 @@
 														<%= address.address %><br>
 														<%= address.pincode %><br>
 														<%= address.city %><br>
-														<%= address.state %><br>
-														<a href="#">Edit <i class="icon-edit"></i></a>
-														<button class="btn btn-danger btn-sm" onclick="deleteFunction()">
-                                                            Delete 
-                                                        </button>
+														<%= address.state %><br></p>
+
+														<div class="container justify-content-between">
+															<!-- Edit button with data-toggle attribute to open the modal -->
+															<a href="#" data-toggle="modal" data-target="#editModal<%=address._id%>">Edit <i class="icon-edit"></i></a>
+										
+															
+															<a href="#" style="margin-left: 255px;" onclick="removeAddress('<%=address._id%>')">Delete <i class="fa-solid fa-trash"></i></a>
+
+														</div>
                                                         
-                                                        </p>
+                                                        
                                                        
 								    				</div><!-- End .card-body -->
 								    			</div><!-- End .card-dashboard -->
 								    		</div><!-- End .col-lg-6 -->
-                                            <%})%>
+
+                                            <div class="modal fade" id="editModal<%= address._id %>" tabindex="-1" role="dialog" aria-labelledby="editModalLabel<%= address._id %>" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <!-- Add your modal content here -->
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="editModalLabel<%= address._id %>">Edit Address</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+
+                                                        <div class="modal-body">
+                                                            <!-- Add your form fields with predefined values here -->
+                                                            <form id="editForm<%= address._id %>">
+                                                                <!-- Example input field (replace with your actual form fields) -->
+                                                                <div class="modal-body mx-3">
+                                                                    <div class="modal-body mx-3">
+                                                                        <div class="form-group">
+                                                                            <label for="editName<%= address._id %>">Name</label>
+                                                                            <input type="text" class="form-control" id="editName<%= address._id %>" value="<%= address.name %>" name="name">
+                                                                        </div>
+                                                                    
+                                                                        <div class="form-group">
+                                                                            <label for="editMobile<%= address._id %>">Mobile Number</label>
+                                                                            <input type="tel" class="form-control" id="editMobile<%= address._id %>" value="<%= address.mobile %>" name="mobile" required>
+                                                                        </div>
+                                                                    
+                                                                        <div class="form-group">
+                                                                            <label for="editPincode<%= address._id %>">Pincode</label>
+                                                                            <input type="text" class="form-control" id="editPincode<%= address._id %>" value="<%= address.pincode %>" name="pincode" required>
+                                                                        </div>
+                                                                    
+                                                                        <div class="form-group">
+                                                                            <label for="editAddress<%= address._id %>">Address</label>
+                                                                            <input type="text" class="form-control" id="editAddress<%= address._id %>" value="<%= address.address %>" name="address" required>
+                                                                        </div>
+                                                                    
+                                                                        <div class="form-group">
+                                                                            <label for="editCity<%= address._id %>">City</label>
+                                                                            <input type="text" class="form-control" id="editCity<%= address._id %>" value="<%= address.city %>" name="city" required>
+                                                                        </div>
+                                                                    
+                                                                        <div class="form-group">
+                                                                            <label for="editState<%= address._id %>">State</label>
+                                                                            <select class="form-control" id="editState<%= address._id %>" name="state" >
+                                                                                <option value="<%= address.state %>" selected><%= address.state %></option>
+                                                                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                                                                <option value="Karnataka">Karnataka</option>
+                                                                                <option value="Goa">Goa</option>
+                                                                                <option value="Mumbai">Mumbai</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        </div>
+                        
+                                                                <!-- Add more fields as needed -->
+                                
+                                                                <!-- Example Save button -->
+                                                                <button type="button" class="btn btn-primary" onclick="saveEdit('<%= address._id %>')">Save Changes</button>
+                                                            </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End Edit Modal -->
+                                           
 								    
 								    	</div><!-- End .row -->
+                                        <%})%>
 								    </div><!-- .End .tab-pane -->
 
+
+                                   
 								    <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
-								    	<form action="#">
-			                				<div class="row">
-			                					<div class="col-sm-6">
-			                						<label>First Name *</label>
-			                						<input type="text" class="form-control" required>
-			                					</div><!-- End .col-sm-6 -->
-
-			                					<div class="col-sm-6">
-			                						<label>Last Name *</label>
-			                						<input type="text" class="form-control" required>
-			                					</div><!-- End .col-sm-6 -->
-			                				</div><!-- End .row -->
-
-		            						<label>Display Name *</label>
-		            						<input type="text" class="form-control" required>
-		            						<small class="form-text">This will be how your name will be displayed in the account section and in reviews</small>
-
-		                					<label>Email address *</label>
-		        							<input type="email" class="form-control" required>
+								    	<form id="changePasswordForm">
+			                					
 
 		            						<label>Current password (leave blank to leave unchanged)</label>
-		            						<input type="password" class="form-control">
+		            						<input type="password" class="form-control" name="currentpassword">
 
 		            						<label>New password (leave blank to leave unchanged)</label>
-		            						<input type="password" class="form-control">
+		            						<input type="password" class="form-control" name="newpassword">
 
 		            						<label>Confirm new password</label>
-		            						<input type="password" class="form-control mb-2">
+		            						<input type="password" class="form-control mb-2" name="confirmnewpassword">
 
-		                					<button type="submit" class="btn btn-outline-primary-2">
-			                					<span>SAVE CHANGES</span>
-			            						<i class="icon-long-arrow-right"></i>
-			                				</button>
+		                					<button type="button" class="btn btn-outline-primary-2" onclick="changePassword()">
+												<span>SAVE CHANGES</span>
+												<i class="icon-long-arrow-right"></i>
+											</button>
 			                			</form>
+                                        <div id="successMessage"></div>
+										<div id="errorMessage"></div>
 								    </div><!-- .End .tab-pane -->
 								</div>
 	                		</div><!-- End .col-lg-9 -->
@@ -635,3 +800,301 @@
 
 <!-- molla/dashboard.html  22 Nov 2019 10:03:13 GMT -->
 </html>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+//Change password 
+
+<script>
+	function changePassword() {
+  const formData = new FormData(document.getElementById('changePasswordForm'));
+
+  const formObject = {};
+  formData.forEach((value, key) => {
+    formObject[key] = value;
+  });
+
+  fetch('/changepassword/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formObject),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+                // Update the success and error message divs
+                const successMessageDiv = document.getElementById('successMessage');
+                const errorMessageDiv = document.getElementById('errorMessage');
+
+                if (data.success) {
+                    successMessageDiv.textContent = data.message;
+                    errorMessageDiv.textContent = ''; // Clear any previous error messages
+					document.getElementById('changePasswordForm').reset();
+                } else {
+                    errorMessageDiv.textContent = data.message;
+                    successMessageDiv.textContent = ''; // Clear any previous success messages
+                }
+            })
+  .catch(error => {
+    // Handle errors
+    console.error('There was a problem changing the password:', error.message);
+  });
+}
+
+ </script>
+
+//==================================================================Edit profile
+<script>
+    function submitForm() {
+        // Display confirmation SweetAlert
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You are about to update your profile.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, update it!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Get form values and trim them
+                const name = document.getElementById('editName').value.trim();
+                const mobile = document.getElementById('editMobile').value.trim();
+
+                // Send a fetch request to the backend
+                fetch('/submitprofile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded', // Set the Content-Type header
+                    },
+                    body: `name=${encodeURIComponent(name)}&mobile=${encodeURIComponent(mobile)}`, // Encode the form data
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Handle the response from the backend
+
+                        console.log('Response from the backend:', data);
+
+                        // Display SweetAlert for success
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Profile updated successfully.',
+                        });
+
+                        window.location.reload();
+                    })
+                    .catch(error => {
+                        // Handle errors
+
+                        console.error('There was a problem:', error.message);
+
+                        // Display SweetAlert for error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to update profile. Please try again.',
+                        });
+                    });
+            }
+        });
+    }
+</script>
+
+//
+
+
+//==================================================================remove Address
+<script>
+
+function removeAddress(userId) {
+    // Show SweetAlert confirmation dialog
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // User confirmed, proceed with the delete operation
+            deleteAddress(userId);
+        }
+    });
+}
+
+function deleteAddress(userId) {
+    fetch(`/removeaddress/${userId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            // You may need to include additional headers such as authentication tokens
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        // Handle success, show success message with SweetAlert
+        Swal.fire({
+            title: 'Success!',
+            text: 'Address removed successfully.',
+            icon: 'success',
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 1500 // Automatically close after 1.5 seconds
+        });
+        // Reload the 'tab-address' content
+        reloadAddressTab();
+    })
+    .catch(error => {
+        // Handle errors, show an alert to the user
+        console.error('Error removing address:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'Failed to remove address.',
+            icon: 'error',
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 1500 // Automatically close after 1.5 seconds
+        });
+    });
+}
+
+function reloadAddressTab() {
+    // Use vanilla JavaScript to fetch the content and update the specific div
+    fetch(window.location.href, { method: 'GET' })
+        .then(response => response.text())
+        .then(html => {
+            // Extract the content of the 'tab-address' div from the fetched HTML
+            const tabAddressContent = new DOMParser().parseFromString(html, 'text/html')
+                .getElementById('tab-address').innerHTML;
+
+            // Update the content of the 'tab-address' div
+            document.getElementById('tab-address').innerHTML = tabAddressContent;
+        })
+        .catch(error => {
+            console.error('Error reloading address tab:', error);
+        });
+}
+</script>
+
+
+
+
+<script>
+    function saveEdit(addressId) {
+        // Get the values from the modal form
+        const name = document.getElementById(`editName${addressId}`).value;
+        const mobile = document.getElementById(`editMobile${addressId}`).value;
+        const pincode = document.getElementById(`editPincode${addressId}`).value;
+        const address = document.getElementById(`editAddress${addressId}`).value;
+        const city = document.getElementById(`editCity${addressId}`).value;
+        const state = document.getElementById(`editState${addressId}`).value;
+
+        // Prepare the data to be sent in the request body
+        const formData = {
+            name: name,
+            mobile: mobile,
+            pincode: pincode,
+            address: address,
+            city: city,
+            state: state
+        };
+
+        // Send a PUT or PATCH request to update the address
+        fetch(`/updateaddress/${addressId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            console.log('Address updated successfully');
+            // Call a function to reload or update the address tab if needed
+        })
+        .catch(error => {
+            console.error('Error updating address:', error);
+        });
+
+        $(`#editModal${addressId}`).modal('hide');
+    }
+</script>
+
+
+
+<script>
+    ///// deleting the order product
+    function removefromorder(orderId, proId) {
+        // Show SweetAlert confirmation dialog
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You are about to cancel the order. This action cannot be undone!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, cancel it!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user clicks "Yes" on the confirmation dialog
+
+                // Make a fetch request to your server to cancel the product from the order
+                fetch(`/cancelOrder/${orderId}/${proId}`, {
+                    method: 'POST',
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Handle the response from the server
+                        console.log('Order cancelled successfully:', data);
+
+                        // Show SweetAlert success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Order Cancelled!',
+                            text: 'Your order has been cancelled successfully.',
+                        }).then(() => {
+                            // Reload the page
+                            window.location.reload();
+                        });
+                    })
+                    .catch(error => {
+                        // Handle errors
+                        console.error('There was a problem cancelling the order:', error.message);
+
+                        // Show SweetAlert error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'There was a problem cancelling the order. Please try again.',
+                        });
+                    });
+            }
+        });
+    }
+</script>

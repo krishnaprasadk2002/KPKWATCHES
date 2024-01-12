@@ -5,6 +5,7 @@ const category=require("../models/categoryModel")
 const userOtpVerification = require("../models/otpModel")
 const nodemailer = require("nodemailer");
 const Category = require("../models/categoryModel");
+const Orders = require("../models/orderModel");
 
 
 
@@ -330,60 +331,173 @@ const userLogout = async (req, res) => {
 
 //Load Userprofile
 
-const userProfile=async (req,res)=>{
+const userProfile = async (req, res) => {
   try {
-    const userId=req.session.user_id
-    const user=await User.findById(userId)
-    res.render("userprofile",{user})
-  } catch (error) {
-    console.log(error.message)
-  }
-}
+    const userId = req.session.user_id;
 
+    // if (!userId) {
+    //   res.redirect("/")
+    // }
 
+    const user = await User.findById(userId);
+    const orders = await Orders.find({ user: userId })
+      .populate({
+        path: "Products.productId",
+        model: "Products", 
+      })
+      .exec();
 
-//Load editProfile
-
-const loadEditProfile=async (req,res)=>{
-  try {
-    const userId=req.session.user_id
-    const userEditProfile=await User.findById(userId)
-
-    res.rnder("editProfile",{userEditProfile})
+    console.log(orders);
+    res.render("userprofile", { user, orders });
   } catch (error) {
     console.log(error.message);
   }
-}
+};
+
+
+
+// Edit Address
+
+const editAddress=async (req,res)=>{
+  try {
+    const userId=req.session.user_id
+    const user = await User.findById(userId)
+
+    if(!user){
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    const specificaddress = user.address.find((add) => add.address === req.body.address);
+    console.log(specificaddress);
+    if(specificaddress){
+      specificaddress.name=req.body.name
+      specificaddress.mobile=req.body.mobile
+      specificaddress.pincode=req.body.pincode
+      specificaddress.address=req.body.address
+      specificaddress.city=req.body.city
+      specificaddress.state=req.body.state
+
+      console.log('userId:', userId);
+      console.log(user.address);
+      
+      try {
+        await User.findByIdAndUpdate({ email: req.session.email, 'address.address': req.body.address },
+          
+          {
+            $set: {
+              'address.$.name': req.body.name,
+              'address.$.mobile': req.body.mobile,
+              'address.$.pincode': req.body.pincode,
+              'address.$.address': req.body.address,
+              'address.$.city': req.body.city,
+              'address.$.state': req.body.state,
+            },
+          }
+        );
+          console.log('Address updated successfully');
+        res.status(200).json({ message: 'Address updated successfully' });
+      } catch (error) {
+        console.error('Error updating address:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+      }
+    } else {
+      console.log('Specific address not found');
+      // Handle the case where the specific address is not found
+      res.status(404).json({ message: 'Specific address not found' });
+    }
+  } catch (error) {
+    console.error('Error updating address:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
 //Edit profile
 
 const editProfile=async (req,res)=>{
   try {
+    const userId=req.session.user_id
+    const user=await User.findById(userId)
 
-    const email=req.body.email
-    const newName=req.body.name;
-    const newMobile=req.body.mobile;
-
-    const findUserNameExist=await User.find({name:newName})
-
-    if(findUserNameExist.length>0){
-      res.json({edited: false});
-    }else{
-      const user=await User.findByIdAndUpdate({
-        email:email
-      },
-      {
-        $set:{
-          name:newName,
-          mobile:newMobile
-
-        }
-      },{new:true})
-      res.json({edited: true, user: user});
+    if(!user){
+      return res.status(404).json({ success: false, message: 'User not found' });
     }
+
+    user.name=req.body.name
+    user.mobile=req.body.mobile
+
+    await user.save()
+    return res.status(200).json({ success: true, message: 'Form submitted successfully' });
   } catch (error) {
-    res.json({edited: true, user: user});
+    console.log(error.message);
+    return res.status(500).json({ success: false, error: 'Internal server error' });
   }
 }
+
+//Change password
+
+const changePassword=async (req,res)=>{
+  const userId=req.session.user_id
+  const currentPassword=req.body.currentpassword
+  const newPassword=req.body.newpassword
+  const confirmNewPassword=req.body.confirmnewpassword
+
+  try {
+    const user=await User.findById(userId)
+    if(!user){
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if(currentPassword){
+      const passwordMatch=await bcrypt.compare(currentPassword,user.password)
+      if(!currentPassword){
+        return res.json({ message: 'Current password is incorrect' });
+      }
+    }
+
+    if(newPassword !== confirmNewPassword){
+      return res.json({ message: 'New password and confirm password do not match' });
+    }
+
+      // Update the user's password
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+      user.password = hashedPassword;
+
+      await user.save()
+
+      return res.status(200).json({ success: true, message: 'Password changed successfully' });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+
+
+//Remove address
+
+const removeAddress = async (req, res) => {
+  try {
+      const userId = req.session.user_id;
+      const addressId = req.params.id;
+      const user = await User.findById(userId);
+
+      user.address.pull({ _id: addressId });
+      await user.save();
+
+      // Send a success response to the client
+      res.status(200).json({ message: 'Address removed successfully' });
+  } catch (error) {
+      console.log(error);
+      // Send an error response to the client
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
+
 
 module.exports = {
   loadRegister,
@@ -396,5 +510,9 @@ module.exports = {
   loadHome,
   loadProduct,
   userLogout,
-  userProfile
+  userProfile,
+  editProfile,
+  changePassword,
+  removeAddress,
+  editAddress
 }

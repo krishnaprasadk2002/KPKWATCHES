@@ -81,4 +81,13 @@ userRoute.post("/placeorder",orderController.placeOrder)
 
 //===================================================User profile==============================================
 userRoute.get("/profile",userController.userProfile)
+userRoute.post("/submitprofile",userController.editProfile)
+userRoute.post('/changepassword',userController.changePassword)
+// userRoute.post("/cancelOrder/:orderId/:productId",orderController.cancelOrPlacedOrder)
+userRoute.delete('/removeaddress/:id', userController.removeAddress);
+userRoute.post('/updateaddress/:id',userController.editAddress)
+userRoute.post('/cancelOrder/:orderId/:productId',orderController.cancelOrPlacedOrder)
+
+
+
 module.exports=userRoute

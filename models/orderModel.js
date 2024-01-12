@@ -37,7 +37,8 @@ const ordersSchema=mongoose.Schema({
             type: String
         },
         image:{
-            type:String
+            type:String,
+            required:true
         }
     }
 ],
