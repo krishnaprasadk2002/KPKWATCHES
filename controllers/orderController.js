@@ -134,7 +134,7 @@ const placeOrder = async (req, res) => {
             }
         );
 
-        console.log('result:', updatedOrder);
+        // console.log('result:', updatedOrder);
 
         if (updatedOrder.nModified === 0) {
             return res.status(404).json({ error: 'Order not found or status already updated' });

@@ -403,40 +403,39 @@ const addAddressProfile = async (req, res) => {
 
 const editAddress = async (req, res) => {
   try {
-    const userId = req.session.user_id;
-    const { name, mobile, pincode, address, city, state } = req.body;
+     const userId = req.session.user_id;
+     const { name, mobile, pincode, address, city, state } = req.body;
 
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: userId },
-      {
-        $set: {
-          'address.$.name': name,
-          'address.$.mobile': mobile,
-          'address.$.pincode': pincode,
-          'address.$.address': address,
-          'address.$.city': city,
-          'address.$.state': state,
+     const updatedUser = await User.findOneAndUpdate(
+        { _id: userId, 'address._id': req.params.id },
+        {
+           $set: {
+              'address.$.name': name,
+              'address.$.mobile': mobile,
+              'address.$.pincode': pincode,
+              'address.$.address': address,
+              'address.$.city': city,
+              'address.$.state': state,
+           },
         },
-      },
-      { new: true } // This option returns the modified document instead of the original one
-    );
+        { new: true } 
+     );
 
-    if (updatedUser) {
-      console.log('Address updated successfully');
-      res.status(200).json({ success: true, message: 'Address updated successfully' });
-    } else {
-      console.log('User or address not found');
-      res.status(404).json({ success: false, message: 'User or address not found' });
-    }
+     if (updatedUser) {
+        console.log('Address updated successfully');
+        res.status(200).json({ success: true, message: 'Address updated successfully' });
+     } else {
+        console.log('User or address not found');
+        res.status(404).json({ success: false, message: 'User or address not found' });
+     }
   } catch (error) {
-    console.error('Error updating address:', error);
-    res.status(500).json({ success: false, error: 'Internal server error' });
+     console.error('Error updating address:', error);
+     res.status(500).json({ success: false, error: 'Internal server error' });
   }
 };
 
 
-
-//Edit profile
+// Edit profile
 
 const editProfile=async (req,res)=>{
   try {
@@ -510,11 +509,11 @@ const removeAddress = async (req, res) => {
       user.address.pull({ _id: addressId });
       await user.save();
 
-      // Send a success response to the client
+      
       res.status(200).json({ message: 'Address removed successfully' });
   } catch (error) {
       console.log(error);
-      // Send an error response to the client
+     
       res.status(500).json({ error: 'Internal Server Error' });
   }
 };

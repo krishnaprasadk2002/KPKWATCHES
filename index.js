@@ -21,6 +21,9 @@ app.use(flash())
 const PORT=process.env.PORT || 4000
 const path=require("path")
 
+const cors = require('cors');
+app.use(cors());
+
 app.use(express.static(path.join(__dirname,'public')))
 
 

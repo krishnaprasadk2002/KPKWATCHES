@@ -45,7 +45,8 @@ const insertProduct = async (req, res) => {
 
         await Promise.all(promises);
 
-        res.status(200).send("Product added successfully");
+        // res.status(200).send("Product added successfully");
+        res.redirect("/admin/allproduct")
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
@@ -173,31 +174,23 @@ const handleEditProduct = async (req, res) => {
 const deleteimage = async (req, res) => {
     try {
         const index = req.query.index;
-
-        // Assuming you have a product object with an 'image' property
         const product = await Products.findOne({ _id: req.query.id });
 
-        // Check if the product is found
+           //checking prouct
         if (!product) {
             return res.status(404).send('Product not found');
         }
 
-        // Check if the index is valid
+        // Check index
         if (index >= 0 && index < product.image.length) {
-            // Get the filename of the image at the specified index
             const filenameToDelete = product.image[index];
-
-            // Construct the file path
             const filePath = path.join(__dirname, '../public/uploads', filenameToDelete);
 
             // Delete the file
             fs.unlinkSync(filePath);
              // fs.promises.unlink(filePath)
 
-            // Update the database to remove the image reference
             await Products.findByIdAndUpdate(product._id, { $pull: { image: filenameToDelete } });
-
-            // Send a success response
             res.redirect(`/admin/editproduct?id=${req.query.id}`);
         } else {
             res.status(400).send('Invalid index');
