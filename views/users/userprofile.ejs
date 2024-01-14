@@ -40,7 +40,7 @@
             color: red;
         }
     </style>
-    
+
     <div class="page-wrapper">
         <header class="header">
             <div class="header-top">
@@ -229,9 +229,8 @@
 
 <!-- -----------------------------------------------------------------------Orders section---------------------------------------------------------------------------------- -->
 
-
-                                        <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
-                                            <section class="vh-100 gradient-custom-2">
+                                          <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                                            <section class="vh-70 gradient-custom-2">
                                                 <div class="container py-5 ">
                                                   <% orders.forEach(order => { %>
                                                     <div class="row align-items-center h-100">
@@ -259,10 +258,10 @@
                                                                 <div class="flex-fill">
                                                                   <h5 class="bold"> <a href="/eachproduct/?id=<%= product.productId._id %>"><%= product.name %></a></h5>
                                                                   <p class="text-muted"> Qt: <%= product.quentity %> item</p>
-                                                                  <h4 class="mb-3"> ₹ <%= product.total %> <span class="small text-muted"> <br> via (<%=order.paymentMode%>) </span></h4>
+                                                                  <h4 class="mb-3"> $ <%= product.total %> <span class="small text-muted"> <br> via (<%=order.paymentMode%>) </span></h4>
                                                                 </div>
                                                                 <div>
-                                                                  <img class="align-self-center img-fluid" src="/uploads/<%=product.image%>" width="250">
+                                                                  <img class="align-self-center img-fluid" src="/uploads/<%=product.image%>" width="150" height="100">
                                                                 </div>
                                                               </div>
                                                               <% if(product.orderStatus=="placed"){%>
@@ -300,9 +299,12 @@
                                                     </div>
                                                   <% }); %>
                                                 </div>
-                                            
                                               </section>
+                    
                                           </div>
+                    
+                                          <a hidden href="/" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+                    
                     
                                           
 
@@ -1032,9 +1034,23 @@
  </script>
 
 
+
+
+
 <script>
     function editprofile() {
-       
+        const name = document.getElementById('editName').value.trim();
+        const mobile = document.getElementById('editMobile').value.trim();
+
+        // Add your conditions here
+        if (name === '' || mobile === '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please fill in all required fields.',
+            });
+            return; // Stop execution if conditions are not met
+        }
 
         Swal.fire({
             title: 'Are you sure?',
@@ -1046,15 +1062,10 @@
             confirmButtonText: 'Yes, update it!',
         }).then((result) => {
             if (result.isConfirmed) {
-                
-                const name = document.getElementById('editName').value.trim();
-                const mobile = document.getElementById('editMobile').value.trim();
-
-               
                 fetch('/submitprofile', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded', 
+                        'Content-Type': 'application/x-www-form-urlencoded',
                     },
                     body: `name=${encodeURIComponent(name)}&mobile=${encodeURIComponent(mobile)}`,
                 })
@@ -1094,6 +1105,7 @@
         });
     }
 </script>
+
 
 
 <script>
