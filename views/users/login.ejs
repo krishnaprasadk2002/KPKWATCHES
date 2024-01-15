@@ -175,7 +175,7 @@
 
     <main class="main">
 
-        <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('user/assets/images/backgrounds/login-bg.jpg')">
+        <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url(../user/assets/images/banners/countdown-begins-antique-timer-sand-flowing-endlessly-generated-by-ai.jpg)">
             <div class="container">
                 <div class="form-box">
                     <div class="form-tab">
@@ -210,7 +210,7 @@
                                             <label class="custom-control-label" for="signin-remember-2">Remember Me</label>
                                         </div><!-- End .custom-checkbox -->
                             
-                                        <a href="#" class="forgot-link">Forgot Your Password?</a>
+                                        <a href="/forgetpass" class="forgot-link">Forgot Your Password?</a>
                                     </div><!-- End .form-footer -->
                                 </form>
                             </div>
@@ -426,12 +426,18 @@
                                             <label class="custom-control-label" for="signin-remember">Remember Me</label>
                                         </div><!-- End .custom-checkbox -->
 
-                                        <a href="#" class="forgot-link">Forgot Your Password?</a>
+                                        <a href="/forgetpass" class="forgot-link">Forgot Your Password?</a>
                                     </div><!-- End .form-footer -->
                                 </form>
                                 <% if (locals.message) { %>
                                     <div class="success-message" style="color:red">
                                       <%= locals.message %>
+                                    </div>
+                                  <% } %>
+
+                                  <% if (locals.success) { %>
+                                    <div class="success-message" style="color:green">
+                                      <%= locals.success %>
                                     </div>
                                   <% } %>
                                     
