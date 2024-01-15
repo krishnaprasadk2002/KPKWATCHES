@@ -3,6 +3,7 @@
 
 
 <!-- molla/category-boxed.html  22 Nov 2019 10:03:00 GMT -->
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -37,7 +38,7 @@
         <header class="header">
             <div class="header-top">
                 <div class="container">
-                  
+
 
                     <div class="header-right">
                         <ul class="top-menu">
@@ -67,7 +68,7 @@
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
                                 <li class="megamenu-container ">
-                                    <a href="/" >Home</a>
+                                    <a href="/">Home</a>
                                 </li>
                                 <li class="megamenu-container active">
                                     <a href="/product">product</a>
@@ -75,7 +76,7 @@
                                 </li>
                                 <li>
 
-                                    <a href="product.html" >About</a>
+                                    <a href="product.html">About</a>
 
                                 </li>
                                 <li>
@@ -91,22 +92,58 @@
 
                     <div class="header-right">
                         <div class="header-search">
-                            <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
-                            <form action="#" method="get">
+                            <a href="#" class="search-toggle" role="button" title="Search"><i
+                                    class="icon-search"></i></a>
+                            <form action="/searchProduct" method="post">
                                 <div class="header-search-wrapper">
-                                    <label for="q" class="sr-only">Search</label>
-                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search in..." required>
+                                    <label for="search" class="sr-only">Search</label>
+                                    <input type="search" class="form-control" name="search" id="q"
+                                        placeholder="Search in..." required>
+
                                 </div><!-- End .header-search-wrapper -->
                             </form>
                         </div><!-- End .header-search -->
-                     
+
+
+                        <script>
+                            function updateSort(selectElement) {
+                                const selectedValue = selectElement.value;
+                                window.location.href = selectedValue;
+                            }
+                        
+                            document.querySelector('form').addEventListener('submit', async function (event) {
+                                event.preventDefault();
+                        
+                                const searchValue = document.getElementById('q').value;
+                        
+                                try {
+                                    const response = await fetch('/searchProduct', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({ search: searchValue }),
+                                    });
+                        
+                                    const data = await response.json();
+                        
+                                    // Process the response data (display results, etc.)
+                                    console.log(data);
+                                } catch (error) {
+                                    console.error(error.message);
+                                }
+                            });
+                        </script>
+                        
+
 
                         <div class="dropdown cart-dropdown">
-                            <a href="/cart" class="dropdown-toggle" role="button"  aria-haspopup="true" aria-expanded="false" data-display="static">
+                            <a href="/cart" class="dropdown-toggle" role="button" aria-haspopup="true"
+                                aria-expanded="false" data-display="static">
                                 <i class="icon-shopping-cart"></i>
                                 <span class="cart-count">2</span>
                             </a>
-                            
+
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class="dropdown-cart-products">
                                     <div class="product">
@@ -123,10 +160,12 @@
 
                                         <figure class="product-image-container">
                                             <a href="product.html" class="product-image">
-                                                <img src="../user/assets/images/products/cart/product-1.jpg" alt="product">
+                                                <img src="../user/assets/images/products/cart/product-1.jpg"
+                                                    alt="product">
                                             </a>
                                         </figure>
-                                        <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
+                                        <a href="#" class="btn-remove" title="Remove Product"><i
+                                                class="icon-close"></i></a>
                                     </div><!-- End .product -->
 
                                     <div class="product">
@@ -143,10 +182,12 @@
 
                                         <figure class="product-image-container">
                                             <a href="product.html" class="product-image">
-                                                <img src="../user/assets/images/products/cart/product-2.jpg" alt="product">
+                                                <img src="../user/assets/images/products/cart/product-2.jpg"
+                                                    alt="product">
                                             </a>
                                         </figure>
-                                        <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
+                                        <a href="#" class="btn-remove" title="Remove Product"><i
+                                                class="icon-close"></i></a>
                                     </div><!-- End .product -->
                                 </div><!-- End .cart-product -->
 
@@ -158,7 +199,8 @@
 
                                 <div class="dropdown-cart-action">
                                     <a href="cart.html" class="btn btn-primary">View Cart</a>
-                                    <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                    <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i
+                                            class="icon-long-arrow-right"></i></a>
                                 </div><!-- End .dropdown-cart-total -->
                             </div><!-- End .dropdown-menu -->
                         </div><!-- End .cart-dropdown -->
@@ -174,245 +216,310 @@
                     font-size: 16px;
                     margin-bottom: 5px;
                 }
-        
+
                 .original-price {
                     text-decoration: line-through;
-                    color: #999; /* Optional: Adjust the color to your preference */
+                    color: #999;
                 }
-        
+
                 .offer-price {
-                    color: #e44d26; /* Optional: Adjust the color to your preference */
-                    font-weight: bold; /* Optional: Adjust the font weight to your preference */
+                    color: #e44d26;
+                    font-weight: bold;
                 }
             </style>
-        	
-           
+
+
 
             <div class="page-content">
                 <div class="container">
-        			<div class="toolbox">
-        				<div class="toolbox-left">
+                    <div class="toolbox">
+                        <div class="toolbox-left">
                             <a href="#" class="sidebar-toggler"><i class="icon-bars"></i>Filters</a>
-        				</div><!-- End .toolbox-left -->
+                        </div><!-- End .toolbox-left -->
 
-                        <div class="toolbox-center">
-                            <div class="toolbox-info">
-                                Showing <span>12 of 56</span> Products
-                            </div><!-- End .toolbox-info -->
-                        </div><!-- End .toolbox-center -->
 
-        				<div class="toolbox-right">
-        					<div class="toolbox-sort">
-        						<label for="sortby">Sort by:</label>
-        						<div class="select-custom">
-									<select name="sortby" id="sortby" class="form-control">
-										<option value="popularity" selected="selected">Most Popular</option>
-										<option value="rating">Most Rated</option>
-										<option value="date">Date</option>
-									</select>
-								</div>
-        					</div><!-- End .toolbox-sort -->
-        				</div><!-- End .toolbox-right -->
-        			</div><!-- End .toolbox -->
+                        <div class="toolbox-right">
+                            <div class="toolbox-sort">
+                                <label for="sortby">Sort by:</label>
+                                <div class="select-custom">
+                                    <select name="sortby" id="sortby" class="form-control" onchange="updateSort(this)">
+                                        <option value="/product?sort=default" <%= sortOption === 'default' ? 'selected' : '' %>>Sort By</option>
+                                        <option value="/product?sort=priceLowTohigh" <%= sortOption === 'priceLowTohigh' ? 'selected' : '' %>>Low-High</option>
+                                        <option value="/product?sort=2" <%= sortOption === '2' ? 'selected' : '' %>>High-Low</option>
+                                        <option value="/product?sort=3" <%= sortOption === '3' ? 'selected' : '' %>>Name</option>
+                                    </select>
+                                </div>
+                            </div><!-- End .toolbox-sort -->
+                        </div><!-- End .toolbox-right -->
+                        
 
                     <div class="products">
                         <div class="row">
-                            <% filteredProducts.forEach((productData) => { %>
+                            <% filteredProducts.forEach((productData)=> { %>
                                 <div class="col-6 col-md-4 col-lg-4 col-xl-3">
                                     <div class="product">
                                         <figure class="product-media">
                                             <a href="/eachproduct?id=<%= productData._id %>">
-                                                <img src="/uploads/<%= productData.image[0] %>" alt="Product image" class="product-image" style="width: 100%; height: 300px;">
+                                                <img src="/uploads/<%= productData.image[0] %>" alt="Product image"
+                                                    class="product-image" style="width: 100%; height: 300px;">
                                             </a>
                                         </figure><!-- End .product-media -->
-                        
+
                                         <div class="product-body">
                                             <h3 class="product-title">
-                                                <a href="/eachproduct?id=<%= productData._id %>"><b><%= productData.name %></b></a>
+                                                <a href="/eachproduct?id=<%= productData._id %>"><b>
+                                                        <%= productData.name %>
+                                                    </b></a>
                                             </h3><!-- End .product-title -->
                                             <div class="product-cat">
-                                                <a href="/eachproduct?id=<%= productData._id %>"><%= productData.category.name %></a>
+                                                <a href="/eachproduct?id=<%= productData._id %>">
+                                                    <%= productData.category.name %>
+                                                </a>
                                             </div><!-- End .product-cat -->
 
                                             <div class="product-price">
-                                                <% if (productData.offerprice <= productData.price) { %>
+                                                <% if (productData.offerprice <=productData.price) { %>
                                                     <br>
                                                     <span class="original-price">₹<%= productData.price %></span>
                                                     <br><br>
                                                     <span class="offer-price">₹<%= productData.offerprice %></span>
-                                                <% } else { %>
-                                                    ₹<%= productData.price %>
-                                                <% } %>
+                                                    <% } else { %>
+                                                        ₹<%= productData.price %>
+                                                            <% } %>
                                             </div>
-                                            
+
                                             <div class="Description">
                                                 <%= productData.description %>
                                             </div>
                                         </div><!-- End .product-body -->
                                     </div><!-- End .product -->
                                 </div><!-- End .col-md-4 -->
-                            <% }) %>
+                                <% }) %>
                         </div><!-- End .row -->
                     </div><!-- End .products -->
-                    
-                    
+
+
+
+
+                      <div class="products">
+                        <div class="row">
+                            <% filteredProducts.forEach((productData)=> { %>
+                                <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+                                    <div class="product">
+                                        <figure class="product-media">
+                                            <a href="/eachproduct?id=<%= productData._id %>">
+                                                <img src="/uploads/<%= productData.image[0] %>" alt="Product image"
+                                                    class="product-image" style="width: 100%; height: 300px;">
+                                            </a>
+                                        </figure><!-- End .product-media -->
+
+                                        <div class="product-body">
+                                            <h3 class="product-title">
+                                                <a href="/eachproduct?id=<%= productData._id %>"><b>
+                                                        <%= productData.name %>
+                                                    </b></a>
+                                            </h3><!-- End .product-title -->
+                                            <div class="product-cat">
+                                                <a href="/eachproduct?id=<%= productData._id %>">
+                                                    <%= productData.category.name %>
+                                                </a>
+                                            </div><!-- End .product-cat -->
+
+                                            <div class="product-price">
+                                                <% if (productData.offerprice <=productData.price) { %>
+                                                    <br>
+                                                    <span class="original-price">₹<%= productData.price %></span>
+                                                    <br><br>
+                                                    <span class="offer-price">₹<%= productData.offerprice %></span>
+                                                    <% } else { %>
+                                                        ₹<%= productData.price %>
+                                                            <% } %>
+                                            </div>
+
+                                            <div class="Description">
+                                                <%= productData.description %>
+                                            </div>
+                                        </div><!-- End .product-body -->
+                                    </div><!-- End .product -->
+                                </div><!-- End .col-md-4 -->
+                                <% }) %>
+                        </div><!-- End .row -->
+                    </div><!-- End .products -->
+
+
+
 
                     <div class="sidebar-filter-overlay"></div><!-- End .sidebar-filter-overlay -->
                     <aside class="sidebar-shop sidebar-filter">
                         <div class="sidebar-filter-wrapper">
                             <div class="widget widget-clean">
                                 <label><i class="icon-close"></i>Filters</label>
-                                <a href="/product" >Clean All</a>
+                                <a href="/product">Clean All</a>
                             </div><!-- End .widget -->
-                           
-                                <h3 class="widget-title">
-                                    <a  href="/product" role="button" aria-expanded="true" aria-controls="widget-1">
-                                       All Category
-                                    </a>
-                                </h3><!-- End .widget-title -->
 
-                                <% allcategory.forEach((productData) => { %>
-                                    
-                                    <div class="collapse show" id="widget-<%= productData.id %>">
-                                        <div class="widget-body">
-                                            <div class="filter-item">
-                                                <div>
-                                                    
-                                                    <label " for="cat-<%= productData.id %>"><a href="/product?category=<%= productData._id%>"><%= productData.name %></a></label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count"></span>
-                                
-                                            </div><!-- End .filter-item -->
-                                        </div><!-- End .widget-body -->
-                                    </div><!-- End .collapse -->
+                            <h3 class="widget-title">
+                                <a href="/product" role="button" aria-expanded="true" aria-controls="widget-1">
+                                    All Category
+                                </a>
+                            </h3><!-- End .widget-title -->
+
+                            <% allcategory.forEach((productData)=> { %>
+
+                                <div class="collapse show" id="widget-<%= productData.id %>">
+                                    <div class="widget-body">
+                                        <div class="filter-item">
+                                            <div>
+
+                                                <label " for=" cat-<%=productData.id %>"><a
+                                                        href="/product?category=<%= productData._id%>">
+                                                        <%= productData.name %>
+                                                    </a></label>
+                                            </div><!-- End .custom-checkbox -->
+                                            <span class="item-count"></span>
+
+                                        </div><!-- End .filter-item -->
+                                    </div><!-- End .widget-body -->
+                                </div><!-- End .collapse -->
                                 <% }) %>
-                                
-                                
-                          
 
-                       
+
+
+
+
 
                         </div><!-- End .sidebar-filter-wrapper -->
                     </aside><!-- End .sidebar-filter -->
                 </div><!-- End .container -->
             </div><!-- End .page-content -->
 
-            
+
         </main><!-- End .main -->
 
         <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
-                <% if (locals.currentPage > 1) { %>
+                <% if (locals.currentPage> 1) { %>
                     <li class="page-item">
                         <a class="page-link" href="/product?page=<%= currentPage - 1 %>" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                             <span class="sr-only">Previous</span>
                         </a>
                     </li>
-                <% } else { %>
-                    <li class="page-item disabled">
-                        <span class="page-link" aria-hidden="true">&laquo;</span>
-                    </li>
-                <% } %>
-        
-                <% for (let page = 1; page <= locals.totalPages; page++) { %>
-                    <li class="page-item <%= locals.currentPage === page ? 'Listed' : '' %>">
-                        <a class="page-link" href="/product?page=<%= page %>"><%= page %></a>
-                    </li>
-                <% } %>
-        
-                <li class="page-item-total">of <%= locals.totalPages %></li>
-        
-                <% if (locals.currentPage < locals.totalPages) { %>
-                    <li class="page-item">
-                        <a class="page-link" href="/product?page=<%= currentPage + 1 %>" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </li>
-                <% } else { %>
-                    <li class="page-item disabled">
-                        <span class="page-link" aria-hidden="true">&raquo;</span>
-                    </li>
-                <% } %>
+                    <% } else { %>
+                        <li class="page-item disabled">
+                            <span class="page-link" aria-hidden="true">&laquo;</span>
+                        </li>
+                        <% } %>
+
+                            <% for (let page=1; page <=locals.totalPages; page++) { %>
+                                <li class="page-item <%= locals.currentPage === page ? 'Listed' : '' %>">
+                                    <a class="page-link" href="/product?page=<%= page %>">
+                                        <%= page %>
+                                    </a>
+                                </li>
+                                <% } %>
+
+                                    <li class="page-item-total">of <%= locals.totalPages %>
+                                    </li>
+
+                                    <% if (locals.currentPage < locals.totalPages) { %>
+                                        <li class="page-item">
+                                            <a class="page-link" href="/product?page=<%= currentPage + 1 %>"
+                                                aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        </li>
+                                        <% } else { %>
+                                            <li class="page-item disabled">
+                                                <span class="page-link" aria-hidden="true">&raquo;</span>
+                                            </li>
+                                            <% } %>
             </ul>
-         </nav>
+        </nav>
 
         <footer class="footer">
-        	<div class="footer-middle">
-	            <div class="container">
-	            	<div class="row">
-	            		<div class="col-sm-6 col-lg-3">
-	            			<div class="widget widget-about">
-	            				<img src="../user/assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105" height="25">
-	            				<p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. </p>
+            <div class="footer-middle">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget widget-about">
+                                <img src="../user/assets/images/logo.png" class="footer-logo" alt="Footer Logo"
+                                    width="105" height="25">
+                                <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate
+                                    magna eros eu erat. </p>
 
-	            				<div class="social-icons">
-	            					<a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
-	            					<a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
-	            					<a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
-	            					<a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
-	            					<a href="#" class="social-icon" target="_blank" title="Pinterest"><i class="icon-pinterest"></i></a>
-	            				</div><!-- End .soial-icons -->
-	            			</div><!-- End .widget about-widget -->
-	            		</div><!-- End .col-sm-6 col-lg-3 -->
+                                <div class="social-icons">
+                                    <a href="#" class="social-icon" target="_blank" title="Facebook"><i
+                                            class="icon-facebook-f"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Twitter"><i
+                                            class="icon-twitter"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Instagram"><i
+                                            class="icon-instagram"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Youtube"><i
+                                            class="icon-youtube"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Pinterest"><i
+                                            class="icon-pinterest"></i></a>
+                                </div><!-- End .soial-icons -->
+                            </div><!-- End .widget about-widget -->
+                        </div><!-- End .col-sm-6 col-lg-3 -->
 
-                        
 
-	            		<div class="col-sm-6 col-lg-3">
-	            			<div class="widget">
-	            				<h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
 
-	            				<ul class="widget-list">
-	            					<li><a href="about.html">About Molla</a></li>
-	            					<li><a href="#">How to shop on Molla</a></li>
-	            					<li><a href="#">FAQ</a></li>
-	            					<li><a href="contact.html">Contact us</a></li>
-	            					<li><a href="login.html">Log in</a></li>
-	            				</ul><!-- End .widget-list -->
-	            			</div><!-- End .widget -->
-	            		</div><!-- End .col-sm-6 col-lg-3 -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget">
+                                <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
 
-	            		<div class="col-sm-6 col-lg-3">
-	            			<div class="widget">
-	            				<h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
+                                <ul class="widget-list">
+                                    <li><a href="about.html">About Molla</a></li>
+                                    <li><a href="#">How to shop on Molla</a></li>
+                                    <li><a href="#">FAQ</a></li>
+                                    <li><a href="contact.html">Contact us</a></li>
+                                    <li><a href="login.html">Log in</a></li>
+                                </ul><!-- End .widget-list -->
+                            </div><!-- End .widget -->
+                        </div><!-- End .col-sm-6 col-lg-3 -->
 
-	            				<ul class="widget-list">
-	            					<li><a href="#">Payment Methods</a></li>
-	            					<li><a href="#">Money-back guarantee!</a></li>
-	            					<li><a href="#">Returns</a></li>
-	            					<li><a href="#">Shipping</a></li>
-	            					<li><a href="#">Terms and conditions</a></li>
-	            					<li><a href="#">Privacy Policy</a></li>
-	            				</ul><!-- End .widget-list -->
-	            			</div><!-- End .widget -->
-	            		</div><!-- End .col-sm-6 col-lg-3 -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget">
+                                <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
 
-	            		<div class="col-sm-6 col-lg-3">
-	            			<div class="widget">
-	            				<h4 class="widget-title">My Account</h4><!-- End .widget-title -->
+                                <ul class="widget-list">
+                                    <li><a href="#">Payment Methods</a></li>
+                                    <li><a href="#">Money-back guarantee!</a></li>
+                                    <li><a href="#">Returns</a></li>
+                                    <li><a href="#">Shipping</a></li>
+                                    <li><a href="#">Terms and conditions</a></li>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                </ul><!-- End .widget-list -->
+                            </div><!-- End .widget -->
+                        </div><!-- End .col-sm-6 col-lg-3 -->
 
-	            				<ul class="widget-list">
-	            					<li><a href="#">Sign In</a></li>
-	            					<li><a href="cart.html">View Cart</a></li>
-	            					<li><a href="#">My Wishlist</a></li>
-	            					<li><a href="#">Track My Order</a></li>
-	            					<li><a href="#">Help</a></li>
-	            				</ul><!-- End .widget-list -->
-	            			</div><!-- End .widget -->
-	            		</div><!-- End .col-sm-6 col-lg-3 -->
-	            	</div><!-- End .row -->
-	            </div><!-- End .container -->
-	        </div><!-- End .footer-middle -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget">
+                                <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
 
-	        <div class="footer-bottom">
-	        	<div class="container">
-	        		<p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p><!-- End .footer-copyright -->
-	        		<figure class="footer-payments">
-	        			<img src="../user/assets/images/payments.png" alt="Payment methods" width="272" height="20">
-	        		</figure><!-- End .footer-payments -->
-	        	</div><!-- End .container -->
-	        </div><!-- End .footer-bottom -->
+                                <ul class="widget-list">
+                                    <li><a href="#">Sign In</a></li>
+                                    <li><a href="cart.html">View Cart</a></li>
+                                    <li><a href="#">My Wishlist</a></li>
+                                    <li><a href="#">Track My Order</a></li>
+                                    <li><a href="#">Help</a></li>
+                                </ul><!-- End .widget-list -->
+                            </div><!-- End .widget -->
+                        </div><!-- End .col-sm-6 col-lg-3 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .footer-middle -->
+
+            <div class="footer-bottom">
+                <div class="container">
+                    <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p>
+                    <!-- End .footer-copyright -->
+                    <figure class="footer-payments">
+                        <img src="../user/assets/images/payments.png" alt="Payment methods" width="272" height="20">
+                    </figure><!-- End .footer-payments -->
+                </div><!-- End .container -->
+            </div><!-- End .footer-bottom -->
         </footer><!-- End .footer -->
     </div><!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
@@ -426,18 +533,19 @@
 
             <form action="#" method="get" class="mobile-search">
                 <label for="mobile-search" class="sr-only">Search</label>
-                <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..." required>
+                <input type="search" class="form-control" name="mobile-search" id="mobile-search"
+                    placeholder="Search in..." required>
                 <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
             </form>
-            
+
             <nav class="mobile-nav">
                 <ul class="mobile-menu">
-                    <li >
+                    <li>
                         <a href="/">Home</a>
                     </li>
-                    
+
                     <li class="active">
-                        <a href="/product" >Product</a>
+                        <a href="/product">Product</a>
                     </li>
 
                     <li>
@@ -449,13 +557,13 @@
                     <li>
                         <a href="#">Blog</a>
                     </li>
-                    
-                  
+
+
                 </ul>
             </nav><!-- End .mobile-nav -->
 
 
-            
+
         </div><!-- End .mobile-menu-wrapper -->
     </div><!-- End .mobile-menu-container -->
 
@@ -472,23 +580,28 @@
                         <div class="form-tab">
                             <ul class="nav nav-pills nav-fill" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">Sign In</a>
+                                    <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin"
+                                        role="tab" aria-controls="signin" aria-selected="true">Sign In</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Register</a>
+                                    <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab"
+                                        aria-controls="register" aria-selected="false">Register</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="tab-content-5">
-                                <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                                <div class="tab-pane fade show active" id="signin" role="tabpanel"
+                                    aria-labelledby="signin-tab">
                                     <form action="#">
                                         <div class="form-group">
                                             <label for="singin-email">Username or email address *</label>
-                                            <input type="text" class="form-control" id="singin-email" name="singin-email" required>
+                                            <input type="text" class="form-control" id="singin-email"
+                                                name="singin-email" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
                                             <label for="singin-password">Password *</label>
-                                            <input type="password" class="form-control" id="singin-password" name="singin-password" required>
+                                            <input type="password" class="form-control" id="singin-password"
+                                                name="singin-password" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-footer">
@@ -498,8 +611,10 @@
                                             </button>
 
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="signin-remember">
-                                                <label class="custom-control-label" for="signin-remember">Remember Me</label>
+                                                <input type="checkbox" class="custom-control-input"
+                                                    id="signin-remember">
+                                                <label class="custom-control-label" for="signin-remember">Remember
+                                                    Me</label>
                                             </div><!-- End .custom-checkbox -->
 
                                             <a href="#" class="forgot-link">Forgot Your Password?</a>
@@ -527,12 +642,14 @@
                                     <form action="#">
                                         <div class="form-group">
                                             <label for="register-email">Your email address *</label>
-                                            <input type="email" class="form-control" id="register-email" name="register-email" required>
+                                            <input type="email" class="form-control" id="register-email"
+                                                name="register-email" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
                                             <label for="register-password">Password *</label>
-                                            <input type="password" class="form-control" id="register-password" name="register-password" required>
+                                            <input type="password" class="form-control" id="register-password"
+                                                name="register-password" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-footer">
@@ -542,8 +659,10 @@
                                             </button>
 
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="register-policy" required>
-                                                <label class="custom-control-label" for="register-policy">I agree to the <a href="#">privacy policy</a> *</label>
+                                                <input type="checkbox" class="custom-control-input" id="register-policy"
+                                                    required>
+                                                <label class="custom-control-label" for="register-policy">I agree to the
+                                                    <a href="#">privacy policy</a> *</label>
                                             </div><!-- End .custom-checkbox -->
                                         </div><!-- End .form-footer -->
                                     </form>
@@ -590,4 +709,5 @@
 
 
 <!-- molla/category-boxed.html  22 Nov 2019 10:03:02 GMT -->
+
 </html>
