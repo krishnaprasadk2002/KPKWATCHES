@@ -286,11 +286,30 @@
                                                                     </div>
                                                                   </div>
                                                                 <%}%>
-                                                                <%if(product.orderStatus=="delivered"){%>
-                                                                    <h6 class="text-success"><%=product.orderStatus%></h6>
-                                                                    <%}%>
+
+                                                                <% if (product.orderStatus == "delivered") { %>
+                                                                    <h6 class="text-primary" style="margin-left: 20px; margin-bottom: 30px;"><%= product.orderStatus %></h6>
+                                                                    <div class="card-footer p-4">
+                                                                        <div class="d-flex justify-content-between">
+                                                                            <h5 class="fw-normal mb-0">
+                                                                                <a href="#" class="mb-4" onclick="returnfromorder('<%= order._id %>', '<%= product._id %>', '<%= product.orderStatus %>')">Return Order</a>
+                                                                            </h5>
+                                                                            <div class="border-start h-100"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                <% } %>
+
+
+                                                                
+                                                            
                                                                     <%if(product.orderStatus=="cancelled"){%>
                                                                         <h6 class="text-danger " ><%=product.orderStatus%></h6>
+                                                                        <%}%>
+                                                                    <%if(product.orderStatus=="request return"){%>
+                                                                        <h6 class="text-danger " ><%=product.orderStatus%></h6>
+                                                                        <%}%>
+                                                                    <%if(product.orderStatus=="returned"){%>
+                                                                        <h6 class="text-success " ><%=product.orderStatus%></h6>
                                                                         <%}%>
                                                             <% }); %>
                                                           </div>
@@ -1244,6 +1263,56 @@ function reloadAddressTab() {
     }
 </script>
 
+
+<script>
+
+function returnfromorder(orderId, proId, orderStatus) {
+    Swal.fire({
+        title: 'Return Order',
+        html: `You are about to request a return for an order with status: <strong>${orderStatus}</strong>.<br>Do you want to proceed?`,
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, request return!',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/returnOrder/${orderId}/${proId}`, {
+                method: 'POST',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Return request submitted successfully:', data);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Return Request Submitted!',
+                        text: 'Your return request has been submitted successfully.',
+                    }).then(() => {
+                        // page reload or redirect to the return requests page
+                        window.location.reload();
+                        // or window.location.href = '/return-requests'; // Redirect to a specific page
+                    });
+                })
+                .catch(error => {
+                    console.error('There was a problem submitting the return request:', error.message);
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was a problem submitting the return request. Please try again.',
+                    });
+                });
+        }
+    });
+}
+
+</script>
 
 
 

@@ -373,7 +373,62 @@
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-        <script>
+
+
+
+<script>
+    function addtoCart(proid, userid) {
+        const quentity = document.getElementById('qty').value;
+
+        // Check if the quantity is less than 1
+        if (quentity < 1) {
+            // Display SweetAlert error message
+            Swal.fire({
+                icon: 'error',
+                title: 'Out of Stock',
+                text: 'Product quantity must be at least 1.',
+            });
+            return; // Exit the function if the quantity is invalid
+        }
+
+        // Make an AJAX request to the backend
+        fetch(`/addingcart/${proid}/${quentity}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                quentity: quentity,
+            }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            // Handle the response from the backend
+            console.log('Response from backend:', data);
+
+            // Display SweetAlert notification
+            Swal.fire({
+                icon: 'success',
+                title: 'Product added to cart!',
+                showConfirmButton: false,
+                timer: 1500, // Display the notification for 1.5 seconds
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+
+            // Display SweetAlert error notification
+            Swal.fire({
+                icon: 'error',
+                title: 'Error adding to cart',
+                text: 'An error occurred while adding the product to the cart.',
+            });
+        });
+    }
+</script>
+
+
+        <!-- <script>
             function addtoCart(proid, userid) {
                 const quentity = document.getElementById('qty').value;
         
@@ -410,7 +465,7 @@
                     });
                 });
         }
-    </script>
+    </script> -->
         
 
         <footer class="footer">

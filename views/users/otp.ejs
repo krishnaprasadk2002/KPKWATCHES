@@ -176,8 +176,18 @@
             </div><!-- End .container -->
         </div><!-- End .header-middle -->
     </header><!-- End .header -->
-
+<style>
+    .flash-message {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
     
+    .error {
+        background-color: #FFD2D2;
+        color: #FF0000;
+    }
+
+</style>
 
 <div class="otp-verification-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url(../user/assets/images/banners/countdown-begins-antique-timer-sand-flowing-endlessly-generated-by-ai.jpg)">
     <div class="container">
@@ -206,6 +216,12 @@
                                     <span>VERIFY OTP</span>
                                     <i class="icon-long-arrow-right"></i>
                                 </button>
+
+                                <% if (locals.error && locals.error.length > 0) { %>
+                                    <div class="flash-message error">
+                                        <%= error %>
+                                    </div>
+                                <% } %>
 
                                 <a href="/resendOtp?email=<%= email %>" class="resend-link">Resend OTP</a>
                             </div><!-- End .form-footer -->
