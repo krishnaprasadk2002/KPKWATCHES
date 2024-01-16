@@ -141,17 +141,20 @@
                       </td>
                       <td>
                         <div class="btn-group">
-                          <div class="btn-group dropstart">
-                            <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                              Status
-                            </button>
-                            <ul class="dropdown-menu">
-                              <li><a class="dropdown-item text-primary" href="#" onclick="updateStatus('shipped', '<%= order._id %>')">shipped</a></li>
-                              <li><a class="dropdown-item text-success" href="#" onclick="updateStatus('delivered', '<%= order._id %>')">delivered</a></li>
-                              <li><a class="dropdown-item text-danger" href="#" onclick="updateStatus('cancelled', '<%= order._id %>')">cancelled</a></li>
-                            </ul>
-                          </div>
+                            <div class="btn-group dropstart">
+                                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Status
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item text-primary" href="#" onclick="updateStatus('shipped', '<%= order._id %>')">Shipped</a></li>
+                                    <li><a class="dropdown-item text-success" href="#" onclick="updateStatus('delivered', '<%= order._id %>')">Delivered</a></li>
+                                    <li><a class="dropdown-item text-danger" href="#" onclick="updateStatus('cancelled', '<%= order._id %>')">Cancelled</a></li>
+                                    <li><a class="dropdown-item text-danger" href="#" onclick="updateStatus('request_return', '<%= order._id %>')">Request Return</a></li>
+                                    <li><a class="dropdown-item text-danger" href="#" onclick="updateStatus('returned', '<%= order._id %>')">Returned</a></li>
+                                </ul>
+                            </div>
                         </div>
+                        
                       </td>
                 </tr>
             <% }); %>

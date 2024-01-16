@@ -37,6 +37,14 @@ userRoute.post('/otp',userController.verifyOtp);
 userRoute.get('/resendOtp',userController.resendOtp)
 
 
+// Forgetpassword
+userRoute.get("/forgetpass",UserAuth.isLogout,userController.forgotpass)
+userRoute.post("/forgetpass",userController.sentResetPass)
+userRoute.get("/resetpassword/:userId/:token",userController.resetPage)
+userRoute.post("/resetpassword",userController.resetPassword)
+
+
+
 
 //login
 userRoute.post("/login",userController.verifyLogin)
@@ -50,7 +58,7 @@ userRoute.get("/home",UserAuth.isLogin,userController.loadHome)
 const productController=require("../controllers/productController")
 userRoute.get("/product",userController.loadProduct)
 userRoute.get("/eachproduct",productController.singleProduct)
-
+// userRoute.post("/searchProduct",productController.searchProduct)
 //logout
 userRoute.get("/logout",userController.userLogout)
 
@@ -88,6 +96,7 @@ userRoute.delete('/removeaddress/:id', userController.removeAddress);
 userRoute.post('/addAddressProfile',userController.addAddressProfile)
 userRoute.post('/updateaddress/:id',userController.editAddress)
 userRoute.post('/cancelOrder/:orderId/:productId',orderController.cancelOrPlacedOrder)
+userRoute.post('/returnOrder/:orderId/:productId',orderController.returnOrder)
 
 
 

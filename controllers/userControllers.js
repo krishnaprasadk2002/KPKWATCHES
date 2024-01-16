@@ -6,6 +6,8 @@ const userOtpVerification = require("../models/otpModel")
 const nodemailer = require("nodemailer");
 const Category = require("../models/categoryModel");
 const Orders = require("../models/orderModel");
+const Token=require("../models/tokenModel")
+const crypto=require("crypto")
 
 
 
@@ -28,6 +30,11 @@ const securePassword = async (password) => {
 
 const insertUser = async (req, res) => {
   try {
+    // const delteUnverifiedUser=await User.deleteOne({email:req.body.email,is_verified:0})
+
+    // if(delteUnverifiedUser){
+    //   console.log("Not entered Otp user Deleted");
+    // }
     const { name, mobile, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
@@ -121,7 +128,8 @@ const verifyOtp = async (req, res) => {
 
     if (!userVerification) {
       console.log("otp expired");
-      res.redirect('/register?failed=otp verifcation failed. Please try again.');
+      req.flash('error', 'Invalid OTP');
+      res.redirect('/otp');
       return;
     }
 
@@ -144,10 +152,11 @@ const verifyOtp = async (req, res) => {
       // delete the OTP record
       await userOtpVerification.deleteOne({ email });
 
-
+      
       res.redirect('/login?success=Registration successful!');
     } else {
-      res.redirect('/register?failed=Registration failed. Please try again.');
+      req.flash('error', 'Invalid OTP');
+      res.redirect('/otp');
     }
   } catch (error) {
     console.log(error);
@@ -179,6 +188,145 @@ const resendOtp = async (req, res) => {
 
   }
 } 
+
+
+//Forget password
+
+const forgotpass=async(req,res)=>{
+  try {
+    res.render("forgotpassword")
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+//reset password link
+
+const sendResetPasslink=async(email,res)=>{
+  try {
+    email=email
+    const user=await User.findOne({email:email})
+    console.log("what user send restpass:",user);
+
+    if(!user){
+      return res.status(400).send("user with given email doesn't exist");
+    }
+
+    let token= await Token.findOne({userId:user._id})
+
+    if(!token){
+      token = await new Token({userId: user._id, token: crypto.randomBytes(32).toString("hex")}).save();
+    }
+
+
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: 'prasadkrishna1189@gmail.com',
+        pass: 'vglm kbwh kqpt zbdg'
+      }
+    });
+
+    const resetpage = `http://localhost:4004/resetpassword/${
+            user._id
+        }/${
+            token.token
+        }`;
+
+  const mailOptions = {
+    from: 'prasadkrishna1189@gmail.com',
+    to: email,
+    subject: "Verify Your email",
+    html: `Your link here to reset the password: ${resetpage}`
+  };
+  await transporter.sendMail(mailOptions)
+
+
+
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+//send resent password
+
+const sentResetPass=async (req,res)=>{
+  try {
+    const email=req.body.mail
+    await sendResetPasslink(email,res)
+    req.flash('success', 'we sented a reset password link');
+    res.redirect("/login")
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+// reset password page link
+
+const resetPage=async(req,res)=>{
+  try {
+    const userId=req.params.userId
+    const token=req.params.token
+  
+    console.log(" what i want", userId, token);
+    const categories=await Category.find({is_listed:"Listed"})
+  
+    res.render("resetPassword",{
+      category:categories,
+      userId,
+      token
+    })
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+//reset password
+
+const resetPassword=async(req,res)=>{
+  try {
+    const user=req.body.userId
+    const userId=await User.findById(user)
+    const {email}=userId
+
+    const token=req.body.token
+    console.log(userId);
+
+    if(!userId){
+      return res.status(400).send("Invalid link or expired")
+    }
+
+    const tokenDoc=await Token.findOne({
+      userId:userId._id,
+      token:token
+    })
+
+    console.log("woking",token);
+
+    if(!tokenDoc){
+      return res.status(400).send("Invalid link or expired")
+    }
+
+    let password=req.body.confirmpassword
+    const spassword=await securePassword(password)
+    console.log("this is the last step:",spassword);
+
+    await User.updateOne({
+      email:email
+    },
+    {$set:{
+      password:spassword
+    }})
+    req.flash('success', 'successfully setted new password');
+    res.redirect("/login")
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 
 // login page
 
@@ -283,10 +431,27 @@ const loadHome = async (req, res) => {
 
 
 const loadProduct = async (req, res) => {
-  try {let totalproducts=await Products.find({is_listed: "Listed"}).count()
+  try {
+    const sortOption=req.query.sort
+    
+  let totalproducts=await Products.find({is_listed: "Listed"}).count()
   let totalPages=Math.ceil(totalproducts/12)
   let currentPage = parseInt(req.query.page, 10) || 1;
   const skip=(currentPage-1)*12
+
+
+
+  let sort = {};
+  if( sortOption === 'default' ){
+      sort = {date:-1}
+  }
+ else if(sortOption === 'priceLowTohigh' ){
+      sort = {price : 1}
+  } else if (sortOption === '2') {
+      sort = { price: -1 }; 
+  } else if (sortOption === '3') {
+      sort = { name: 1 }; 
+  }
 
 
       const selectedCategory = req.query.category;
@@ -297,10 +462,11 @@ const loadProduct = async (req, res) => {
 
           if (category && category.is_listed) {
               const products = await Products.find({ category: selectedCategory, is_listed: "Listed" }).populate('category')
+              .sort(sort) 
               .skip(skip)
               .limit(12)
               .exec();
-              res.render("allproduct", { filteredProducts: products, allcategory: [],totalPages,currentPage }); // Pass products directly to the view
+              res.render("allproduct", { filteredProducts: products, allcategory: [],totalPages,currentPage ,sortOption}); // Pass products directly to the view
               return; // End the function to prevent further execution
           } else {
               productss = [];
@@ -314,6 +480,7 @@ const loadProduct = async (req, res) => {
       }
 
       const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }).populate('category')
+              .sort(sort) 
               .skip(skip)
               .limit(12)
               .exec();
@@ -322,7 +489,7 @@ const loadProduct = async (req, res) => {
 
       
 
-      res.render("allproduct", { filteredProducts, allcategory,totalPages,currentPage });
+      res.render("allproduct", { filteredProducts, allcategory,totalPages,currentPage,sortOption });
   } catch (error) {
       console.log(error.message);
   }
@@ -528,6 +695,11 @@ module.exports = {
   loadotp,
   verifyOtp,
   resendOtp,
+  forgotpass,
+  sendResetPasslink,
+  sentResetPass,
+  resetPage,
+  resetPassword,
   loginLoad,
   verifyLogin,
   loadHome,

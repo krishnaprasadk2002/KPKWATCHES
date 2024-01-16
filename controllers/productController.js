@@ -201,6 +201,18 @@ const deleteimage = async (req, res) => {
     }
 };
 
+
+// const searchProduct=async(req,res)=>{
+//     try {
+//       const search=req.body.search
+//       const searchProduct=await Products.find({name:{$regex:new RegExp('^'+search+'.*','i')}}).exec()
+//       const searchedProducts=searchProduct.slice(0,8);
+//       res.send({search:searchedProducts})
+//     } catch (error) {
+//       console.log(error.message);
+//     }
+//   }
+
 //single product
 
 const singleProduct = async (req, res) => {
@@ -249,6 +261,7 @@ module.exports={insertProduct,
     listunlistProduct,
     loadEditProduct,
     handleEditProduct,
+    
     singleProduct,
     deleteimage,
     productDelete}

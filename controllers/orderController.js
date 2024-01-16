@@ -51,6 +51,20 @@ const placeOrder = async (req, res) => {
 
         const savedOrder = await orderInstance.save().then(async () => {
             await Cart.deleteOne({ userid: req.session.user_id });
+
+            
+            for (let i = 0; i < cart.products.length; i++) {
+                const productId = cart.products[i].productId;
+                const count = cart.products[i].quentity;
+            
+                await Products.updateOne({
+                    _id: productId
+                }, {
+                    $inc: {
+                        quentity: -count
+                    }
+                });
+            }
         });
 
         res.json({ success: true, products: products });
@@ -87,6 +101,33 @@ const placeOrder = async (req, res) => {
         console.error("Error cancelling product:", error.message);
         res.status(500).json({ success: false, message: "Internal server error" });
     
+    }
+  }
+
+
+  const returnOrder= async(req,res)=>{
+    try {
+        const productId=req.params.productId
+        const orderId=req.params.orderId
+
+        const updatedOrder=await Orders.updateOne({
+            _id:orderId,
+            'Products._id': productId
+        },
+        {
+            $set:{
+                'Products.$.orderStatus':'request return'
+            }
+        })
+        res.json({
+            success: true,
+            message: "Product Return Request successfully",
+            updatedOrder,
+          });
+          console.log(updatedOrder);
+    } catch (error) {
+        console.error("Error returning product:", error.message);
+        res.status(500).json({ success: false, message: "Internal server error" });
     }
   }
 
@@ -155,6 +196,7 @@ const placeOrder = async (req, res) => {
     placeOrder,
     cancelOrPlacedOrder,
     loadOrder,
-    changeStatus
+    changeStatus,
+    returnOrder
   };
   
