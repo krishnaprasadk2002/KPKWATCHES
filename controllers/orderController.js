@@ -75,6 +75,27 @@ const placeOrder = async (req, res) => {
 };
 
 
+const loadOrderSuccess=async (req,res)=>{
+    try {
+        const userId = req.session.user_id;
+        
+
+        if(!userId){
+            res.redirect("/")
+        }
+        const user=await User.findById(userId)
+        const orders=await Orders.find({user:userId})
+        .populate({
+            path: "Products.productId",
+            model: "Products", 
+          })
+          .exec();
+          res.render("ordersuccess",{user,orders})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
   const cancelOrPlacedOrder=async (req,res)=>{
     try {
         const orderId = req.params.orderId;
@@ -197,6 +218,8 @@ const placeOrder = async (req, res) => {
     cancelOrPlacedOrder,
     loadOrder,
     changeStatus,
-    returnOrder
+    returnOrder,
+    loadOrderSuccess
+    
   };
   

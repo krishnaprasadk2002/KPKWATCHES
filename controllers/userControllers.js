@@ -420,7 +420,7 @@ const loadHome = async (req, res) => {
 
     // Render the home page
     if (req.session.user_id) {
-      res.render("home", { username, filteredProducts });
+      res.render("home", { username, filteredProducts});
     } else {
       res.render("home", { filteredProducts });
     }

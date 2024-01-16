@@ -74,7 +74,7 @@ userRoute.get("/logout",userController.userLogout)
 const cartController=require("../controllers/cartController")
 
 userRoute.get("/cart",cartController.loadCart)
-userRoute.post("/addingcart/:productid/:quentity",cartController.addToCart)
+userRoute.post("/addingcart/:productid/:quentity/:userid",cartController.addToCart)
 userRoute.get("/addtocart",cartController.addToCart)
 userRoute.post('/removeFromCart',cartController.removeCart);
 userRoute.post('/updatequentity',cartController.updateQuentity)
@@ -96,6 +96,7 @@ userRoute.delete('/removeaddress/:id', userController.removeAddress);
 userRoute.post('/addAddressProfile',userController.addAddressProfile)
 userRoute.post('/updateaddress/:id',userController.editAddress)
 userRoute.post('/cancelOrder/:orderId/:productId',orderController.cancelOrPlacedOrder)
+userRoute.get("/ordersuccess",orderController.loadOrderSuccess)
 userRoute.post('/returnOrder/:orderId/:productId',orderController.returnOrder)
 
 

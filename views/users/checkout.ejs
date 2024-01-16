@@ -113,8 +113,9 @@
                         </div><!-- End .header-search -->
                        
     
-                        <div class="dropdown cart-dropdown" >
-                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                        <div class="dropdown cart-dropdown">
+                            <a href="/cart" class="dropdown-toggle" role="button" aria-haspopup="true"
+                                aria-expanded="false" data-display="static">
                                 <i class="icon-shopping-cart"></i>
                                 <span class="cart-count">2</span>
                             </a>
@@ -373,67 +374,56 @@
             </script>
             
             <script>
-            function sendSelection(paymentMethod) {
-                // Get the selected value
-                const selectedValue = document.getElementById("addressSelect").value;
+                function sendSelection(paymentMethod) {
+                    // Get the selected value
+                    const selectedValue = document.getElementById("addressSelect").value;
             
-                // Check if an address is selected
-                if (!selectedValue || selectedValue === "Please select an address" || selectedValue === "No addresses found for this user.") {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Please select a valid address!',
-                    });
-                    return;
-                }
-            
-                // Example fetch API request
-                fetch('/placeorder', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        paymentMethod: paymentMethod,
-                        selectedValue: selectedValue
-                    }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Backend response:', data);
-            
-                    // Check if the order processing was successful
-                    if (data.success) {
-                        // Display SweetAlert success notification
+                    // Check if an address is selected
+                    if (!selectedValue || selectedValue === "Please select an address" || selectedValue === "No addresses found for this user.") {
                         Swal.fire({
-                            title: 'Order Placed Successfully!',
-                            icon: 'success',
-                            showConfirmButton: false,
-                            timer: 2000 // Set the duration for the alert
-            
-                        });
-            
-                        setTimeout(() => {
-                            // Redirect to the user cart page after the alert is closed
-                            window.location.href = '/cart';
-                        }, 2000);
-            
-                    } else {
-                        // Display SweetAlert error notification
-                        Swal.fire({
-                            title: 'Order Processing Failed',
-                            text: 'An error occurred while processing the order.',
                             icon: 'error',
-                            confirmButtonText: 'OK'
+                            title: 'Oops...',
+                            text: 'Please select a valid address!',
                         });
+                        return;
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    // Handle errors if any
-                });
-            }
+            
+                    // Example fetch API request
+                    fetch('/placeorder', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            paymentMethod: paymentMethod,
+                            selectedValue: selectedValue
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Backend response:', data);
+            
+                        // Check if the order processing was successful
+                        if (data.success) {
+                            // Redirect to the /ordersuccess route
+                            window.location.href = '/ordersuccess';
+                        } else {
+                            // Display SweetAlert error notification
+                            Swal.fire({
+                                title: 'Order Processing Failed',
+                                text: 'An error occurred while processing the order.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Handle errors if any
+                    });
+                }
             </script>
+            
 
         <footer class="footer">
         	<div class="footer-middle">
