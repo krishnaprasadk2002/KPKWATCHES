@@ -99,6 +99,9 @@ userRoute.post('/cancelOrder/:orderId/:productId',orderController.cancelOrPlaced
 userRoute.get("/ordersuccess",orderController.loadOrderSuccess)
 userRoute.post('/returnOrder/:orderId/:productId',orderController.returnOrder)
 
+//==============================================OnlinePayment==================================
+// userRoute.post("/varifypayment",orderController.verifyPayment)
+
 
 
 module.exports=userRoute

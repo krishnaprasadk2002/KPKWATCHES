@@ -24,6 +24,7 @@ const path=require("path")
 const cors = require('cors');
 app.use(cors());
 
+
 app.use(express.static(path.join(__dirname,'public')))
 
 
