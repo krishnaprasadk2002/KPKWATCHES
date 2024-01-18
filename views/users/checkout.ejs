@@ -199,7 +199,7 @@
                 <div class="checkout">
                     <div class="container">
                         <div class="checkout-discount" hidden>
-                            <form action="#">
+                            <form>
                                 <input type="text" class="form-control" required id="checkout-discount-input">
                                 <label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click
                                         here to enter your code</span></label>
@@ -266,30 +266,29 @@
                                         }
                                       </script> -->
 
-
-
-
-
-
                                     <div>
                                         <!-- Add Address button with the /address route -->
                                         <a href="/address" class="btn btn-primary btn-rounded mb-4 mt-3">Add Address</a>
                                     </div>
+
+                                    <div class="checkout-discount" >
+									<form id="couponForm">
+										<input type="text" class="form-control"  required id="checkout-discount-input">
+										<label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
+										<button class="btn btn-primary mt-4" type="submit">Submit</button>
+									</form>
+									<p id="already" class="text-danger"></p>
+								</div><!-- End .checkout-discount -->
+                                
                                 </div><!-- End .col-lg-9 -->
 
 
-
-
+                                
 
 
                                 <aside class="col-lg-3">
                                     <div class="summary">
                                         <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
-
-
-
-
-
 
                                         <table class="table table-summary">
                                             <thead>
@@ -333,6 +332,8 @@
                                             </tbody>
                                         </table><!-- End .table table-summary -->
 
+                                        
+
 
                                         <div class="accordion-summary" id="accordion-payment">
                                             <!-- Add accordion summary details if needed -->
@@ -343,15 +344,14 @@
                                             </select>
                                         </div><!-- End .accordion -->
 
-                                        <button class="btn btn-outline-primary-2 btn-order btn-block"
+                                        <button class="btn btn-outline-primary-2 btn-sorder btn-block"
                                             onclick="sendSelection()">
-                                            <span class="btn-text">Place Order</span>
-                                            <span class="btn-hover-text">Proceed to Checkout</span>
+                                           Place Order
                                         </button>
                                     </div>
-
+                                </aside><!-- End .col-lg-3 -->
                             </div><!-- End .summary -->
-                            </aside><!-- End .col-lg-3 -->
+                         
                     </div><!-- End .row -->
                     </form>
                 </div><!-- End .container -->
@@ -383,11 +383,18 @@
 
     <script>
         function sendSelection() {
+            event.preventDefault();
             // Get the selected value from the payment dropdown
             const paymentMethod = document.getElementById("payment").value;
 
             // Get the selected address value (adjust this based on your HTML structure)
             const selectedValue = document.getElementById("addressSelect").value;
+
+            if(!selectedValue){
+                alert('please selcect a payment method');
+                return;
+            }
+
 
             // Make an AJAX request to the backend
             fetch('/placeorder', {
@@ -406,8 +413,18 @@
 
                     // Check if the order processing was successful
                     if (data.success) {
-                        // Redirect to the /ordersuccess route
-                        window.location.href = '/ordersuccess';
+                        Swal.fire({
+                            title: 'Order Placed Successfully!',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 2000 // Set the duration for the alert
+
+                        });
+
+                        setTimeout(() => {
+                            // Redirect to the user cart page after the alert is closed
+                            window.location.href = '/ordersuccess';
+                        }, 2000)
                     } else if (data.response) {
                         var options = {
                             "key": 'rzp_test_TIOiShpd8euA17', // Enter the Key ID generated from the Dashboard
@@ -418,8 +435,7 @@
                             "image": "https://example.com/your_logo",
                             "order_id": data.response.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
                             "handler": function (response) {
-                                
-
+                               
                                 verifyPayment(response, data.response)
                             },
                             "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
@@ -435,8 +451,7 @@
                             }
                         };
                         var rzp1 = new Razorpay(options);
-                        rzp1.on('payment.failed', function (response) {
-                        });
+
                         rzp1.open();
 
                     } else {
@@ -462,7 +477,24 @@
                     payment,
                     order
                 },
-                method: 'post'
+                method: 'post',
+                success: (response) => {
+                    if (response.payment) {
+
+                        Swal.fire({
+                            title: 'Order Placed Successfully!',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 2000 // Set the duration for the alert
+
+                        });
+
+                        setTimeout(() => {
+                            // Redirect to the user cart page after the alert is closed
+                            window.location.href = '/ordersuccess';
+                        }, 2000)
+                    }
+                }
             })
         }
     </script>

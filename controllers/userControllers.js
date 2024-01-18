@@ -640,7 +640,7 @@ const changePassword=async (req,res)=>{
 
     if(currentPassword){
       const passwordMatch=await bcrypt.compare(currentPassword,user.password)
-      if(!currentPassword){
+      if(!passwordMatch){
         return res.json({ message: 'Current password is incorrect' });
       }
     }

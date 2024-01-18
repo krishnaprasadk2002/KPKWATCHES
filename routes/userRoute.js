@@ -100,7 +100,7 @@ userRoute.get("/ordersuccess",orderController.loadOrderSuccess)
 userRoute.post('/returnOrder/:orderId/:productId',orderController.returnOrder)
 
 //==============================================OnlinePayment==================================
-// userRoute.post("/varifypayment",orderController.verifyPayment)
+userRoute.post("/varifypayment",orderController.verifyPayment)
 
 
 

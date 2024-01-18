@@ -93,12 +93,20 @@ adminRoute.post('/editcategory',adminAuth.verify, categoryController.updateCateg
 adminRoute.get("/deletecategory",adminAuth.verify,categoryController.deleteCategory)
 
 
-
+//===========================================Order ===============================
 
 const orderController=require("../controllers/orderController")
 
 adminRoute.get("/orders",adminAuth.verify,orderController.loadOrder)
 adminRoute.put('/updateStatus/:orderId',adminAuth.verify,orderController.changeStatus)
+
+//=====================================Coupon Controller ==============================
+const couponController=require("../controllers/couponController")
+
+adminRoute.get("/coupon",couponController.loadCoupan)
+adminRoute.get("/addcoupon",couponController.loadAddCoupon)
+adminRoute.post("/addcoupon",couponController.addCouponDetails)
+adminRoute.delete('/deleteCoupon/:id',couponController.deleteCoupon)
 
 //Logout
 adminRoute.get("/logout",adminController.adminLogout)

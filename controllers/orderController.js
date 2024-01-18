@@ -2,7 +2,8 @@ const User = require("../models/userModel");
 const Products = require("../models/productModel");
 const Cart = require("../models/cartModel");
 const Orders = require("../models/orderModel");
-const Razorpay = require("razorpay")
+const Razorpay = require("razorpay");
+const { response } = require("express");
 
 //==========================================================Razorpay instance===============================
 
@@ -32,7 +33,6 @@ const placeOrder = async (req, res) => {
         }));
 
 
-
         const orderData = {
             user: req.session.user_id,
             Products: products.map(product => ({
@@ -51,11 +51,8 @@ const placeOrder = async (req, res) => {
             date: new Date(),
             address: selectedValue,
         };
-        
-
 
         const orderInstance = new Orders(orderData);
-
         if (paymentMethod === "Cash on delivery") {
             const savedOrder = await orderInstance.save().then(async () => {
                 await Cart.deleteOne({ userid: req.session.user_id });
@@ -74,7 +71,6 @@ const placeOrder = async (req, res) => {
                 }
             });
 
-
             res.json({ success: true, order: savedOrder });
         } else if (paymentMethod === "Razorpay") {
             const totalpriceInPaise = Math.round(orderData.total * 100);
@@ -90,6 +86,7 @@ const placeOrder = async (req, res) => {
         res.status(500).json({ success: false, message: 'An error occurred while processing the order or updating product stock.' });
     }
 };
+
 
 const generateRazorpay = (orderId, total) => {
     return new Promise((resolve, reject) => {
@@ -112,38 +109,54 @@ const generateRazorpay = (orderId, total) => {
 };
 
 
-// const verifyPayment = async (req, res) => {
-//     try {
-//         const userid = req.session.user_id;
-//         const { payment, order } = req.body;
-//         const Crypto = require("crypto");
-//         const orderid = order.receipt;
+const verifyPayment = async (req, res) => {
+    try {
+        const userid = req.session.user_id;
+        const { payment, order } = req.body;
+        const Crypto = require("crypto");
+        const orderId = order.receipt;
+        console.log('Response:', response);
 
-//         console.log("user:", userid);
-//         console.log("orderid:", orderid);
+        console.log("payment:", payment);
+        console.log("Order:", order);
 
-//         const secretKey = process.env.RazorKey;
+        const secret = process.env.RazorKey;
+        let hmac = Crypto.createHmac('sha256', secret);
+        hmac.update(payment.razorpay_order_id + "|" + payment.razorpay_payment_id);
+        hmac = hmac.digest('hex');
 
-//         let hmac = Crypto.createHmac('sha256', secretKey);
-//         hmac.update(payment.razorpay_order_id + '|' + payment.razorpay_payment_id);
-//         const calculatedSignature = hmac.digest('hex');
-//         console.log('Calculated HMAC:', calculatedSignature);
+        if (hmac === payment.razorpay_signature) {
+            const order = await Orders.findById(orderId);
+            if (order) {
+                order.paymentStatus = "Razorpay";
+                await order.save();
+            }
 
-//         if (calculatedSignature === payment.razorpay_signature) {
-//             const orderInstance = await Orders.findById(orderid);
-//             orderInstance.paymentstatus = "Razorpay";
-//             await orderInstance.save();
-//             await Cart.deleteOne({ userid: userid });
-//             res.json({ payment: true });
-//         } else {
-//             res.status(403).json({ error: 'Invalid signature' });
-//         }
-//     } catch (error) {
-//         console.log(error.message);
-//         res.status(500).json({ error: 'Internal Server Error' });
-//     }
-// };
+            const cart = await Cart.findOne({ userid: userid });
+            if (cart && cart.products && cart.products.length > 0) {
+                for (let i = 0; i < cart.products.length; i++) {
+                    const productId = cart.products[i].productId;
+                    const count = cart.products[i].quentity;
 
+                    await Products.updateOne(
+                        { _id: productId },
+                        {
+                            $inc: {
+                                quentity: -count
+                            }
+                        }
+                    );
+                }
+            }
+
+            await Cart.deleteOne({ userid: userid });
+            res.json({ payment: true });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+};
 
 //===========================================Order success page =========================================================
 const loadOrderSuccess = async (req, res) => {
@@ -274,7 +287,7 @@ const changeStatus = async (req, res) => {
 
 module.exports = {
     placeOrder,
-    // verifyPayment,
+    verifyPayment,
     cancelOrPlacedOrder,
     loadOrder,
     changeStatus,
