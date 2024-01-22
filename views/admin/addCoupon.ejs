@@ -24,6 +24,7 @@
     <!-- /admin/Libraries Stylesheet -->
     <link href="/admin/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="/admin/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -160,12 +161,61 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
-                <% if (locals.error) { %>
-                    <div class="alert alert-danger">
-                        <%= locals.error %>
-                    </div>
-                <% } %>
+                
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
             </div>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const couponForm = document.getElementById('couponForm');
+            
+                    couponForm.addEventListener('submit', function (event) {
+                        event.preventDefault();
+            
+                        // Validate and trim inputs
+                        const nameInput = document.getElementById('couponName');
+                        const codeInput = document.getElementById('couponCode');
+                        const minInput = document.getElementById('minAmount');
+                        const discountInput = document.getElementById('discountAmount');
+                        const descriptionInput = document.getElementById('couponDescription');
+                        const expiryDateInput = document.getElementById('expiryDate');
+            
+                        const name = nameInput.value.trim();
+                        const code = codeInput.value.trim();
+                        const min = minInput.value.trim();
+                        const discount = discountInput.value.trim();
+                        const description = descriptionInput.value.trim();
+                        const expiryDate = expiryDateInput.value.trim();
+            
+                        // Check for negative values
+                        if (min < 0 || discount < 0) {
+                            // Display SweetAlert for validation error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Validation Error',
+                                text: 'Minimum amount and discount cannot be negative.',
+                            });
+                            return;
+                        }
+            
+                        if (!name || !code || !min || !discount || !description || !expiryDate) {
+                            // Display SweetAlert for validation error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Validation Error',
+                                text: 'Please fill in all the fields.',
+                            });
+                            return;
+                        }
+            
+                        // Perform form submission if validation passes
+                        couponForm.submit();
+                    });
+                });
+            </script>
+            
+            
             
 
 

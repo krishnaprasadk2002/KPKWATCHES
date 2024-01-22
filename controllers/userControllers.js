@@ -521,14 +521,16 @@ const userProfile = async (req, res) => {
 
     const user = await User.findById(userId);
     const orders = await Orders.find({ user: userId })
+    
       .populate({
         path: "Products.productId",
         model: "Products", 
       })
       .exec();
+    
 
     // console.log(orders);
-    res.render("userprofile", { user, orders });
+    res.render("userprofile", { user, orders});
   } catch (error) {
     console.log(error.message);
   }

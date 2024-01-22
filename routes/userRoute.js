@@ -101,6 +101,10 @@ userRoute.post('/returnOrder/:orderId/:productId',orderController.returnOrder)
 
 //==============================================OnlinePayment==================================
 userRoute.post("/varifypayment",orderController.verifyPayment)
+const couponController=require("../controllers/couponController")
+
+userRoute.post("/applyCoupon",couponController.applyCoupon)
+
 
 
 

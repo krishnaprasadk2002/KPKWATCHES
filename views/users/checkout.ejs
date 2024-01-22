@@ -271,26 +271,65 @@
                                         <a href="/address" class="btn btn-primary btn-rounded mb-4 mt-3">Add Address</a>
                                     </div>
 
-                                    <div class="checkout-discount" >
-									<form id="couponForm">
-										<input type="text" class="form-control"  required id="checkout-discount-input">
-										<label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
-										<button class="btn btn-primary mt-4" type="submit">Submit</button>
-									</form>
-									<p id="already" class="text-danger"></p>
-								</div><!-- End .checkout-discount -->
-                                
+
+                                    <div class="checkout-discount">
+                                        <form id="couponForm">
+
+                                            <select id="couponCode" name="couponCode"
+                                                style="max-width: 200px;" required>
+                                                <option disabled selected value="">Please select an avilable coupon
+                                                </option>
+                                                <% if (coupon.length> 0) { %>
+                                                    <% coupon.forEach(coupon=> { %>
+                                                        <option>
+                                                            <%= coupon.couponCode%>
+                                                        </option>
+                                                        <% }); %>
+                                                            <% } else { %>
+                                                                <option>No Coupons are Avilable.</option>
+                                                                <% } %>
+                                            </select>
+
+
+                                            <label for="checkout-discount-input" class="text-truncate">Have a coupon?
+                                                <span>Click here to enter your code</span></label><br>
+                                            <button class="btn btn-primary mt-4" type="button" onclick="applyCoupon()">Apply
+                                                Coupon</button>
+
+                                            <div id="couponMessage"></div>
+                                        </form>
+
+                                    </div>
+
+
+                                    <!-- <div class="checkout-discount">
+                                        <form id="couponForm">
+                                    
+                                           
+                                            <input type="text" id="couponCode" name="couponCode" style="max-width: 200px;" placeholder="Enter coupon code" required>
+                                    
+                                            <label for="checkout-discount-input" class="text-truncate">Have a coupon?
+                                                <span>Click here to enter your code</span>
+                                            </label>
+                                            <button class="btn btn-primary mt-4" type="button" onclick="applyCoupon()">Apply Coupon</button>
+                                    
+                                            <div id="couponMessage"></div>
+                                        </form>
+                                    </div> -->
+                                    
+
+
                                 </div><!-- End .col-lg-9 -->
 
 
-                                
+
 
 
                                 <aside class="col-lg-3">
                                     <div class="summary">
                                         <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
 
-                                        <table class="table table-summary">
+                                        <table class="table table-summary" id="load">
                                             <thead>
                                                 <tr>
                                                     <th>Product</th>
@@ -313,8 +352,7 @@
 
                                                         <tr class="summary-subtotal">
                                                             <td>Subtotal:</td>
-                                                            <td>
-                                                                <%= totalPrice %>
+                                                            <td>₹<%= totalWithoutDiscount %>
                                                             </td>
                                                         </tr><!-- End .summary-subtotal -->
 
@@ -323,16 +361,26 @@
                                                             <td>Free shipping</td>
                                                         </tr>
 
-                                                        <tr class="summary-total">
-                                                            <td>Total:</td>
-                                                            <td>
-                                                                <%= totalPrice %>
-                                                            </td>
-                                                        </tr><!-- End .summary-total -->
+                                                        <% if (totalWithoutDiscount - totalWithDiscount> 0) { %>
+                                                            <tr>
+                                                                <td>Discount:</td>
+                                                                <td>
+                                                                    <%= totalWithoutDiscount - totalWithDiscount %>
+                                                                </td>
+                                                            </tr>
+                                                            <% } %>
+
+
+                                                                <tr class="summary-total">
+                                                                    <td>Total:</td>
+                                                                    <td>₹<%= totalWithDiscount %>
+                                                                    </td>
+                                                                </tr><!-- End .summary-total -->
+
                                             </tbody>
                                         </table><!-- End .table table-summary -->
 
-                                        
+
 
 
                                         <div class="accordion-summary" id="accordion-payment">
@@ -341,17 +389,18 @@
                                             <select name="paymentMethod" id="payment">
                                                 <option value="Cash on delivery">Cash on delivery</option>
                                                 <option value="Razorpay">Razorpay</option>
+                                                <option value="wallet">Wallet</option>
                                             </select>
                                         </div><!-- End .accordion -->
 
                                         <button class="btn btn-outline-primary-2 btn-sorder btn-block"
                                             onclick="sendSelection()">
-                                           Place Order
+                                            Place Order
                                         </button>
                                     </div>
                                 </aside><!-- End .col-lg-3 -->
                             </div><!-- End .summary -->
-                         
+
                     </div><!-- End .row -->
                     </form>
                 </div><!-- End .container -->
@@ -380,7 +429,6 @@
 
 
 
-
     <script>
         function sendSelection() {
             event.preventDefault();
@@ -389,9 +437,10 @@
 
             // Get the selected address value (adjust this based on your HTML structure)
             const selectedValue = document.getElementById("addressSelect").value;
+            const couponCode = document.getElementById('couponCode').value;
 
-            if(!selectedValue){
-                alert('please selcect a payment method');
+            if (!selectedValue) {
+                alert('please selcect a payment method & Address');
                 return;
             }
 
@@ -405,6 +454,8 @@
                 body: JSON.stringify({
                     paymentMethod: paymentMethod,
                     selectedValue: selectedValue,
+                    couponCode: couponCode
+
                 }),
             })
                 .then(response => response.json())
@@ -435,7 +486,7 @@
                             "image": "https://example.com/your_logo",
                             "order_id": data.response.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
                             "handler": function (response) {
-                               
+
                                 verifyPayment(response, data.response)
                             },
                             "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
@@ -499,6 +550,46 @@
         }
     </script>
 
+    
+<script>
+    
+    async function applyCoupon() {
+        
+        const couponCode = document.getElementById('couponCode').value;
+        
+        console.log("req:", couponCode);
+        event.preventDefault();
+        try {
+            const response = await fetch('/applyCoupon', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ couponCode }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                $('#load').load(`/checkout?coupon=${couponCode} #load`)
+                document.getElementById('couponMessage').innerHTML = data.success;
+            } else if (data.already) {
+                document.getElementById('couponMessage').innerHTML = data.already;
+            } else if (data.error) {
+                document.getElementById('couponMessage').innerHTML = data.error;
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+           
+        }
+    }
+
+</script>
 
 
 

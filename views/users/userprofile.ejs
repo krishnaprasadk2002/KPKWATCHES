@@ -170,6 +170,9 @@
 								        <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Change Password</a>
 								    </li>
 								    <li class="nav-item">
+								        <a class="nav-link" id="tab-wallet-link" data-toggle="tab" href="#tab-wallet" role="tab" aria-controls="tab-wallet" aria-selected="false">Wallet</a>
+								    </li>
+								    <li class="nav-item">
 								        <a class="nav-link" href="/logout">LogOut</a>
 								    </li>
 								</ul>
@@ -538,6 +541,65 @@
                                         <div id="successMessage"></div>
 										<div id="errorMessage"></div>
 								    </div><!-- .End .tab-pane -->
+
+                                    <div class="tab-pane fade" id="tab-wallet" role="tab-wallet" aria-labelledby="tab-wallet-link">
+                                        <div class="col-lg-6">
+                                            <div class="card card-dashboard">
+                                                <div class="card-body">
+                                                    <h3 class="card-title">Wallet Information</h3><!-- End .card-title -->
+                                    
+                                                    <p>
+                                                        Wallet Balance: <%= user.wallet %> 
+    
+                                                    </p>
+                                    
+                                                        <!-- Button to open Wallet history modal -->
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#walletHistoryModal">
+                                                            Wallet History
+                                                        </button>
+                                                    
+                                                </div><!-- End .card-body -->
+                                            </div><!-- End .card-dashboard -->
+                                        </div><!-- End .col-lg-6 -->
+                                    
+                                        <!-- Wallet History Modal -->
+                                        <div class="modal fade" id="walletHistoryModal" tabindex="-1" role="dialog" aria-labelledby="walletHistoryModalLabel" aria-hidden="true">
+                                            <!-- Add your modal content for wallet history here -->
+                                            <!-- Example: -->
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="walletHistoryModalLabel">Wallet History</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Date</th>
+                                                                    <th scope="col">Amount</th>
+                                                                    <th scope="col">Reason</th>
+                                                                    <!-- Add a header for 'Status' if needed -->
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                               <% user.wallet_history.forEach((result)=>{ %>
+                                                                    <tr>
+                                                                      <td><%= result.date%></td>
+                                                                      <td><%= result.amount%></td>
+                                                                      <td><%= result.reason%></td>
+                                                                    </tr>
+                                                                    <%})%>
+                                                            </tbody>
+                                                        </table>
+                                                        <p>Wallet history content goes here...</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- End Wallet History Modal -->
+                                    </div><!-- .End .tab-pane -->
 								</div>
 	                		</div><!-- End .col-lg-9 -->
 	                	</div><!-- End .row -->

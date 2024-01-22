@@ -2,47 +2,33 @@ const User=require("../models/userModel")
 const Products=require("../models/productModel")
 const Category=require("../models/categoryModel")
 const Cart=require("../models/cartModel")
+const Coupons=require("../models/couponModel")
 const { response } = require("../routes/userRoute")
 
-//load Cart page
 
-const loadCart=async (req,res)=>{
+
+const loadCart = async (req, res) => {
     try {
-        const user = req.session.user_id
-        const cartData = await Cart.findOne({ userid: user }).populate({
-            path: "products.productId",
-            model: "Products", 
-          });
-          
-        
-        if (cartData) {
-           
-            const totalPriceTotal = await Cart.aggregate([
-                {
-                    $unwind: "$products" 
-                },
-                {
-                    $group: {
-                        _id: null,
-                        total: { $sum: "$products.totalPrice" } 
-                    }
-                }
-            ]);
-            if (totalPriceTotal[0]!=undefined) {
-                res.render("cartpage", { cartData,totalPriceTotal:totalPriceTotal[0].total});
-            }
-            else{
-                res.render("cartpage");
-            }
-           
-          }else{
-      
-              res.render("cartpage");
-          }
-    } catch (error) {
-        console.log(error.message);
+      const user = req.session.user_id;
+      const cartData = await Cart.findOne({ userid: user }).populate({
+        path: "products.productId",
+        model: "Products", // Make sure it matches the model name for the Product
+      });
+    
+      if (cartData) {
+        const totalPriceTotal = cartData.products.reduce((total, product) => {
+          return total + product.totalPrice;
+        }, 0);
+  
+        res.render("cartpage", { cartData, totalPriceTotal });
+      }else{
+  
+          res.render("cartpage", {cartData});
+      }
+    } catch (err) {
+      console.log(err);
     }
-}
+  };
 //Product added to cart
 
 const addToCart = async (req, res) => {
@@ -162,7 +148,11 @@ const updateQuentity = async (req, res) => {
 
         const updatedCart = await existingCart.save();
         const updatedTotalPrice = productToUpdate.totalPrice;
-        const totalPriceTotal = existingCart.products.reduce((total, product) => total + product.totalPrice, 0);
+        console.log("updated totalprice:",updatedTotalPrice);
+        const totalPriceTotal = existingCart.products.reduce((total, product) => {
+            return total + product.totalPrice, 0});
+
+            console.log("total:",totalPriceTotal);
 
         
         res.json({
@@ -182,8 +172,11 @@ const updateQuentity = async (req, res) => {
 const loadCheckout = async (req, res) => {
     try {
         const user_id = req.session.user_id;
+        const coupon=await Coupons.find()
+        const couponCode=req.query.coupon||''
+       console.log("code:",couponCode);
         const user = await User.findById(user_id); 
-        // console.log(user);
+
          if(!req.session.user_id){
             res.redirect("/")
          }else{
@@ -192,19 +185,78 @@ const loadCheckout = async (req, res) => {
             model: "Products", 
           });
           
-        // console.log(cartData);
+        const totalWithoutDiscount=cartData.products.reduce((acc,product)=>{
+            return acc + product.totalPrice
+        },0)
 
-        const totalPrice= cartData.products.reduce((total, product) => {
-            return total + product.totalPrice;
-        }, 0);
+        let totalWithDiscount=totalWithoutDiscount
+        
 
-        res.render("checkout", { user, cartData , totalPrice });
+        if(couponCode){
+            const coupon=await Coupons.findOne({ couponCode })
+
+            if(coupon){
+                const discountAmount=coupon.discountAmount
+                totalWithDiscount -= discountAmount
+            }
+        }
+
+        
+
+        res.render("checkout", { user, cartData , totalWithDiscount,totalWithoutDiscount,coupon});
     }
     } catch (error) {
         console.log(error.message);
        
     }
 };
+
+// const loadCheckout = async (req, res) => {
+//     try {
+//         const user_id = req.session.user_id;
+//         const coupon=await Coupons.find()
+//         const couponCode=req.query.coupon||''
+//        console.log("code:",couponCode);
+//         const user = await User.findById(user_id); 
+
+//          if(!req.session.user_id){
+//             res.redirect("/")
+//          } else {
+//             const cartData = await Cart.findOne({ userid: user }).populate({
+//                 path: "products.productId",
+//                 model: "Products", 
+//             });
+
+//             const totalWithoutDiscount = cartData.products.reduce((acc, product) => {
+//                 return acc + product.totalPrice;
+//             }, 0);
+
+//             let totalWithDiscount = totalWithoutDiscount;
+            
+//             if (couponCode) {
+//                 const coupon = await Coupons.findOne({ couponCode });
+
+//                 if (coupon) {
+//                     const discountAmount = coupon.discountAmount;
+//                     totalWithDiscount -= discountAmount;
+
+//                     // Update coupon usage
+//                     const alreadyUsed = coupon.userUsed.some((user) => user.userid.toString() === user_id);
+//                     if (!alreadyUsed) {
+//                         coupon.userUsed.push({ userid: user_id });
+//                         await coupon.save();
+//                     }
+//                 }
+//             }
+
+//             res.render("checkout", { user, cartData, totalWithDiscount, totalWithoutDiscount, coupon });
+//         }
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// };
+
+
 
 //add address page
 

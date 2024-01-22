@@ -66,7 +66,22 @@ const userSchema=new mongoose.Schema({
         type: String,
         uStatus: ['Active', 'Block'],
         default: 'Active'
-    }
+    },
+    wallet:{
+        type:Number,
+        default:0
+    },
+    wallet_history:[{
+        date:{
+            type:Date
+        },
+        amount:{
+            type:Number
+        },
+        reason:{
+            type:String
+        }
+    }],
 })
 
 module.exports=mongoose.model('User',userSchema)

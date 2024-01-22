@@ -28,7 +28,7 @@ const couponSchema=mongoose.Schema({
         default:true
     },
     userUsed:[{
-        user_id:{
+        userid:{
             type:mongoose.Types.ObjectId,
             ref:'User'
         },
