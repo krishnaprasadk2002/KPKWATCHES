@@ -96,10 +96,10 @@ const updateCategory = async (req, res) => {
         if (!updatedCategory) {
             console.log("Category not found");
         }
-        req.flash('success', 'Login successful!');
+        req.flash('success', 'category edited successful!');
         res.redirect("/admin/category");
     } catch (error) {
-        req.flash('error', 'An error occurred');
+        
         res.status(500).json({ error: "Internal server error" });
     }
 };

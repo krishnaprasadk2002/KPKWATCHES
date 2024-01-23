@@ -103,10 +103,12 @@ adminRoute.put('/updateStatus/:orderId',adminAuth.verify,orderController.changeS
 //=====================================Coupon Controller ==============================
 const couponController=require("../controllers/couponController")
 
-adminRoute.get("/coupon",couponController.loadCoupan)
-adminRoute.get("/addcoupon",couponController.loadAddCoupon)
-adminRoute.post("/addcoupon",couponController.addCouponDetails)
-adminRoute.delete('/deleteCoupon/:id',couponController.deleteCoupon)
+adminRoute.get("/coupon",adminAuth.verify,couponController.loadCoupan)
+adminRoute.get("/addcoupon",adminAuth.verify,couponController.loadAddCoupon)
+adminRoute.post("/addcoupon",adminAuth.verify,couponController.addCouponDetails)
+adminRoute.get("/editcoupon",adminAuth.verify,couponController.loadEditCoupon)
+adminRoute.post("/editcoupon",adminAuth.verify,couponController.editCoupon)
+adminRoute.delete('/deleteCoupon/:id',adminAuth.verify,couponController.deleteCoupon)
 
 //Logout
 adminRoute.get("/logout",adminController.adminLogout)

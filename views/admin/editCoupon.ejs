@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>DarkPan - Bootstrap 5 Admin Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax//admin/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- /admin/Libraries Stylesheet -->
+    <link href="/admin/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/admin/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+            class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-secondary navbar-dark">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>DarkPan</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                        <div
+                            class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
+                        </div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">KRISHNAPRASAD</h6>
+                        <span>Admin</span>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="/admin/dashboard" class="nav-item nav-link"><i
+                            class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+
+                    <a href="/admin/alluser" class="nav-item nav-link"><i class="fa fa-th me-2"></i>All User</a>
+                    <div class="nav-item dropdown">
+                        <a href="/admin/allproduct" class="nav-link dropdown-toggle "><i
+                                class="far fa-file-alt me-2"></i>All Product</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="/admin/addproduct" class="dropdown-item">Add Product</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="/admin/category" class="nav-link dropdown-toggle "><i
+                                class="far fa-file-alt me-2"></i>Category</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="/admin/addcategory" class="dropdown-item">Add Category</a>
+                        </div>
+                    </div>
+
+                    <a href="/admin/orders" class="nav-item nav-link "><i class="fa fa-th me-2"></i>Orders</a>
+
+                    <div class="nav-item dropdown">
+                        <a href="/admin/coupon" class="nav-link dropdown-toggle "><i
+                                class="far fa-file-alt me-2"></i>All Coupons</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="/admin/addcoupon" class="dropdown-item">Add Coupon</a>
+                        </div>
+                    </div>
+
+                </div>
+                <a href="/admin/logout" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Logout</a>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+
+
+            </nav>
+
+            <div class="container mt-5">
+                <h2 class="mb-4">Edit Coupon</h2>
+                <form id="couponForm" action="/admin/editcoupon" method="POST" novalidate>
+
+                    <input type="hidden" name="id" value="<%= coupon._id %>">
+
+                    <input type="hidden" name="couponId" value="<%= coupon._id %>">
+            
+                    <div class="mb-3">
+                        <label for="couponName" class="form-label">Coupon Name</label>
+                        <input type="text" class="form-control" style="background-color: white" placeholder="Coupon Name" id="couponName" name="name" value="<%= coupon.couponName %>" required>
+                        <div class="invalid-feedback">
+                            Please enter the coupon name.
+                        </div>
+                    </div>
+            
+                    <div class="mb-3">
+                        <label for="couponCode" class="form-label">Coupon Code</label>
+                        <input type="text" class="form-control" style="background-color: white" placeholder="Coupon Code" id="couponCode" name="code" value="<%= coupon.couponCode %>" required>
+                        <div class="invalid-feedback">
+                            Please enter the coupon code.
+                        </div>
+                    </div>
+            
+                    <div class="mb-3">
+                        <label for="minAmount" class="form-label">Min Amount</label>
+                        <input type="text" class="form-control" style="background-color: white" placeholder="Min Amount" id="minAmount" name="min" value="<%= coupon.minAmount %>" required>
+                        <div class="invalid-feedback">
+                            Please enter the minimum amount.
+                        </div>
+                    </div>
+            
+                    <div class="mb-3">
+                        <label for="discountAmount" class="form-label">Discount Amount</label>
+                        <input type="number" class="form-control" style="background-color: white" placeholder="Discount Amount" id="discountAmount" name="discount" min="1" value="<%= coupon.discountAmount %>" required>
+                        <div class="invalid-feedback">
+                            Please enter a valid discount amount.
+                        </div>
+                    </div>
+            
+                    <div class="mb-3">
+                        <label for="couponDescription" class="form-label">Coupon Description</label>
+                        <textarea class="form-control" style="background-color: white" id="couponDescription" placeholder="Coupon Description" name="description" required><%= coupon.couponDescription %></textarea>
+                        <div class="invalid-feedback">
+                            Please enter the coupon description.
+                        </div>
+                    </div>
+            
+                    <div class="mb-3">
+                        <label for="expiryDate" class="form-label">Expiry Date</label>
+                        <input type="date" class="form-control" style="background-color: white" id="expiryDate" name="expiryDate" value="<%= coupon.expiryDate %>" required>
+                        <div class="invalid-feedback">
+                            Please enter a valid expiry date.
+                        </div>
+                    </div>
+            
+                    <!-- Add other fields for editing existing coupon properties -->
+            
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+            </div>
+            
+
+
+            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+        </div>
+
+        <!-- JavaScript /admin/Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="/admin/lib/chart/chart.min.js"></script>
+        <script src="/admin/lib/easing/easing.min.js"></script>
+        <script src="/admin/lib/waypoints/waypoints.min.js"></script>
+        <script src="/admin/lib/owlcarousel/owl.carousel.min.js"></script>
+        <script src="/admin/lib/tempusdominus/js/moment.min.js"></script>
+        <script src="/admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
+        <script src="/admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <!-- Template Javascript -->
+        <script src="js/main.js"></script>
+</body>
+
+</html>
+
+
+
+<!-- Include SweetAlert library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const couponForm = document.getElementById('couponForm');
+
+        couponForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Validate and trim inputs
+            const couponIdInput = document.querySelector('input[name="couponId"]');
+            const nameInput = document.getElementById('couponName');
+            const codeInput = document.getElementById('couponCode');
+            const minInput = document.getElementById('minAmount');
+            const discountInput = document.getElementById('discountAmount');
+            const descriptionInput = document.getElementById('couponDescription');
+            const expiryDateInput = document.getElementById('expiryDate');
+
+            const couponId = couponIdInput.value.trim();
+            const name = nameInput.value.trim();
+            const code = codeInput.value.trim();
+            const min = minInput.value.trim();
+            const discount = discountInput.value.trim();
+            const description = descriptionInput.value.trim();
+            const expiryDate = expiryDateInput.value.trim();
+
+            // Check for negative values
+            if (min < 0 || discount < 0) {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    text: 'Minimum amount and discount cannot be negative.',
+                });
+                return;
+            }
+
+            if (!name || !code || !min || !discount || !description || !expiryDate) {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    text: 'Please fill in all the fields.',
+                });
+                return;
+            }
+
+
+            fetch("/admin/editcoupon", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: couponId,
+                    name: name,
+                    code: code,
+                    min: min,
+                    discount: discount,
+                    description: description,
+                    expiryDate: expiryDate,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.error,
+                    });
+                } else {
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Coupon edited successfully!',
+                    }).then(() => {
+                        window.location.href = '/admin/coupon';
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while updating the coupon.',
+                });
+            });
+        });
+    });
+</script>

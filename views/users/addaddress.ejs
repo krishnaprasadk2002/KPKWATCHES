@@ -3,6 +3,7 @@
 
 
 <!-- molla/index-18.html  22 Nov 2019 10:00:41 GMT -->
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,122 +32,136 @@
     <link rel="stylesheet" href="../user/assets/css/style.css">
     <link rel="stylesheet" href="../user/assets/css/demos/demo-18.css">
 </head>
+
 <body>
 
 
     <main class="main">
-        <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url(../user/assets/images/banners/countdown-begins-antique-timer-sand-flowing-endlessly-generated-by-ai.jpg)">
+        <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
+            style="background-image: url(../user/assets/images/banners/countdown-begins-antique-timer-sand-flowing-endlessly-generated-by-ai.jpg)">
             <div class="container">
                 <div class="form-box">
                     <div class="form-tab">
                         <div class="tab-content">
-                            <div class="tab-pane fade show active" id="delivery-address" role="tabpanel" aria-labelledby="delivery-address-tab">
+                            <div class="tab-pane fade show active" id="delivery-address" role="tabpanel"
+                                aria-labelledby="delivery-address-tab">
 
-            <form id="addressForm" onsubmit="return submitForm()">
-                <div class="form-group">
-                    <label for="name">Name *</label>
-                    <input type="text" class="form-control" id="name" name="name" required>
-                </div>
-        
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="mobile">Mobile Number *</label>
-                            <input type="tel" class="form-control" id="mobile" name="mobile" required>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="pincode">Pincode *</label>
-                            <input type="number" class="form-control" id="pincode" name="pincode" required>
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="form-group">
-                    <label for="Address1">Address *</label>
-                    <input type="text" class="form-control" id="Address1" name="address" placeholder="Enter your address" required>
-                </div>
-        
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="City">City *</label>
-                            <input type="text" class="form-control" id="City" name="city" required>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="state">State *</label>
-                            <select class="form-control" id="state" name="state" required>
-                                <option value="" selected disabled>Select your state</option>
-                                <option value="Kerala">Kerala</option>
-                                <option value="Tamil Nadu">Tamil Nadu</option>
-                                <option value="Karnataka">Karnataka</option>
-                                <option value="Goa">Goa</option>
-                                <option value="Mumbai">Mumbai</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-        
-                <button type="submit" class="btn btn-outline-primary btn-block">
-                    Submit Address
-                </button>
-            </form>
-       
+                                <form id="addressForm" onsubmit="return submitForm()">
+                                    <div class="form-group">
+                                        <label for="name">Name *</label>
+                                        <input type="text" class="form-control" id="name" name="name" required>
+                                    </div>
 
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="mobile">Mobile Number *</label>
+                                                <input type="tel" class="form-control" id="mobile" name="mobile"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="pincode">Pincode *</label>
+                                                <input type="number" class="form-control" id="pincode" name="pincode"
+                                                    required>
+                                            </div>
+                                        </div>
+                                    </div>
 
-            <script>
-            async function submitForm() {
-                const name = document.getElementById('name').value.trim();
-                const mobile = document.getElementById('mobile').value.trim();
-                const pincode = document.getElementById('pincode').value.trim();
-                const address = document.getElementById('Address1').value.trim();
-                const city = document.getElementById('City').value.trim();
-                const state = document.getElementById('state').value.trim();
-            
-                const formData = {
-                    name,
-                    mobile,
-                    pincode,
-                    address,
-                    city,
-                    state
-                };
-            
-                try {
-                    const response = await fetch('/addAddressProfile', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(formData),
-                    });
-            
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-            
-                    // Explicitly navigate to '/profile' upon successful submission
-                    window.location.replace('/profile');
-            
-                    return true;  // Allow form submission
-                } catch (error) {
-                    console.error('Error submitting address:', error);
-            
-                    // Display SweetAlert for submission error
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Submission Error',
-                        text: 'There was an error submitting the address.',
-                    });
-            
-                    return false;  // Prevent form submission
-                }
-            }
-        </script>
-</div>
+                                    <div class="form-group">
+                                        <label for="Address1">Address *</label>
+                                        <input type="text" class="form-control" id="Address1" name="address"
+                                            placeholder="Enter your address" required>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="City">City *</label>
+                                                <input type="text" class="form-control" id="City" name="city" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="state">State *</label>
+                                                <select class="form-control" id="state" name="state" required>
+                                                    <option value="" selected disabled>Select your state</option>
+                                                    <option value="Kerala">Kerala</option>
+                                                    <option value="Tamil Nadu">Tamil Nadu</option>
+                                                    <option value="Karnataka">Karnataka</option>
+                                                    <option value="Goa">Goa</option>
+                                                    <option value="Mumbai">Mumbai</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-outline-primary btn-block">
+                                        Submit Address
+                                    </button>
+                                </form>
+
+
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+                                <script>
+                                    async function submitForm() {
+                                        const name = document.getElementById('name').value.trim();
+                                        const mobile = document.getElementById('mobile').value.trim();
+                                        const pincode = document.getElementById('pincode').value.trim();
+                                        const address = document.getElementById('Address1').value.trim();
+                                        const city = document.getElementById('City').value.trim();
+                                        const state = document.getElementById('state').value.trim();
+
+                                        const formData = {
+                                            name,
+                                            mobile,
+                                            pincode,
+                                            address,
+                                            city,
+                                            state
+                                        };
+
+                                        try {
+                                            const response = await fetch('/addAddressProfile', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                },
+                                                body: JSON.stringify(formData),
+                                            });
+
+                                            if (!response.ok) {
+                                                throw new Error(`HTTP error! Status: ${response.status}`);
+                                            }
+
+                                            // Display SweetAlert for successful submission
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Success',
+                                                text: 'Address submitted successfully!',
+                                            }).then(() => {
+                                                window.location.replace('/profile');
+                                            });
+
+                                            return true;  // Allow form submission
+                                        } catch (error) {
+                                            console.error('Error submitting address:', error);
+
+                                            // Display SweetAlert for submission error
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Submission Error',
+                                                text: 'There was an error submitting the address.',
+                                            });
+
+                                            return false;  // Prevent form submission
+                                        }
+                                    }
+                                </script>
+
+                            </div>
 </body>
+
 </html>

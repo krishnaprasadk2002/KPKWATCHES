@@ -120,6 +120,7 @@
                         <th scope="col">Min Amount</th>
                         <th scope="col">Coupon Description</th>
                         <th scope="col">Expiry Date</th>
+                        <th>Edit</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -144,7 +145,10 @@
                         Not published
                     <% } %>
                 </td>
-                
+                <td>
+                    <a class="btn btn-primary" href="/admin/editcoupon?id=<%= coupon._id %>">Edit</a>
+
+                </td>
                 <td>
                     <button class="btn btn-danger" onclick="deletecoupon('<%= coupon._id %>')">Delete</button>
 

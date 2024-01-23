@@ -108,6 +108,51 @@ const addCouponDetails = async (req, res) => {
 };
 
 
+//load editcoupon page
+
+const loadEditCoupon=async (req,res)=>{
+    try {
+        const couponId=req.query.id
+        const coupon=await Coupon.findById(couponId)
+        console.log("coupon data:",coupon);
+        res.render("editCoupon",{coupon})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+//edit coupon
+const editCoupon = async (req, res) => {
+    try {
+        const couponId = req.body.id; 
+        const { name, code, min, discount, description, expiryDate } = req.body;
+
+        const existingCoupon = await Coupon.findOne({
+            couponCode: { $regex: new RegExp("^" + code + "$", "i") },
+            _id: { $ne: couponId },
+        });
+
+        if (existingCoupon) {
+            return res.status(400).json({ error: "Coupon name and code already exist" });
+        }
+
+        const updateCoupon = await Coupon.findByIdAndUpdate(
+            couponId,
+            { couponName: name, couponCode: code, minAmount: min, discountAmount: discount, couponDescription: description, expiryDate },
+            { new: true }
+        );
+
+        if (!updateCoupon) {
+            return res.status(404).json({ error: "Coupon not found" });
+        }
+
+        
+        res.json({ success: true, message: 'Coupon edited successfully!' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
 const deleteCoupon = async(req,res)=>{
     try {
        const couponId=req.params.id
@@ -127,6 +172,8 @@ module.exports={
   loadCoupan,
   loadAddCoupon,
   addCouponDetails,
+  loadEditCoupon,
+  editCoupon,
   deleteCoupon
 
 }

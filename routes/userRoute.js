@@ -105,6 +105,11 @@ const couponController=require("../controllers/couponController")
 
 userRoute.post("/applyCoupon",couponController.applyCoupon)
 
+userRoute.get("/wishlist",userController.loadWhishlist)
+userRoute.post("/addingWishlist/:productid", userController.addToWishlist);
+userRoute.post("/removeFromWishlist",userController.removeWishlist)
+userRoute.post("/addToCart/:productid", userController.wishAddToCart);
+
 
 
 
