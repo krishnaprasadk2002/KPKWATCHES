@@ -30,11 +30,11 @@ const securePassword = async (password) => {
 
 const insertUser = async (req, res) => {
   try {
-    // const delteUnverifiedUser=await User.deleteOne({email:req.body.email,is_verified:0})
+    const delteUnverifiedUser=await User.deleteOne({email:req.body.email,is_verified:0})
 
-    // if(delteUnverifiedUser){
-    //   console.log("Not entered Otp user Deleted");
-    // }
+    if(delteUnverifiedUser){
+      console.log("Not entered Otp user Deleted");
+    }
     const { name, mobile, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
@@ -111,7 +111,8 @@ const loadotp = async (req, res) => {
   try {
     const email = req.query.email
     console.log(email);
-    res.render("otp", { email })
+    const otp=req.flash('error')[0]
+    res.render("otp", { email , otp})
   } catch (error) {
     console.log(error.message)
   }
@@ -129,7 +130,7 @@ const verifyOtp = async (req, res) => {
     if (!userVerification) {
       console.log("otp expired");
       req.flash('error', 'Invalid OTP');
-      res.redirect('/otp');
+      res.redirect(`/otp?email=${email}`);
       return;
     }
 
@@ -156,7 +157,7 @@ const verifyOtp = async (req, res) => {
       res.redirect('/login?success=Registration successful!');
     } else {
       req.flash('error', 'Invalid OTP');
-      res.redirect('/otp');
+      res.redirect(`/otp?email=${email}`);
     }
   } catch (error) {
     console.log(error);
@@ -538,6 +539,13 @@ const userProfile = async (req, res) => {
 
 //Add address
 
+const loadAddAddress=async(req,res)=>{
+  try {
+    res.render('addaddress')
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 const addAddressProfile = async (req, res) => {
   try {
       const userId = req.session.user_id; 
@@ -561,6 +569,9 @@ const addAddressProfile = async (req, res) => {
       });
 
       const updatedUser = await user.save();
+      if(updatedUser){
+        res.redirect('/profile');
+      }
       
   } catch (error) {
       console.log(error.message);
@@ -589,7 +600,6 @@ const editAddress = async (req, res) => {
         },
         { new: true } 
      );
-
      if (updatedUser) {
         console.log('Address updated successfully');
         res.status(200).json({ success: true, message: 'Address updated successfully' });
@@ -711,6 +721,7 @@ module.exports = {
   editProfile,
   changePassword,
   removeAddress,
+  loadAddAddress,
   addAddressProfile,
   editAddress,
 }

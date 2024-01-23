@@ -14,12 +14,13 @@ var instance = new Razorpay({ key_id: process.env.RazorId, key_secret: process.e
 
 const placeOrder = async (req, res) => {
     try {
-        const paymentMethod = req.body.paymentMethod
+        console.log(req.body)
+        const paymentMethod = req.body.paymentMethod;
         const selectedValue = req.body.selectedValue;
         const cartId = req.session.user_id;
-        const { couponCode } = req.body
+        const { couponCode } = req.body;
         const cart = await Cart.findOne({ userid: cartId });
-        const userId = req.session.user_id
+        const userId = req.session.user_id;
 
         const products = await Promise.all(cart.products.map(async (cartProduct) => {
             const productDetails = await Products.findById(cartProduct.productId);
@@ -41,7 +42,6 @@ const placeOrder = async (req, res) => {
 
         let totalWithDiscount = totalWithoutDiscount;
 
-
         if (couponCode) {
             const coupon = await Coupons.findOne({ couponCode });
 
@@ -50,24 +50,6 @@ const placeOrder = async (req, res) => {
                 totalWithDiscount -= discountAmount;
             }
         }
-
-        const coupon = await Coupons.findOne({ couponCode });
-
-        if (coupon) {
-            const userIndex = coupon.userUsed.findIndex(user => user.userid.toString() === userId);
-        
-            if (userIndex === -1 || !coupon.userUsed[userIndex].used) {
-                coupon.userUsed.push({ userid: userId, used: true });
-                const couponName = coupon.couponName;
-        
-                await coupon.save();
-            } else {
-                res.json({ already: 'Coupon already used by this user' });
-                return; 
-            }
-        } 
-          
-
 
         const orderData = {
             user: req.session.user_id,
@@ -81,35 +63,37 @@ const placeOrder = async (req, res) => {
                 image: product.image[0],
                 reason: product.reason,
             })),
-
-
             paymentMode: paymentMethod,
             total: totalWithDiscount,
             date: new Date(),
             address: selectedValue,
         };
 
-
         const orderInstance = new Orders(orderData);
+
         if (paymentMethod === "Cash on delivery") {
-            const savedOrder = await orderInstance.save().then(async () => {
-                await Cart.deleteOne({ userid: req.session.user_id });
-
-                for (let i = 0; i < cart.products.length; i++) {
-                    const productId = cart.products[i].productId;
-                    const count = cart.products[i].quentity;
-
-                    await Products.updateOne({
-                        _id: productId
-                    }, {
-                        $inc: {
-                            quentity: -count
-                        }
-                    });
-                }
-            });
-
-            res.json({ success: true, order: savedOrder });
+            try {
+                const savedOrder = await orderInstance.save().then(async () => {
+                    await Cart.deleteOne({ userid: req.session.user_id });
+    
+                    for (let i = 0; i < cart.products.length; i++) {
+                        const productId = cart.products[i].productId;
+                        const count = cart.products[i].quentity;
+    
+                        await Products.updateOne({
+                            _id: productId
+                        }, {
+                            $inc: {
+                                quentity: -count
+                            }
+                        });
+                    }
+                });
+    
+                res.json({ success: true, order: savedOrder });
+            } catch (error) {
+                res.status(500).json({ success: false, message: 'OD not working properly.' });
+            }
         } else if (paymentMethod === "Razorpay") {
             const totalpriceInPaise = Math.round(totalWithDiscount * 100);
             const minimumAmount = 100;
@@ -118,10 +102,15 @@ const placeOrder = async (req, res) => {
                 const savedOrder = await orderInstance.save();
                 res.json({ response, total: total, order: savedOrder });
             });
-
-
         } else if (paymentMethod === "wallet") {
-            const savedOrder = await orderInstance.save().then(async () => {
+            try {
+
+                const user=await User.findById(req.session.user_id)
+                if(!user && user.wallet < totalWithDiscount){
+                    return res.json({ success: false, message: 'Insufficient wallet balance' });
+                }
+                const savedOrder = await orderInstance.save();
+
                 await Cart.deleteOne({ userid: req.session.user_id });
 
                 for (let i = 0; i < cart.products.length; i++) {
@@ -136,13 +125,31 @@ const placeOrder = async (req, res) => {
                         }
                     });
                 }
-            });
-            res.json({ success: true, order: savedOrder });
-            
-        }
 
+                await User.updateOne({
+                    _id: req.session.user_id
+                }, {
+                    $inc: {
+                        wallet: -totalWithDiscount
+                    },
+                    $push: {
+                        walletHistory: {
+                            date: new Date(),
+                            amount: `-${totalWithDiscount}`,
+                            reason: 'ordered with wallet'
+                        }
+                    }
+                });
+
+                res.json({ success: true, order: savedOrder });
+            } catch (error) {
+                console.error('Wallet order error:', error);
+                res.status(500).json({ success: false, message: 'Wallet order error' });
+            }
+        }
     } catch (error) {
-        res.status(500).json({ success: false, message: 'An error occurred while processing the order or updating product stock.' });
+        console.error('Place order error:', error);
+        res.status(500).json({ success: false, message: 'An error occurred while processing the order.' });
     }
 };
 
@@ -230,6 +237,7 @@ const cancelOrPlacedOrder = async (req, res) => {
     try {
         const orderId = req.params.orderId;
         const productId = req.params.productId
+       
 
 
         const updatedOrder = await Orders.updateOne({
@@ -239,15 +247,16 @@ const cancelOrPlacedOrder = async (req, res) => {
         },
             {
                 $set: {
-                    'Products.$.orderStatus': 'cancelled',
+                    'Products.$.orderStatus': 'request cancellation',
                 }
             })
+            
         res.json({
             success: true,
             message: "Product cancelled successfully",
             updatedOrder,
         });
-        console.log(updatedOrder);
+
     } catch (error) {
         console.error("Error cancelling product:", error.message);
         res.status(500).json({ success: false, message: "Internal server error" });
@@ -260,6 +269,7 @@ const returnOrder = async (req, res) => {
     try {
         const productId = req.params.productId
         const orderId = req.params.orderId
+        
 
         const updatedOrder = await Orders.updateOne({
             _id: orderId,
@@ -289,11 +299,11 @@ const loadOrder = async (req, res) => {
     try {
         const admin = req.session.admin
         const allOrders = await Orders.find()
-            .populate({
-                path: "Products.productId",
-                model: "Products",
-            })
-            .populate('user', 'name').exec();
+    .populate({
+        path: "Products.productId",
+        model: "Products",
+    })
+    .populate('user', 'name').exec();
         res.render("orders", { allOrders })
     } catch (error) {
         console.log(error.message);
@@ -330,8 +340,8 @@ const changeStatus = async (req, res) => {
         const userId = orderData.user;
 
         let totalAmountofWallet = orderData.total;
-
-        if (status === "returned" || status === "cancelled") {
+        console.log("Status",status);
+        if (status === "returned") {
             for (let i = 0; i < products.length; i++) {
                 const productId = products[i].productId;
                 const count = products[i].quentity;
@@ -346,7 +356,6 @@ const changeStatus = async (req, res) => {
                 );
             }
 
-            
 
             await User.findByIdAndUpdate(
                 { _id: userId },
@@ -363,6 +372,38 @@ const changeStatus = async (req, res) => {
                     }
                 }
             );
+
+        }else if (status === "cancelled") {
+            for (let i = 0; i < products.length; i++) {
+                const productId = products[i].productId;
+                const count = products[i].quentity;
+        
+                await Products.updateOne(
+                    { _id: productId },
+                    {
+                        $inc: {
+                            quentity: count
+                        }
+                    }
+                );
+            }
+        
+            await User.findByIdAndUpdate(
+                { _id: userId },
+                {
+                    $inc: {
+                        wallet: totalAmountofWallet
+                    },
+                    $push: {
+                        wallet_history: {
+                            date: new Date(),
+                            amount: totalAmountofWallet,
+                            reason: 'cancel order'
+                        }
+                    }
+                }
+            );
+
         }
 
         if (updatedOrder.nModified === 0) {
@@ -372,7 +413,7 @@ const changeStatus = async (req, res) => {
         res.json({ success: true, message: 'Status updated successfully' });
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
@@ -389,3 +430,4 @@ module.exports = {
     loadOrderSuccess
 
 };
+
