@@ -78,6 +78,13 @@ const adminLogout=async(req,res)=>{
     }
 }
 
+
+
+
+//======================================================================================Admin DashBoard ==========================================================================
+
+
+
 module.exports = { 
       loadLogin,
       verifyLogin,
@@ -85,5 +92,4 @@ module.exports = {
       loadAlluser,
       listUnlistUser,
       adminLogout,
-      
     };

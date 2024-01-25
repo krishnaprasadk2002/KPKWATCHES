@@ -204,10 +204,11 @@ const deleteimage = async (req, res) => {
 
 // const searchProduct=async(req,res)=>{
 //     try {
-//       const search=req.body.search
-//       const searchProduct=await Products.find({name:{$regex:new RegExp('^'+search+'.*','i')}}).exec()
-//       const searchedProducts=searchProduct.slice(0,8);
-//       res.send({search:searchedProducts})
+//       const search = req.body.Search;
+//       console.log("search:", search);
+//       const searchProduct = await Products.find({ name: { $regex: new RegExp(search, 'i') } })
+//       const searchedProducts = searchProduct.slice(0, 8);
+//       res.send({ search: searchedProducts });
 //     } catch (error) {
 //       console.log(error.message);
 //     }
@@ -262,5 +263,6 @@ module.exports={insertProduct,
     loadEditProduct,
     handleEditProduct,
     singleProduct,
+    // searchProduct,
     deleteimage,
     productDelete}

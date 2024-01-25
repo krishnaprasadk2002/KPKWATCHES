@@ -97,7 +97,7 @@
                             <form action="/searchProduct" method="post">
                                 <div class="header-search-wrapper">
                                     <label for="search" class="sr-only">Search</label>
-                                    <input type="search" class="form-control" name="search" id="q"
+                                    <input type="search" class="form-control" name="search" id="Search"
                                         placeholder="Search in..." required>
 
                                 </div><!-- End .header-search-wrapper -->
@@ -105,36 +105,8 @@
                         </div><!-- End .header-search -->
 
 
-                        <script>
-                            function updateSort(selectElement) {
-                                const selectedValue = selectElement.value;
-                                window.location.href = selectedValue;
-                            }
-                        
-                            document.querySelector('form').addEventListener('submit', async function (event) {
-                                event.preventDefault();
-                        
-                                const searchValue = document.getElementById('q').value;
-                        
-                                try {
-                                    const response = await fetch('/searchProduct', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                        },
-                                        body: JSON.stringify({ search: searchValue }),
-                                    });
-                        
-                                    const data = await response.json();
-                        
-                                    // Process the response data (display results, etc.)
-                                    console.log(data);
-                                } catch (error) {
-                                    console.error(error.message);
-                                }
-                            });
-                        </script>
-                        
+
+
 
 
                         <div class="dropdown cart-dropdown">
@@ -243,110 +215,114 @@
                                 <label for="sortby">Sort by:</label>
                                 <div class="select-custom">
                                     <select name="sortby" id="sortby" class="form-control" onchange="updateSort(this)">
-                                        <option value="/product?sort=default" <%= sortOption === 'default' ? 'selected' : '' %>>Sort By</option>
-                                        <option value="/product?sort=priceLowTohigh" <%= sortOption === 'priceLowTohigh' ? 'selected' : '' %>>Low-High</option>
-                                        <option value="/product?sort=2" <%= sortOption === '2' ? 'selected' : '' %>>High-Low</option>
-                                        <option value="/product?sort=3" <%= sortOption === '3' ? 'selected' : '' %>>Name</option>
+                                        <option value="/product?sort=default" <%=sortOption==='default' ? 'selected'
+                                            : '' %>>Sort By</option>
+                                        <option value="/product?sort=priceLowTohigh" <%=sortOption==='priceLowTohigh'
+                                            ? 'selected' : '' %>>Low-High</option>
+                                        <option value="/product?sort=2" <%=sortOption==='2' ? 'selected' : '' %>
+                                            >High-Low</option>
+                                        <option value="/product?sort=3" <%=sortOption==='3' ? 'selected' : '' %>>Name
+                                        </option>
                                     </select>
                                 </div>
                             </div><!-- End .toolbox-sort -->
                         </div><!-- End .toolbox-right -->
-                        
-
-                   
 
 
 
-                      <div class="products">
-                        <div class="row">
-                            <% filteredProducts.forEach((productData)=> { %>
-                                <div class="col-6 col-md-4 col-lg-4 col-xl-3">
-                                    <div class="product">
-                                        <figure class="product-media">
-                                            <a href="/eachproduct?id=<%= productData._id %>">
-                                                <img src="/uploads/<%= productData.image[0] %>" alt="Product image"
-                                                    class="product-image" style="width: 100%; height: 300px;">
-                                            </a>
-                                        </figure><!-- End .product-media -->
 
-                                        <div class="product-body">
-                                            <h3 class="product-title">
-                                                <a href="/eachproduct?id=<%= productData._id %>"><b>
-                                                        <%= productData.name %>
-                                                    </b></a>
-                                            </h3><!-- End .product-title -->
-                                            <div class="product-cat">
+
+
+                        <div class="products" id="searchResultsContainer">
+                            <div class="row">
+                                <% filteredProducts.forEach((productData)=> { %>
+                                    <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+                                        <div class="product">
+                                            <figure class="product-media">
                                                 <a href="/eachproduct?id=<%= productData._id %>">
-                                                    <%= productData.category.name %>
+                                                    <img src="/uploads/<%= productData.image[0] %>" alt="Product image"
+                                                        class="product-image" style="width: 100%; height: 300px;">
                                                 </a>
-                                            </div><!-- End .product-cat -->
+                                            </figure><!-- End .product-media -->
 
-                                            <div class="product-price">
-                                                <% if (productData.offerprice <=productData.price) { %>
-                                                    <br>
-                                                    <span class="original-price">₹<%= productData.price %></span>
-                                                    <br><br>
-                                                    <span class="offer-price">₹<%= productData.offerprice %></span>
-                                                    <% } else { %>
-                                                        ₹<%= productData.price %>
-                                                            <% } %>
-                                            </div>
+                                            <div class="product-body">
+                                                <h3 class="product-title">
+                                                    <a href="/eachproduct?id=<%= productData._id %>"><b>
+                                                            <%= productData.name %>
+                                                        </b></a>
+                                                </h3><!-- End .product-title -->
+                                                <div class="product-cat">
+                                                    <a href="/eachproduct?id=<%= productData._id %>">
+                                                        <%= productData.category.name %>
+                                                    </a>
+                                                </div><!-- End .product-cat -->
 
-                                            <div class="Description">
-                                                <%= productData.description %>
-                                            </div>
-                                        </div><!-- End .product-body -->
-                                    </div><!-- End .product -->
-                                </div><!-- End .col-md-4 -->
-                                <% }) %>
-                        </div><!-- End .row -->
-                    </div><!-- End .products -->
+                                                <div class="product-price">
+                                                    <% if (productData.offerprice <=productData.price) { %>
+                                                        <br>
+                                                        <span class="original-price">₹<%= productData.price %></span>
+                                                        <br><br>
+                                                        <span class="offer-price">₹<%= productData.offerprice %></span>
+                                                        <% } else { %>
+                                                            ₹<%= productData.price %>
+                                                                <% } %>
+                                                </div>
 
-
-
-
-                    <div class="sidebar-filter-overlay"></div><!-- End .sidebar-filter-overlay -->
-                    <aside class="sidebar-shop sidebar-filter">
-                        <div class="sidebar-filter-wrapper">
-                            <div class="widget widget-clean">
-                                <label><i class="icon-close"></i>Filters</label>
-                                <a href="/product">Clean All</a>
-                            </div><!-- End .widget -->
-
-                            <h3 class="widget-title">
-                                <a href="/product" role="button" aria-expanded="true" aria-controls="widget-1">
-                                    All Category
-                                </a>
-                            </h3><!-- End .widget-title -->
-
-                            <% allcategory.forEach((productData)=> { %>
-
-                                <div class="collapse show" id="widget-<%= productData.id %>">
-                                    <div class="widget-body">
-                                        <div class="filter-item">
-                                            <div>
-
-                                                <label " for=" cat-<%=productData.id %>"><a
-                                                        href="/product?category=<%= productData._id%>">
-                                                        <%= productData.name %>
-                                                    </a></label>
-                                            </div><!-- End .custom-checkbox -->
-                                            <span class="item-count"></span>
-
-                                        </div><!-- End .filter-item -->
-                                    </div><!-- End .widget-body -->
-                                </div><!-- End .collapse -->
-                                <% }) %>
+                                                <div class="Description">
+                                                    <%= productData.description %>
+                                                </div>
+                                            </div><!-- End .product-body -->
+                                        </div><!-- End .product -->
+                                    </div><!-- End .col-md-4 -->
+                                    <% }) %>
+                            </div><!-- End .row -->
+                        </div><!-- End .products -->
 
 
 
 
+                        <div class="sidebar-filter-overlay"></div><!-- End .sidebar-filter-overlay -->
+                        <aside class="sidebar-shop sidebar-filter">
+                            <div class="sidebar-filter-wrapper">
+                                <div class="widget widget-clean">
+                                    <label><i class="icon-close"></i>Filters</label>
+                                    <a href="/product">Clean All</a>
+                                </div><!-- End .widget -->
+
+                                <h3 class="widget-title">
+                                    <a href="/product" role="button" aria-expanded="true" aria-controls="widget-1">
+                                        All Category
+                                    </a>
+                                </h3><!-- End .widget-title -->
+
+                                <% allcategory.forEach((productData)=> { %>
+
+                                    <div class="collapse show" id="widget-<%= productData.id %>">
+                                        <div class="widget-body">
+                                            <div class="filter-item">
+                                                <div>
+
+                                                    <label " for=" cat-<%=productData.id %>"><a
+                                                            href="/product?category=<%= productData._id%>">
+                                                            <%= productData.name %>
+                                                        </a></label>
+                                                </div><!-- End .custom-checkbox -->
+                                                <span class="item-count"></span>
+
+                                            </div><!-- End .filter-item -->
+                                        </div><!-- End .widget-body -->
+                                    </div><!-- End .collapse -->
+                                    <% }) %>
 
 
-                        </div><!-- End .sidebar-filter-wrapper -->
-                    </aside><!-- End .sidebar-filter -->
-                </div><!-- End .container -->
-            </div><!-- End .page-content -->
+
+
+
+
+                            </div><!-- End .sidebar-filter-wrapper -->
+                        </aside><!-- End .sidebar-filter -->
+                    </div><!-- End .container -->
+                </div><!-- End .page-content -->
 
 
         </main><!-- End .main -->
@@ -667,3 +643,94 @@
 <!-- molla/category-boxed.html  22 Nov 2019 10:03:02 GMT -->
 
 </html>
+
+
+
+
+
+<script>
+    function updateSort(selectElement) {
+        const selectedValue = selectElement.value;
+        window.location.href = selectedValue;
+    }
+
+    document.querySelector('form').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const searchInput = document.getElementById('Search');
+        const searchValue = searchInput.value.trim(); // Trim to remove leading/trailing whitespaces
+
+        try {
+            if (searchValue) {
+                const response = await fetch('/searchProduct', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ Search: searchValue }),
+                });
+
+                const data = await response.json();
+                displaySearchResults(data.response);
+            } else {
+                clearSearchResults();
+            }
+        } catch (error) {
+            console.error(error.message);
+        }
+    });
+
+    function displaySearchResults(searchResults) {
+        const searchResultsContainer = document.getElementById('searchResultsContainer');
+
+        // Clear previous search results
+        searchResultsContainer.innerHTML = '';
+
+        // Create a row container to hold the products
+        const rowContainer = document.createElement('div');
+        rowContainer.className = 'row';
+
+        // Iterate through the search results and create HTML elements for each product
+        searchResults.forEach(productData => {
+            const productElement = document.createElement('div');
+            productElement.className = 'col-6 col-md-4 col-lg-4 col-xl-3';
+
+            // Create the HTML structure for a product
+            productElement.innerHTML = `
+<div class="product">
+<figure class="product-media">
+<a href="/eachproduct?id=${productData._id}">
+<img src="/uploads/${productData.image[0]}" alt="Product image" class="product-image" style="width: 100%; height: 300px;">
+</a>
+</figure>
+<div class="product-body">
+<h3 class="product-title">
+<a href="/eachproduct?id=${productData._id}"><b>${productData.name}</b></a>
+</h3>
+<div class="product-cat">
+<a href="/eachproduct?id=${productData._id}">${productData.category.name}</a>
+</div>
+<div class="product-price">
+<!-- Add your price logic here -->
+</div>
+<div class="Description">
+${productData.description}
+</div>
+</div>
+</div>
+`;
+
+            rowContainer.appendChild(productElement);
+        });
+
+        // Append the row container to the main results container
+        searchResultsContainer.appendChild(rowContainer);
+    }
+
+    function clearSearchResults() {
+        const searchResultsContainer = document.getElementById('searchResultsContainer');
+        searchResultsContainer.innerHTML = '';
+    }
+
+
+</script>

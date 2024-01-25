@@ -54,11 +54,14 @@ userRoute.get("/login",UserAuth.isLogin,userController.loginLoad)
 userRoute.get("/",userController.loadHome)
 userRoute.get("/home",UserAuth.isLogin,userController.loadHome)
 
+
+
 //product
 const productController=require("../controllers/productController")
 userRoute.get("/product",userController.loadProduct)
 userRoute.get("/eachproduct",productController.singleProduct)
-// userRoute.post("/searchProduct",productController.searchProduct)
+
+userRoute.post("/searchProduct",userController.loadProduct)
 //logout
 userRoute.get("/logout",userController.userLogout)
 

@@ -11,6 +11,7 @@ const crypto = require("crypto")
 const Wishlist = require("../models/WhishlistModel");
 const Cart=require('../models/cartModel')
 const WhishlistModel = require("../models/WhishlistModel");
+const Banner=require("../models/bannerModal")
 
 
 
@@ -417,7 +418,7 @@ const loadHome = async (req, res) => {
       is_listed: { $ne: "Unlisted" },
       quentity: { $ne: 0 }
   }).populate('category').exec();
-  
+    const banner=await Banner.find({status:{$ne:false}})
     const filteredProducts = productData.filter((product) => product.category.is_listed !== "Unlisted");
 
     // Always check for a blocked user
@@ -426,11 +427,10 @@ const loadHome = async (req, res) => {
       req.session.user_id = null;
     }
 
-    // Render the home page
     if (req.session.user_id) {
-      res.render("home", { username, filteredProducts });
+      res.render("home", { username, filteredProducts,banner });
     } else {
-      res.render("home", { filteredProducts });
+      res.render("home", { filteredProducts,banner });
     }
   } catch (error) {
     console.log(error.message);
@@ -441,6 +441,15 @@ const loadHome = async (req, res) => {
 const loadProduct = async (req, res) => {
   try {
     const sortOption = req.query.sort
+
+
+    const search = req.body.Search; 
+    
+    if (search) {
+        const searchProduct = await Products.find({ name: { $regex: new RegExp(search, 'i') } })
+        const searchedProducts = searchProduct.slice(0, 8);
+        return res.json({ response: searchedProducts });
+    }
 
     let totalproducts = await Products.find({ is_listed: "Listed" }).count()
     let totalPages = Math.ceil(totalproducts / 12)
@@ -480,6 +489,8 @@ const loadProduct = async (req, res) => {
         productss = [];
       }
     } else {
+
+
       const listedCategoryIds = (await Category.find({ is_listed: "Listed" })).map(category => category._id);
       productss = await Products.find({
         'category': { $in: listedCategoryIds },
