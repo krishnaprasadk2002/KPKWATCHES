@@ -261,7 +261,6 @@ module.exports={insertProduct,
     listunlistProduct,
     loadEditProduct,
     handleEditProduct,
-    
     singleProduct,
     deleteimage,
     productDelete}

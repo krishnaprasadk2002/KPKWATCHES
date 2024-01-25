@@ -106,7 +106,7 @@ const placeOrder = async (req, res) => {
             try {
 
                 const user=await User.findById(req.session.user_id)
-                if(!user && user.wallet < totalWithDiscount){
+                if( user.wallet < totalWithDiscount){
                     return res.json({ success: false, message: 'Insufficient wallet balance' });
                 }
                 const savedOrder = await orderInstance.save();
@@ -340,6 +340,7 @@ const changeStatus = async (req, res) => {
         const userId = orderData.user;
 
         let totalAmountofWallet = orderData.total;
+        console.log("total return",totalAmountofWallet);
         console.log("Status",status);
         if (status === "returned") {
             for (let i = 0; i < products.length; i++) {

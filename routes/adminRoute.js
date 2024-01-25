@@ -110,6 +110,31 @@ adminRoute.get("/editcoupon",adminAuth.verify,couponController.loadEditCoupon)
 adminRoute.post("/editcoupon",adminAuth.verify,couponController.editCoupon)
 adminRoute.delete('/deleteCoupon/:id',adminAuth.verify,couponController.deleteCoupon)
 
+//===============================================================================Banner Mangement===============================================
+const bannerController=require("../controllers/bannerController")
+
+adminRoute.get("/banner",bannerController.loadBanner)
+adminRoute.get("/addbanner",bannerController.addBanner)
+
+const bannerStorage=multer.diskStorage({
+  destination:function(req,file,cb){
+    cb(null,path.join(__dirname, '../public/uploads'))
+  },
+  filename:function(req,file,cb){
+    const currentDate=new Date();
+    const formattedDate= currentDate.toISOString().replace(/:/g, '-').replace(/\..+/, '');
+    const name = formattedDate + '_' + file.originalname;
+    cb(null, name);
+  },
+  })
+  const Bannerupload = multer({ storage: bannerStorage })
+adminRoute.post("/addbanner",Bannerupload.single('image'),bannerController.addBannerDetails)
+adminRoute.get('/editbanner',adminAuth.verify,bannerController.editBanner)
+adminRoute.post("/editbanner/:id", Bannerupload.single('image'), bannerController.editBannerDetails);
+adminRoute.delete('/deleteimage',adminAuth.verify, bannerController.editImageDelete);
+adminRoute.get("/bannerstatus",bannerController.bannerStatus)
+adminRoute.get("/deletebanner",bannerController.bannerDelete)
+
 //Logout
 adminRoute.get("/logout",adminController.adminLogout)
 

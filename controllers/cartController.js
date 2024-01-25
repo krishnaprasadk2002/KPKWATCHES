@@ -22,7 +22,7 @@ const loadCart = async (req, res) => {
   
         res.render("cartpage", { cartData, totalPriceTotal });
       }else{
-  
+          
           res.render("cartpage", {cartData});
       }
     } catch (err) {

@@ -413,7 +413,11 @@ const verifyLogin = async (req, res) => {
 const loadHome = async (req, res) => {
   try {
     const username = req.session.user_id;
-    const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }).populate('category').exec();
+    const productData = await Products.find({
+      is_listed: { $ne: "Unlisted" },
+      quentity: { $ne: 0 }
+  }).populate('category').exec();
+  
     const filteredProducts = productData.filter((product) => product.category.is_listed !== "Unlisted");
 
     // Always check for a blocked user
@@ -470,8 +474,8 @@ const loadProduct = async (req, res) => {
           .skip(skip)
           .limit(12)
           .exec();
-        res.render("allproduct", { filteredProducts: products, allcategory: [], totalPages, currentPage, sortOption }); // Pass products directly to the view
-        return; // End the function to prevent further execution
+        res.render("allproduct", { filteredProducts: products, allcategory: [], totalPages, currentPage, sortOption }); 
+        return; 
       } else {
         productss = [];
       }

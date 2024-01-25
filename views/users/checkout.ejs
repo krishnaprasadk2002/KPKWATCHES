@@ -371,7 +371,7 @@
                                                             <% } %>
 
 
-                                                                <tr class="summary-total">
+                                                                <tr class="summary-total" >
                                                                     <td>Total:</td>
                                                                     <td>₹<%= totalWithDiscount %>
                                                                     </td>
@@ -434,6 +434,7 @@
             event.preventDefault();
             // Get the selected value from the payment dropdown
             const paymentMethod = document.getElementById("payment").value;
+            const Total=document.getElementById("total").value;
 
             // Get the selected address value (adjust this based on your HTML structure)
             const selectedValue = document.getElementById("addressSelect").value;
