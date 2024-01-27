@@ -1,5 +1,5 @@
 (function ($) {
-    "use strict";
+    
 
     // Spinner
     var spinner = function () {
@@ -64,27 +64,47 @@
     Chart.defaults.borderColor = "#000000";
 
 
+    const jan = document.getElementById('monthlyOrdersChart1').value;
+    const feb = document.getElementById('monthlyOrdersChart2').value;
+    const mar = document.getElementById('monthlyOrdersChart3').value;
+    const apr = document.getElementById('monthlyOrdersChart4').value;
+    const may = document.getElementById('monthlyOrdersChart5').value;
+    const june = document.getElementById('monthlyOrdersChart6').value;
+    const july = document.getElementById('monthlyOrdersChart7').value;
+    const aug = document.getElementById('monthlyOrdersChart8').value;
+    const sep = document.getElementById('monthlyOrdersChart9').value;
+    const oct = document.getElementById('monthlyOrdersChart10').value;
+    const nav = document.getElementById('monthlyOrdersChart11').value;
+    const dec = document.getElementById('monthlyOrdersChart12').value;
+
+    
+    
+
     // Worldwide Sales Chart
     var ctx1 = $("#worldwide-sales").get(0).getContext("2d");
     var myChart1 = new Chart(ctx1, {
         type: "bar",
         data: {
-            labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
+            labels: [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+              ],
             datasets: [{
-                    label: "USA",
-                    data: [15, 30, 55, 65, 60, 80, 95],
+                    label: "Sales",
+                    data: [jan,feb,mar,apr,may,june,july,aug,sep,oct,nav,dec],
                     backgroundColor: "rgba(235, 22, 22, .7)"
                 },
-                {
-                    label: "UK",
-                    data: [8, 35, 40, 60, 70, 55, 75],
-                    backgroundColor: "rgba(235, 22, 22, .5)"
-                },
-                {
-                    label: "AU",
-                    data: [12, 25, 45, 55, 65, 70, 60],
-                    backgroundColor: "rgba(235, 22, 22, .3)"
-                }
+                // {
+                //     label: "Orders",
+                //     // data: ,
+                //     backgroundColor: "rgba(235, 22, 22, .5)"
+                // },
+
+                // {
+                //     label: "AU",
+                //     data: [12, 25, 45, 55, 65, 70, 60],
+                //     backgroundColor: "rgba(235, 22, 22, .3)"
+                // }
             ]
             },
         options: {

@@ -445,7 +445,7 @@
             }
 
 
-            // Make an AJAX request to the backend
+            
             fetch('/placeorder', {
                 method: 'POST',
                 headers: {
@@ -473,18 +473,18 @@
                         });
 
                         setTimeout(() => {
-                            // Redirect to the user cart page after the alert is closed
+                           
                             window.location.href = '/ordersuccess';
                         }, 2000)
                     } else if (data.response) {
                         var options = {
-                            "key": 'rzp_test_TIOiShpd8euA17', // Enter the Key ID generated from the Dashboard
-                            "amount": data.response.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                            "key": 'rzp_test_TIOiShpd8euA17',
+                            "amount": data.response.order.amount, 
                             "currency": "INR",
                             "name": "KPK WATCHES", //your business name
                             "description": "Test Transaction",
                             "image": "https://example.com/your_logo",
-                            "order_id": data.response.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                            "order_id": data.response.order.id, 
                             "handler": function (response) {
 
                                 verifyPayment(response, data.response)

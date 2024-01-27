@@ -591,8 +591,8 @@ const addAddressProfile = async (req, res) => {
     });
 
     const updatedUser = await user.save();
-    if (updatedUser) {
-      res.redirect('user/profile');
+    if(updatedUser){
+      res.json({message:"adding success"})
     }
 
   } catch (error) {

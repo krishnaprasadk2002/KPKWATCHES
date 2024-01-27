@@ -697,28 +697,27 @@
 
             // Create the HTML structure for a product
             productElement.innerHTML = `
-<div class="product">
-<figure class="product-media">
-<a href="/eachproduct?id=${productData._id}">
-<img src="/uploads/${productData.image[0]}" alt="Product image" class="product-image" style="width: 100%; height: 300px;">
-</a>
-</figure>
-<div class="product-body">
-<h3 class="product-title">
-<a href="/eachproduct?id=${productData._id}"><b>${productData.name}</b></a>
-</h3>
-<div class="product-cat">
-<a href="/eachproduct?id=${productData._id}">${productData.category.name}</a>
-</div>
-<div class="product-price">
-<!-- Add your price logic here -->
-</div>
-<div class="Description">
-${productData.description}
-</div>
-</div>
-</div>
-`;
+                    <div class="product">
+                    <figure class="product-media">
+                    <a href="/eachproduct?id=${productData._id}">
+                    <img src="/uploads/${productData.image[0]}" alt="Product image" class="product-image" style="width: 100%; height: 300px;">
+                    </a>
+                    </figure>
+                    <div class="product-body">
+                    <h3 class="product-title">
+                    <a href="/eachproduct?id=${productData._id}"><b>${productData.name}</b></a>
+                    </h3>
+                    <div class="product-cat">
+                    <a href="/eachproduct?id=${productData._id}">${productData.category.name}</a>
+                    </div>
+                    <div class="product-price">
+                    <!-- Add your price logic here -->
+                    </div>
+                  <div class="Description">
+                   ${productData.description}
+                    </div>
+                   </div> 
+                   </div> `;
 
             rowContainer.appendChild(productElement);
         });

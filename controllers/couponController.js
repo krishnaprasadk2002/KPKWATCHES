@@ -25,6 +25,7 @@ const applyCoupon = async (req, res) => {
         couponCode,
         expiryDate: { $gte: currentDate },
         minAmount: { $lte: totalPriceTotal },
+        "userUsed.used": { $ne: true }
     });
     
     if (coupon) {

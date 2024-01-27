@@ -128,8 +128,26 @@
                         <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-line fa-3x text-primary"></i>
                             <div class="ms-3">
-                                <p class="mb-2">Revenue</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <p class="mb-2">Razorpay and Wallet Revenue</p>
+                                <h6 class="mb-0">₹<%= revenue.length > 0 ? revenue[0].totalrevenue : 0 %></h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-line fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Cash On Delivery Revenue</p>
+                                <h6 class="mb-0">₹ <%= codRevenue.length > 0 ? codRevenue[0].total : 0 %></h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Total Revenue</p>
+                                <h6 class="mb-0">₹<%= revenuelen %></h6>
                             </div>
                         </div>
                     </div>
@@ -138,7 +156,7 @@
                             <i class="fa fa-chart-bar fa-3x text-primary"></i>
                             <div class="ms-3">
                                 <p class="mb-2">All Orders</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <h6 class="mb-0"><%= salesLen %></h6>
                             </div>
                         </div>
                     </div>
@@ -146,8 +164,8 @@
                         <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-area fa-3x text-primary"></i>
                             <div class="ms-3">
-                                <p class="mb-2">products</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <p class="mb-2">Pending Orders</p>
+                                <h6 class="mb-0"><%= pendlen %></h6>
                             </div>
                         </div>
                     </div>
@@ -155,8 +173,26 @@
                         <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-pie fa-3x text-primary"></i>
                             <div class="ms-3">
-                                <p class="mb-2">Monthly Earnings</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <p class="mb-2">All Products</p>
+                                <h6 class="mb-0"><%= productlen %></h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-pie fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Total User</p>
+                                <h6 class="mb-0"><%= totalUser %></h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-pie fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">All category</p>
+                                <h6 class="mb-0"><%= categorylen %></h6>
                             </div>
                         </div>
                     </div>
@@ -179,6 +215,7 @@
                     <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary text-center rounded p-4">
                             <div class="d-flex align-items-center justify-content-between mb-4">
+
                                 <h6 class="mb-0">Yearly Sales</h6>
                                 <a href="">Show All</a>
                             </div>
@@ -285,6 +322,20 @@
             <!-- Footer End -->
         </div>
         <!-- Content End -->
+        <input id="monthlyOrdersChart1" type="hidden" value="<%=updatedMonthlyValues[0].total %>">
+        <input id="monthlyOrdersChart2" type="hidden" value="<%=updatedMonthlyValues[1].total %>">
+        <input id="monthlyOrdersChart3" type="hidden" value="<%=updatedMonthlyValues[2].total %>">
+        <input id="monthlyOrdersChart4" type="hidden" value="<%=updatedMonthlyValues[3].total %>">
+        <input id="monthlyOrdersChart5" type="hidden" value="<%=updatedMonthlyValues[4].total %>">
+        <input id="monthlyOrdersChart6" type="hidden" value="<%=updatedMonthlyValues[5].total %>">
+        <input id="monthlyOrdersChart7" type="hidden" value="<%=updatedMonthlyValues[6].total %>">
+        <input id="monthlyOrdersChart8" type="hidden" value="<%=updatedMonthlyValues[7].total %>">
+        <input id="monthlyOrdersChart9" type="hidden" value="<%=updatedMonthlyValues[8].total %>">
+        <input id="monthlyOrdersChart10" type="hidden" value="<%=updatedMonthlyValues[9].total %>">
+        <input id="monthlyOrdersChart11" type="hidden" value="<%=updatedMonthlyValues[10].total %>">
+        <input id="monthlyOrdersChart12" type="hidden" value="<%=updatedMonthlyValues[11].total %>">
+
+       
 
 
         <!-- Back to Top -->

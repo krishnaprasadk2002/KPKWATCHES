@@ -51,9 +51,9 @@ const addToCart = async (req, res) => {
 
                 if (existingProductIndex !== -1) {
                     const existingProduct = cart.products[existingProductIndex];
-                    existingProduct.quentity += quentity;
-                    existingProduct.totalPrice =
-                        existingProduct.quentity * existingProduct.productPrice;
+                    existingProduct.quentity 
+                    // += quentity;
+                    existingProduct.totalPrice = existingProduct.quentity * existingProduct.productPrice;
                 } else {
                     cart.products.push({
                         productId: product_id,

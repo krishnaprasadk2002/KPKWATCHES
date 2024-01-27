@@ -398,26 +398,32 @@
                                                                         <div class="form-group">
                                                                             <label for="editName<%= address._id %>">Name</label>
                                                                             <input type="text" class="form-control" id="editName<%= address._id %>" value="<%= address.name %>" name="name">
+
+                                                                            <p id="addn" style="color: red"></p>
                                                                         </div>
                                                                     
                                                                         <div class="form-group">
                                                                             <label for="editMobile<%= address._id %>">Mobile Number</label>
                                                                             <input type="tel" class="form-control" id="editMobile<%= address._id %>" value="<%= address.mobile %>" name="mobile" required>
+                                                                            <p id="addm" style="color: red"></p>
                                                                         </div>
                                                                     
                                                                         <div class="form-group">
                                                                             <label for="editPincode<%= address._id %>">Pincode</label>
                                                                             <input type="number" class="form-control" id="editPincode<%= address._id %>" value="<%= address.pincode %>" name="pincode" required>
+                                                                            <p id="addp" style="color: red"></p>
                                                                         </div>
                                                                     
                                                                         <div class="form-group">
                                                                             <label for="editAddress<%= address._id %>">Address</label>
                                                                             <input type="text" class="form-control" id="editAddress<%= address._id %>" value="<%= address.address %>" name="address" required>
+                                                                            <p id="adda" style="color: red"></p>
                                                                         </div>
                                                                     
                                                                         <div class="form-group">
                                                                             <label for="editCity<%= address._id %>">City</label>
                                                                             <input type="text" class="form-control" id="editCity<%= address._id %>" value="<%= address.city %>" name="city" required>
+                                                                            <p id="addc" style="color: red"></p>
                                                                         </div>
                                                                     
                                                                         <div class="form-group">
@@ -430,6 +436,7 @@
                                                                                 <option value="<%= address.state %>">Mumbai</option>
                                                                             </select>
                                                                         </div>
+                                                                        <p id="adds" style="color: red"></p>
                                                                         </div>
                         
                                                                 <!-- Add more fields as needed -->
@@ -1020,6 +1027,41 @@
                 const address = document.getElementById(`editAddress${addressId}`).value.trim();
                 const city = document.getElementById(`editCity${addressId}`).value.trim();
                 const state = document.getElementById(`editState${addressId}`).value.trim();
+
+
+                if(!name){
+                    const message=document.getElementById("addn").innerHTML="Please enter name"
+                    return
+                }
+
+                if(!mobile){
+                    const message=document.getElementById("addm").innerHTML="Please enter mobile"
+                    return
+                }
+
+                if(!pincode){
+                    const message=document.getElementById("addp").innerHTML="Please enter pincode"
+                    return
+                }
+
+                if(!address){
+                    const message=document.getElementById("adda").innerHTML="Please enter address"
+                    return
+                }
+
+                if(!city){
+                    const message=document.getElementById("addc").innerHTML="Please enter city"
+                    return
+                }
+
+                if(!state){
+                    const message=document.getElementById("adds").innerHTML="Please enter state"
+                    return
+                }
+
+
+
+
 
                 
                 fetch(`/updateaddress/${addressId}`, {

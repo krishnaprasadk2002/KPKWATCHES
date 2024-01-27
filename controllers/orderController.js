@@ -21,6 +21,7 @@ const placeOrder = async (req, res) => {
         const { couponCode } = req.body;
         const cart = await Cart.findOne({ userid: cartId });
         const userId = req.session.user_id;
+        const currentDate=new Date()
 
         const products = await Promise.all(cart.products.map(async (cartProduct) => {
             const productDetails = await Products.findById(cartProduct.productId);
@@ -39,18 +40,22 @@ const placeOrder = async (req, res) => {
         const totalWithoutDiscount = products.reduce((acc, product) => {
             return acc + product.total;
         }, 0);
-
+        
         let totalWithDiscount = totalWithoutDiscount;
-
+        
         if (couponCode) {
             const coupon = await Coupons.findOne({ couponCode });
-
+        
             if (coupon) {
-                const discountAmount = coupon.discountAmount;
-                totalWithDiscount -= discountAmount;
+                if (coupon && coupon.expiryDate >= currentDate && coupon.minAmount <= totalWithDiscount) {
+                    const discountAmount = coupon.discountAmount;
+                    totalWithDiscount -= discountAmount;
+        
+                    coupon.userUsed.push({ userId, used: true });
+                    await coupon.save();
+                }
             }
         }
-
         const orderData = {
             user: req.session.user_id,
             Products: products.map(product => ({
@@ -374,7 +379,7 @@ const changeStatus = async (req, res) => {
                 }
             );
 
-        }else if (status === "cancelled") {
+        }else if (status === "cancelled" && orderData.paymentMode !== "Cash on delivery") {
             for (let i = 0; i < products.length; i++) {
                 const productId = products[i].productId;
                 const count = products[i].quentity;
