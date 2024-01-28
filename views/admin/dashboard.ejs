@@ -237,66 +237,32 @@
                         <table class="table text-start align-middle table-bordered table-hover mb-0">
                             <thead>
                                 <tr class="text-white">
-                                    <th scope="col"><input class="form-check-input" type="checkbox"></th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Invoice</th>
-                                    <th scope="col">Customer</th>
-                                    <th scope="col">Amount</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Action</th>
+                                   
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Mobile</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Wallet Balance</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
+
+                                <% user.forEach((user) => { %>
+                                    <tr>
+                                      <td><%= user.name %></td>
+                                      <td><%= user.email %></td>
+                                      <td><%= user.mobile %></td>
+                                      <td>₹<%= user.wallet %></td>
+                                    </tr>
+                                  <% }); %>
+                                  
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+            <br>
+
+            <a href="/admin/salesreport" class="btn btn-primary ms-4">Sales Report</a>
 
 
 
@@ -322,6 +288,10 @@
             <!-- Footer End -->
         </div>
         <!-- Content End -->
+
+
+        <!-- sales -->
+
         <input id="monthlyOrdersChart1" type="hidden" value="<%=updatedMonthlyValues[0].total %>">
         <input id="monthlyOrdersChart2" type="hidden" value="<%=updatedMonthlyValues[1].total %>">
         <input id="monthlyOrdersChart3" type="hidden" value="<%=updatedMonthlyValues[2].total %>">
@@ -334,6 +304,51 @@
         <input id="monthlyOrdersChart10" type="hidden" value="<%=updatedMonthlyValues[9].total %>">
         <input id="monthlyOrdersChart11" type="hidden" value="<%=updatedMonthlyValues[10].total %>">
         <input id="monthlyOrdersChart12" type="hidden" value="<%=updatedMonthlyValues[11].total %>">
+
+
+
+         <!-- Orders -->
+        <input id="monthlyOrdersChart25" type="hidden" value="<%=updatedMonthlyValues[0].count %>">
+        <input id="monthlyOrdersChart26" type="hidden" value="<%=updatedMonthlyValues[1].count %>">
+        <input id="monthlyOrdersChart27" type="hidden" value="<%=updatedMonthlyValues[2].count %>">
+        <input id="monthlyOrdersChart28" type="hidden" value="<%=updatedMonthlyValues[3].count %>">
+        <input id="monthlyOrdersChart29" type="hidden" value="<%=updatedMonthlyValues[4].count %>">
+        <input id="monthlyOrdersChart30" type="hidden" value="<%=updatedMonthlyValues[5].count %>">
+        <input id="monthlyOrdersChart31" type="hidden" value="<%=updatedMonthlyValues[6].count %>">
+        <input id="monthlyOrdersChart32" type="hidden" value="<%=updatedMonthlyValues[7].count %>">
+        <input id="monthlyOrdersChart33" type="hidden" value="<%=updatedMonthlyValues[8].count %>">
+        <input id="monthlyOrdersChart34" type="hidden" value="<%=updatedMonthlyValues[9].count %>">
+        <input id="monthlyOrdersChart35" type="hidden" value="<%=updatedMonthlyValues[10].count %>">
+        <input id="monthlyOrdersChart36" type="hidden" value="<%=updatedMonthlyValues[11].count %>">
+
+
+        <!-- Users -->
+        <input id="monthlyOrdersChart13" type="hidden" value="<%=updatedMonthlyUserCount[0].count %>">
+        <input id="monthlyOrdersChart14" type="hidden" value="<%=updatedMonthlyUserCount[1].count %>">
+        <input id="monthlyOrdersChart15" type="hidden" value="<%=updatedMonthlyUserCount[2].count %>">
+        <input id="monthlyOrdersChart16" type="hidden" value="<%=updatedMonthlyUserCount[3].count %>">
+        <input id="monthlyOrdersChart17" type="hidden" value="<%=updatedMonthlyUserCount[4].count %>">
+        <input id="monthlyOrdersChart18" type="hidden" value="<%=updatedMonthlyUserCount[5].count %>">
+        <input id="monthlyOrdersChart19" type="hidden" value="<%=updatedMonthlyUserCount[6].count %>">
+        <input id="monthlyOrdersChart20" type="hidden" value="<%=updatedMonthlyUserCount[7].count %>">
+        <input id="monthlyOrdersChart21" type="hidden" value="<%=updatedMonthlyUserCount[8].count %>">
+        <input id="monthlyOrdersChart22" type="hidden" value="<%=updatedMonthlyUserCount[9].count %>">
+        <input id="monthlyOrdersChart23" type="hidden" value="<%=updatedMonthlyUserCount[10].count %>">
+        <input id="monthlyOrdersChart24" type="hidden" value="<%=updatedMonthlyUserCount[11].count %>">
+
+
+
+        <!-- chart 2 -->
+
+        <input type="hidden" id="YearlySalesData" value="<%= updatedYearlyValues[0].total %>">
+        <input type="hidden" id="YearlySalesData1" value="<%= updatedYearlyValues[1].total %>">
+        <input type="hidden" id="YearlySalesData2" value="<%= updatedYearlyValues[2] .total%>">
+        <input type="hidden" id="YearlySalesData3" value="<%= updatedYearlyValues[3] .total%>">
+
+        <input type="hidden" id="YearlySalesData4" value="<%= updatedYearlyValues[0].count %>">
+        <input type="hidden" id="YearlySalesData5" value="<%= updatedYearlyValues[1].count %>">
+        <input type="hidden" id="YearlySalesData6" value="<%= updatedYearlyValues[2].count %>">
+        <input type="hidden" id="YearlySalesData7" value="<%= updatedYearlyValues[3].count %>">
 
        
 

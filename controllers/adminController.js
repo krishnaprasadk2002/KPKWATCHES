@@ -122,21 +122,30 @@ const loadDashboard = async (req, res) => {
         //==============Chart DashBoard==================
 
         //orders
+        const user=await User.find()
 
-        const currentYear=new Date().getFullYear()
-        console.log(currentYear);
-        const yearsToInclude=4
+        const currentYear = new Date().getFullYear()
+        const yearsToInclude = 4
         const currentMonth = new Date().getMonth()
 
-        const defalutMonthsValues=Array.from({length:12},(_,i) => ({
+        const defalutMonthsValues = Array.from({ length: 12 }, (_, i) => ({
             month: i + 1,
             total: 0,
             count: 0,
         }))
 
-          //monthly sales Data
+        const defaultYearlyValues = Array.from(
+            { length: yearsToInclude },
+            (_, i) => ({
+                year: currentYear - yearsToInclude + i + 1,
+                total: 0,
+                count: 0,
+            })
+        );
 
-          const monthlySales = await Orders.aggregate([
+        //monthly sales Data
+
+        const monthlySales = await Orders.aggregate([
             {
                 $unwind: "$Products",
             },
@@ -172,21 +181,104 @@ const loadDashboard = async (req, res) => {
                 },
             },
         ]);
-        console.log('monthlySales:',monthlySales);
-    
+
+
         const updatedMonthlyValues = defalutMonthsValues.map((defaultMonth) => {
             const foundMonth = monthlySales.find(
                 (monthData) => monthData.month === defaultMonth.month
             );
             return foundMonth || defaultMonth;
         });
-    
-        console.log("updateMonthValues", updatedMonthlyValues);
-       
 
 
 
-        res.render("dashboard", { salesLen, revenue, codRevenue, productlen, categorylen, totalUser, revenuelen, pendlen,updatedMonthlyValues});
+
+
+        const monthlyUser = await User.aggregate([
+            {
+                $group: {
+                    _id: { $month: "$createdAt" },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    month: "$_id",
+                    count: "$count"
+                }
+            }
+        ]);
+
+
+        const updatedMonthlyUserCount = defalutMonthsValues.map((defaultMonth) => {
+            const foundMonth = monthlyUser.find(
+                (monthData) => monthData.month === defaultMonth.month
+            );
+            return foundMonth || defaultMonth;
+        });
+
+
+        //yearly sales
+
+        const yearlySalesData = await Orders.aggregate([
+            {
+                $unwind: "$Products"
+            },
+            {
+                $match: {
+                    "Products.orderStatus": "delivered",
+                    date: { $gte: new Date(currentYear - yearsToInclude + 1, 0, 1) },
+                    "Products.orderStatus": { $ne: "cancelled" },
+
+                }
+            },
+            {
+                $group: {
+                    _id: { $year: "$date" },
+                    total: {
+                        $sum: {
+                            $subtract: [
+                                {
+                                    $ifNull: [
+                                        { $multiply: ["$Products.price", "$Products.quentity"] },
+                                        0, // Default value if couponDiscountTotal is not present
+                                    ],
+                                },
+                                "$total"
+                            ]
+                        }
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    year: "$_id",
+                    total: "$total",
+                    count: "$count",
+                },
+            },
+        ])
+
+
+
+        // Update yearly values based on retrieved data
+        const updatedYearlyValues = Array.from(
+            { length: yearsToInclude },
+            (_, i) => {
+                const yearToCheck = currentYear + i;
+                const foundYear = yearlySalesData.find(
+                    (yearData) => yearData.year === yearToCheck
+                );
+                return foundYear || { year: yearToCheck, total: 0, count: 0 };
+            }
+        );
+
+        
+
+        res.render("dashboard", { salesLen, revenue, codRevenue, productlen, categorylen, totalUser, revenuelen, pendlen, updatedMonthlyValues, updatedMonthlyUserCount, updatedYearlyValues,user });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ error: 'Internal Server Error' });
