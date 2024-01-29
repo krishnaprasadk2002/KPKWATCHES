@@ -287,6 +287,106 @@ const loadDashboard = async (req, res) => {
 
 
 
+//sales report
+
+const salesReport = async (req,res) =>{
+    try {
+        const moment = require ("moment")
+
+        const firstOrder = await Orders.find().sort({ date : 1})
+        const lastOrder = await Orders.find().sort({date : -1})
+
+        const orders = await Orders.find({
+            "Products.orderStatus":{ $nin: ["returned", "cancelled"] }
+        }).populate({
+            path: "Products.productId",
+            model: "Products",
+          }).populate({
+            path: 'user',
+            model: 'User'
+          })
+          .sort({date : -1})
+
+         res.render("salesReport",{
+            firstOrder: moment(firstOrder[0].date).format("YYYY-MM-DD"),
+            lastOrder: moment(lastOrder[0].date).format("YYYY-MM-DD"),
+            orders,
+            moment,
+         })
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+
+    }
+}
+
+const dateSort=async (req,res)=>{
+    try {
+        const {startDate,endDate}=req.body
+        const startDateObj=new Date(startDate)
+        startDateObj.setHours(0,0,0,0)
+        const endDateObj=new Date(endDate)
+        endDateObj.setHours(23,59,59,999)
+
+        const selectedDate=await Orders.aggregate([
+            {
+                $match:{
+                    date:{
+                        $gte:startDateObj,
+                        $lte:endDateObj
+                    },
+                    "Products.orderStatus":"delivered"
+                },
+            },
+      
+            // {
+            //     $lookup: {
+            //         from: "Users",
+            //         localField: "user",
+            //         foreignField: "_id",
+            //         as: "user",
+            //     },
+            // },
+            // {
+            //     $unwind:"$Products"
+            // },
+            // {
+            //     $lookup: {
+            //         from: "Products",
+            //         localField: "Products.productId",
+            //         foreignField: "_id",
+            //         as: "Products.product",
+            //     },
+            // },
+
+            // {
+            //     $unwind:"$Products"
+            // },
+            // {
+            //     $group: {
+            //         _id: "$_id", // Group by the order ID
+            //         user: { $first: "$user" }, // Preserve the user information
+            //         address: { $first: "$address" },
+            //         order_id: { $first: "$_id" },
+            //         date: { $first: "$date" },
+            //         paymentMode: { $first: "$paymentMode" },
+            //         Products: { $push: "$Products" }, // Corrected field reference
+            //     },
+            // },            
+
+        ])
+
+        res.status(200).json(selectedDate);
+        console.log("selected",selectedDate)
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+
+
 
 
 
@@ -338,4 +438,6 @@ module.exports = {
     loadAlluser,
     listUnlistUser,
     adminLogout,
+    salesReport,
+    dateSort
 };

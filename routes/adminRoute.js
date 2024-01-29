@@ -135,6 +135,10 @@ adminRoute.delete('/deleteimage',adminAuth.verify, bannerController.editImageDel
 adminRoute.get("/bannerstatus",bannerController.bannerStatus)
 adminRoute.get("/deletebanner",bannerController.bannerDelete)
 
+//sales report
+adminRoute.get("/salesreport",adminController.salesReport)
+adminRoute.post("/datesort",adminController.dateSort)
+
 //Logout
 adminRoute.get("/logout",adminController.adminLogout)
 

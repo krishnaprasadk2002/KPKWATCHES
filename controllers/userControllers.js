@@ -744,9 +744,10 @@ const addToWishlist = async (req, res) => {
     const productId = req.params.productid;
     const userId = req.session.user_id;
 
-    const productToWishlist = await Products.findOne({ _id: productId });
-    console.log('Product Data:', productToWishlist);
-    const wishlist = await Wishlist.findOne({ user: userId });
+    const productToWishlist = await Products.find({ _id: productId });
+    console.log(userId);
+    const wishlist = await Wishlist.findOne({ user:userId._id });
+    console.log("wishlist ",wishlist);
 
     if (productToWishlist && userId) {
 //product already wishlisted or not checking .some means uniquevalues checking............
@@ -763,8 +764,10 @@ const addToWishlist = async (req, res) => {
               price: productToWishlist.offerprice,
               Image: productToWishlist.image[0],
             });
-            await wishlist.save();
+           const wish = await wishlist.save();
+           console.log("wish",wish);
           }
+          console.log('hjghjgjg')
           res.status(200).json({ message: "Product added to wishlist successfully." });
         } else {
           
