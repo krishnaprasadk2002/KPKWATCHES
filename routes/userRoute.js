@@ -109,7 +109,7 @@ userRoute.post("/applyCoupon",couponController.applyCoupon)
 
 //===============================================================Wishlists===========================================================================
 
-const wishlistController=require("../controllers/wishlistControoler")
+const wishlistController=require("../controllers/wishlistController")
 
 userRoute.get("/wishlist",wishlistController.loadWhishlist)
 userRoute.post("/addingWishlist/:productid",wishlistController.addToWishlist);

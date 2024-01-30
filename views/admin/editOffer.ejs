@@ -24,7 +24,6 @@
     <!-- /admin/Libraries Stylesheet -->
     <link href="/admin/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="/admin/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -33,7 +32,9 @@
     <link href="css/style.css" rel="stylesheet">
 
     <!-- FontAwsome  -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -97,22 +98,21 @@
                     </div>
 
                     <div class="nav-item dropdown">
-                        <a href="/admin/banner" class="nav-link dropdown-toggle  " data-bs-toggle="dropdown"><i
+                        <a href="/admin/banner" class="nav-link dropdown-toggle "><i
                                 class="far fa-file-alt me-2"></i>All Banners</a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="/admin/addbanner" class="dropdown-item">Add Banner</a>
                         </div>
                     </div>
 
-
                     <div class="nav-item dropdown">
-                        <a href="/admin/offer" class="nav-link dropdown-toggle  " ><i
+                        <a href="/admin/offer" class="nav-link dropdown-toggle active " data-bs-toggle="dropdown"><i
                                 class="far fa-file-alt me-2"></i>All Offers</a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="/admin/addOffer" class="dropdown-item">Add Offer</a>
                         </div>
                     </div>
-                    
+
                 </div>
                 <a href="/admin/logout" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Logout</a>
             </nav>
@@ -131,70 +131,48 @@
 
             </nav>
 
+
+
             <div class="container mt-5">
-                <h2 class="mb-4">Edit Coupon</h2>
-                <form id="couponForm" action="/admin/editcoupon" method="POST" novalidate>
+                <h2 class="mb-4">Edit Offer</h2>
+                <form id="offerForm" action="/admin/editoffer" method="POST" novalidate>
 
-                    <input type="hidden" name="id" value="<%= coupon._id %>">
+                    <input type="hidden" name="id" value="<%= offerData._id %>">
 
-                    <input type="hidden" name="couponId" value="<%= coupon._id %>">
-            
                     <div class="mb-3">
-                        <label for="couponName" class="form-label">Coupon Name</label>
-                        <input type="text" class="form-control" style="background-color: white" placeholder="Coupon Name" id="couponName" name="name" value="<%= coupon.couponName %>" required>
-                        <div class="invalid-feedback">
-                            Please enter the coupon name.
-                        </div>
+                        <label for="offerName" class="form-label">Name</label>
+                        <input type="text" class="form-control" style="background-color: white" placeholder="Offer Name"
+                            value="<%= offerData.name %>" id="offerName" name="name" required>
+                        <p id="offern" style="color: red;"></p>
                     </div>
-            
                     <div class="mb-3">
-                        <label for="couponCode" class="form-label">Coupon Code</label>
-                        <input type="text" class="form-control" style="background-color: white" placeholder="Coupon Code" id="couponCode" name="code" value="<%= coupon.couponCode %>" required>
-                        <div class="invalid-feedback">
-                            Please enter the coupon code.
-                        </div>
+                        <label for="offerDiscount" class="form-label">Discount Percentage</label>
+                        <input type="number" class="form-control" style="background-color: white"
+                            placeholder="Discount percentage" value="<%= offerData.discount %>" id="offerDiscount"
+                            name="discount" min="1" required>
+                        <p id="offerd" style="color: red;"></p>
+                        <p id="offerdp" style="color: red;"></p>
                     </div>
-            
                     <div class="mb-3">
-                        <label for="minAmount" class="form-label">Min Amount</label>
-                        <input type="text" class="form-control" style="background-color: white" placeholder="Min Amount" id="minAmount" name="min" value="<%= coupon.minAmount %>" required>
-                        <div class="invalid-feedback">
-                            Please enter the minimum amount.
-                        </div>
+                        <label for="offerStartingDate" class="form-label">Starting Date</label>
+                        <input type="date" class="form-control" style="background-color: white" id="offerStartingDate"
+                            value="<%= offerData.startingDate %>" name="startingDate" required>
+                        <p id="offersd" style="color: red;"></p>
                     </div>
-            
                     <div class="mb-3">
-                        <label for="discountAmount" class="form-label">Discount Amount</label>
-                        <input type="number" class="form-control" style="background-color: white" placeholder="Discount Amount" id="discountAmount" name="discount" min="1" value="<%= coupon.discountAmount %>" required>
-                        <div class="invalid-feedback">
-                            Please enter a valid discount amount.
-                        </div>
+                        <label for="offerExpiryDate" class="form-label">Expiry Date</label>
+                        <input type="date" class="form-control" style="background-color: white" id="offerExpiryDate"
+                            value="<%= offerData.expiryDate %>" name="expiryDate" required>
+                        <p id="offered" style="color: red;"></p>
                     </div>
-            
-                    <div class="mb-3">
-                        <label for="couponDescription" class="form-label">Coupon Description</label>
-                        <textarea class="form-control" style="background-color: white" id="couponDescription" placeholder="Coupon Description" name="description" required><%= coupon.couponDescription %></textarea>
-                        <div class="invalid-feedback">
-                            Please enter the coupon description.
-                        </div>
-                    </div>
-            
-                    <div class="mb-3">
-                        <label for="expiryDate" class="form-label">Expiry Date</label>
-                        <input type="date" class="form-control" style="background-color: white" id="expiryDate" name="expiryDate" value="<%= coupon.expiryDate %>" required>
-                        <div class="invalid-feedback">
-                            Please enter a valid expiry date.
-                        </div>
-                    </div>
-            
-                    <!-- Add other fields for editing existing coupon properties -->
-            
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
-            
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
             </div>
-            
+
+
+
+
+
 
 
             <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
@@ -219,93 +197,95 @@
 </html>
 
 
-
-<!-- Include SweetAlert library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <script>
 
-const expiryDate=new Date("<%= coupon.expiryDate %>")
-const formattedexpiryDate=expiryDate.toISOString().slice(0,10)
+    var startingDate = new Date('<%= offerData.startingDate %>');
+    var formattedStartingDate = startingDate.toISOString().slice(0, 10);
 
-document.getElementById("expiryDate").value = formattedexpiryDate
+    var expiryDate = new Date("<%= offerData.expiryDate %>")
+    var formattedexpiryDate = expiryDate.toISOString().slice(0, 10)
 
+
+    document.getElementById('offerStartingDate').value = formattedStartingDate;
+    document.getElementById('offerExpiryDate').value = formattedexpiryDate
+
+
+</script>
+
+
+<script>
     document.addEventListener('DOMContentLoaded', function () {
-        const couponForm = document.getElementById('couponForm');
+        const offerForm = document.getElementById('offerForm')
+        offerForm.addEventListener("submit", function (event) {
+            event.preventDefault()
+           
+            const id = document.querySelector('input[name="id"]').value;
+            const offerName = document.getElementById("offerName").value
+            const offerDiscount = document.getElementById("offerDiscount").value
+            const offerStartingDate = document.getElementById("offerStartingDate").value
+            const offerExpiryDate = document.getElementById("offerExpiryDate").value
 
-        couponForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            // Validate and trim inputs
-            const couponIdInput = document.querySelector('input[name="couponId"]');
-            const nameInput = document.getElementById('couponName');
-            const codeInput = document.getElementById('couponCode');
-            const minInput = document.getElementById('minAmount');
-            const discountInput = document.getElementById('discountAmount');
-            const descriptionInput = document.getElementById('couponDescription');
-            const expiryDateInput = document.getElementById('expiryDate');
-
-            const couponId = couponIdInput.value.trim();
-            const name = nameInput.value.trim();
-            const code = codeInput.value.trim();
-            const min = minInput.value.trim();
-            const discount = discountInput.value.trim();
-            const description = descriptionInput.value.trim();
-            const expiryDate = expiryDateInput.value.trim();
-
-            // Check for negative values
-            if (min < 0 || discount < 0) {
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Validation Error',
-                    text: 'Minimum amount and discount cannot be negative.',
-                });
-                return;
+            if (!offerName) {
+                const message = document.getElementById("offern").innerHTML = "please enter offer name"
+                return
+            } else {
+                const message = document.getElementById("offern").innerHTML = ""
             }
 
-            if (!name || !code || !min || !discount || !description || !expiryDate) {
+            if (!(offerDiscount > 0 && offerDiscount <= 100)) {
+                const message = document.getElementById("offerdp").innerHTML = "please enter offer Discount 1 - 100 number of percentage only"
+                return
+            }else{
+                const message = document.getElementById("offerdp").innerHTML = ""
+            }
 
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Validation Error',
-                    text: 'Please fill in all the fields.',
-                });
-                return;
+            if (!offerDiscount) {
+                const message = document.getElementById("offerd").innerHTML = "please enter offer Discount percentage"
+                return
+            } else {
+                const message = document.getElementById("offerd").innerHTML = "";
             }
 
 
-            fetch("/admin/editcoupon", {
-                method: 'POST',
+            const startingDate = new Date(offerStartingDate);
+            const expiryDate = new Date(offerExpiryDate);
+
+            if (isNaN(startingDate) || isNaN(expiryDate) || startingDate > expiryDate) {
+                const message = document.getElementById("offersd").innerHTML = "properly enter starting date below expirydate range";
+                return;
+            } else {
+                const message = document.getElementById("offersd").innerHTML = "";
+            }
+
+            fetch("/admin/editoffer", {
+                method: "post",
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    id: couponId,
-                    name: name,
-                    code: code,
-                    min: min,
-                    discount: discount,
-                    description: description,
+                    id: id,
+                    name: offerName,
+                    discount: offerDiscount,
+                    startingDate: startingDate,
                     expiryDate: expiryDate,
-                }),
-            })
-            .then(response => response.json())
+                })
+            }).then(response => response.json())
             .then(data => {
                 if (data.error) {
-
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: data.error,
                     });
                 } else {
-
                     Swal.fire({
                         icon: 'success',
-                        title: 'Coupon edited successfully!',
+                        title: 'Offer edited successfully!',
                     }).then(() => {
-                        window.location.href = '/admin/coupon';
+                        window.location.href = '/admin/offer';
                     });
                 }
             })
@@ -315,9 +295,10 @@ document.getElementById("expiryDate").value = formattedexpiryDate
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'An error occurred while updating the coupon.',
+                    text: 'An error occurred while updating the offer.',
                 });
-            });
+            })
         });
     });
 </script>
+

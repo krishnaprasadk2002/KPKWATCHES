@@ -139,6 +139,19 @@ adminRoute.get("/deletebanner",adminAuth.verify,bannerController.bannerDelete)
 adminRoute.get("/salesreport",adminAuth.verify,adminController.salesReport)
 adminRoute.post("/datesort",adminAuth.verify,adminController.dateSort)
 
+//=-=======================================Offers=================================
+const offerController = require("../controllers/offerController")
+
+adminRoute.get("/offer",adminAuth.verify,offerController.loadOffer)
+adminRoute.get("/addoffer",adminAuth.verify,offerController.loadAddOffer)
+adminRoute.post("/addoffer",adminAuth.verify,offerController.addOfferDetails)
+adminRoute.get("/editoffer",offerController.loadEditOffer)
+adminRoute.post("/editoffer",offerController.editOfferDetails)
+adminRoute.get("/statusoffer",offerController.statusOffer)
+adminRoute.delete("/deleteoffer",offerController.deletingOffer)
+
+
+// ======================================================================
 //Logout
 adminRoute.get("/logout",adminController.adminLogout)
 
