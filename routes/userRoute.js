@@ -105,13 +105,16 @@ userRoute.post('/returnOrder/:orderId/:productId',orderController.returnOrder)
 //==============================================OnlinePayment==================================
 userRoute.post("/varifypayment",orderController.verifyPayment)
 const couponController=require("../controllers/couponController")
-
 userRoute.post("/applyCoupon",couponController.applyCoupon)
 
-userRoute.get("/wishlist",userController.loadWhishlist)
-userRoute.post("/addingWishlist/:productid", userController.addToWishlist);
-userRoute.post("/removeFromWishlist",userController.removeWishlist)
-userRoute.post("/addToCart/:productid", userController.wishAddToCart);
+//===============================================================Wishlists===========================================================================
+
+const wishlistController=require("../controllers/wishlistControoler")
+
+userRoute.get("/wishlist",wishlistController.loadWhishlist)
+userRoute.post("/addingWishlist/:productid",wishlistController.addToWishlist);
+userRoute.post("/removeFromWishlist",wishlistController.removeWishlist)
+userRoute.post("/addToCart/:productid", wishlistController.wishAddToCart);
 
 
 

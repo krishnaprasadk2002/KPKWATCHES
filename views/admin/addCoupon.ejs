@@ -201,7 +201,7 @@
             
                         // Check for negative values
                         if (min < 0 || discount < 0) {
-                            // Display SweetAlert for validation error
+
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Validation Error',
@@ -211,7 +211,7 @@
                         }
             
                         if (!name || !code || !min || !discount || !description || !expiryDate) {
-                            // Display SweetAlert for validation error
+
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Validation Error',
@@ -219,8 +219,7 @@
                             });
                             return;
                         }
-            
-                        // Perform form submission if validation passes
+
                         couponForm.submit();
                     });
                 });

@@ -242,7 +242,7 @@ const loadDashboard = async (req, res) => {
                                 {
                                     $ifNull: [
                                         { $multiply: ["$Products.price", "$Products.quentity"] },
-                                        0, // Default value if couponDiscountTotal is not present
+                                        0, 
                                     ],
                                 },
                                 "$total"
@@ -336,44 +336,46 @@ const dateSort=async (req,res)=>{
                         $gte:startDateObj,
                         $lte:endDateObj
                     },
-                    "Products.orderStatus":"delivered"
+                    
+                    "Products.orderStatus":{ $nin: ["returned", "cancelled"] }
                 },
             },
       
-            // {
-            //     $lookup: {
-            //         from: "Users",
-            //         localField: "user",
-            //         foreignField: "_id",
-            //         as: "user",
-            //     },
-            // },
-            // {
-            //     $unwind:"$Products"
-            // },
-            // {
-            //     $lookup: {
-            //         from: "Products",
-            //         localField: "Products.productId",
-            //         foreignField: "_id",
-            //         as: "Products.product",
-            //     },
-            // },
+            {
+                $lookup: {
+                  from: "users",
+                  localField: "user",
+                  foreignField: "_id",
+                  as: "user",
+                }
+              },
+            {
+                $unwind:"$Products"
+            },
+            {
+                $lookup: {
+                    from: "Products",
+                    localField: "Products.productId",
+                    foreignField: "_id",
+                    as: "Products.product",
+                },
+            },
 
-            // {
-            //     $unwind:"$Products"
-            // },
-            // {
-            //     $group: {
-            //         _id: "$_id", // Group by the order ID
-            //         user: { $first: "$user" }, // Preserve the user information
-            //         address: { $first: "$address" },
-            //         order_id: { $first: "$_id" },
-            //         date: { $first: "$date" },
-            //         paymentMode: { $first: "$paymentMode" },
-            //         Products: { $push: "$Products" }, // Corrected field reference
-            //     },
-            // },            
+            {
+                $unwind:"$Products"
+            },
+            {
+                $group: {
+                    _id: "$_id", 
+                    user: { $first: "$user" }, 
+                    address: { $first: "$address" },
+                    order_id: { $first: "$_id" },
+                    total:{$first:"$total"},
+                    date: { $first: "$date" },
+                    paymentMode: { $first: "$paymentMode" },
+                    Products: { $push: "$Products" }, 
+                },
+            },            
 
         ])
 
@@ -384,11 +386,6 @@ const dateSort=async (req,res)=>{
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
-
-
-
-
-
 
 //=======================================================================================================
 

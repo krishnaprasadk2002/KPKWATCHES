@@ -96,7 +96,7 @@
                     </div>
 
                     <div class="nav-item dropdown">
-                        <a href="/admin/banner" class="nav-link dropdown-toggle active " data-bs-toggle="dropdown"><i
+                        <a href="/admin/banner" class="nav-link dropdown-toggle " ><i
                                 class="far fa-file-alt me-2"></i>All Banners</a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="/admin/addbanner" class="dropdown-item">Add Banner</a>
@@ -135,6 +135,7 @@
                                     <div class="select-custom">
                                         <input type="date" id="startDate" name="startDate">
                                     </div>
+                                    <p id="start" style="color: red;"></p>
                                 </div>
         
                                 <div class="toolbox-sort m-4">
@@ -142,6 +143,7 @@
                                     <div class="select-custom">
                                         <input type="date" id="endDate" name="endDate">
                                     </div>
+                                    <p id="end" style="color: red;"></p>
                                 </div>
                             </div><!-- End .toolbox-right -->
                             <button class="btn btn-primary ms-4" onclick="sortOrdersByDateRange()">Sort</button>
@@ -162,7 +164,7 @@
                                             <th scope="col">Payment Mode</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="reportBody">
                                         <% orders.forEach(order => { %>
                                             <tr>
                                                 <td ><%= order.user.name %></td>
@@ -190,14 +192,14 @@
                 </div>
                 <br>
 
-            </div>
-            <a href="/admin/downloadinvoice" class="sales-report-link">
-              <button class="btn btn-success">
+            <!-- </div>
+            <a href="/admin/downloadinvoice" class="sales-report-link" id="downloadInvoiceLink">
+              <button class="btn btn-success" onclick="downloadInvoice()">
                 <i class="mdi mdi-clipboard-text"></i>
                 Download invoice
               </button>
             </a>
-          </div>
+            </div> -->
 
 
 
@@ -231,24 +233,69 @@
 
 
 <script>
-    async function sortOrdersByDateRange(){
-   try {
-    const startDate=document.getElementById("startDate").value
-        const endDate=document.getElementById("endDate").value
+    async function sortOrdersByDateRange() {
+        try {
+            const startDate = document.getElementById("startDate").value;
+            const endDate = document.getElementById("endDate").value;
 
-    const response = await fetch('/admin/datesort',{
-        method:"post",
-        headers:{
-            'Content-Type': 'application/json',
-        },
-        body:JSON.stringify({startDate,endDate})
-    })
-    const data = await response.json()
-    console.log(data);
+            if(!startDate){
+              const message = document.getElementById("start").innerHTML = "please enter StartDate"
+              return
+            }
 
-   } catch (error) {
-    console.log(error.message);
-   }
-}
-      
+            if(!endDate){
+              const message = document.getElementById("end").innerHTML = "please enter EndDate"
+              return
+            }
+
+            if (startDate > endDate) {
+                alert("Start date cannot be greater than end date");
+                return;
+            }
+
+            const response = await fetch('/admin/datesort', {
+                method: "post",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ startDate, endDate })
+            });
+
+            const data = await response.json();
+            console.log(data);
+
+            displayOrders(data);
+
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    function displayOrders(orders) {
+        const reportBody = document.getElementById("reportBody");
+        reportBody.innerHTML = orders.map((order) =>
+            `
+            <tr>
+                <td>${order.user[0].name}</td>
+                <td>${order.user[0].email}</td>
+                <td>${formatDate(order.date)}</td>
+                <td>${order.address}</td>
+                <td>${order.total || 'N/A'}</td>
+                <td>${order.paymentMode}</td>
+            </tr>`
+        ).join("");
+    }
+
+    function formatDate(dateString) {
+        // Use Moment.js or native JavaScript methods to format the date as needed
+        return new Date(dateString).toLocaleDateString('en-US', {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    }
+
+  
 </script>
+

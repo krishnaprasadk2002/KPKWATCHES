@@ -32,7 +32,9 @@
     <link href="css/style.css" rel="stylesheet">
 
     <!-- FontAwsome  -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -127,7 +129,8 @@
 
             <div class="container mt-5">
                 <h2 class="mb-4">Edit Banner</h2>
-                <form id="itemForm" action="/admin/editbanner/<%= banner._id %>" method="POST" enctype="multipart/form-data" novalidate>
+                <form id="itemForm" action="/admin/editbanner/<%= banner._id %>" method="POST"
+                    enctype="multipart/form-data" novalidate>
 
                     <a href="/admin/editbanner/<%= banner._id %>">Edit</a>
                     <input type="hidden" name="id" value="<%= banner._id %>">
@@ -190,7 +193,7 @@
 
                     <div class="mb-3">
                         <label for="image" class="form-label">Image</label>
-                        <input  type="file" class="form-control" style="background-color: white" id="image" name="image"
+                        <input type="file" class="form-control" style="background-color: white" id="image" name="image"
                             accept="image/*">
                         <div class="invalid-feedback">
                             Please select one image only.
@@ -206,9 +209,9 @@
 
 
             <script>
-                document.getElementById('image').addEventListener('change',()=>{
+                document.getElementById('image').addEventListener('change', () => {
                     this.files = '';
-                })
+                });
 
                 document.getElementById('itemForm').addEventListener('submit', function (event) {
                     var titleInput = document.getElementById('title');
@@ -219,6 +222,14 @@
 
                     var locationInput = document.getElementById('location');
                     locationInput.value = locationInput.value.trim();
+
+                    // Basic input field validations
+                    if (!titleInput.value || !descriptionInput.value || !locationInput.value) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        alert('Please fill out all required fields.');
+                        return;
+                    }
 
                     // Image input validation
                     var imageInput = document.getElementById('image');
@@ -270,7 +281,7 @@
                                 method: 'DELETE'
                             }).then(response => {
                                 if (response.ok) {
-                                    Swal.fire('Deleted!', 'Your image has been deleted.', 'success').then(()=>{
+                                    Swal.fire('Deleted!', 'Your image has been deleted.', 'success').then(() => {
                                         window.location.reload()
                                     })
                                 } else {
@@ -286,6 +297,7 @@
                     });
                 }
             </script>
+
 
 
             <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>

@@ -353,25 +353,19 @@
         }
 
         function handleResendClick() {
-            // Disable the Resend OTP button during the process
             resendButton.classList.add("disabled");
 
-            // Check if a timer reset is requested
             if (timerResetRequested) {
-                // Retrieve the countdown from sessionStorage
                 let countdown = sessionStorage.getItem('otpCountdown');
                 if (countdown === null || countdown <= 0) {
-                    countdown = 60; // Set the initial countdown time in seconds
+                    countdown = 60; 
                 }
 
-                // Call startTimer() with the retrieved countdown value
                 startTimer(countdown);
-
-                // Update sessionStorage with the new countdown value
                 sessionStorage.setItem('otpCountdown', countdown);
             }
 
-            // Make an AJAX request to trigger the resend
+
             fetch("/admin/resendOtp", {
                 method: "POST",
                 headers: {
@@ -388,7 +382,7 @@
                 .then(data => {
                     console.log(data);
                     alert('OTP has been sent successfully!');
-                    // Set the timerResetRequested flag to true
+
                     timerResetRequested = true;
                 })
                 .catch(error => {
@@ -396,13 +390,11 @@
                 });
         }
 
-        // Retrieve the countdown from sessionStorage
         let countdown = sessionStorage.getItem('otpCountdown');
         if (countdown === null || countdown <= 0) {
-            countdown = 60; // Set the initial countdown time in seconds
+            countdown = 60; 
         }
 
-        // Call startTimer() with the retrieved countdown value
         startTimer(countdown);
     });
 </script>

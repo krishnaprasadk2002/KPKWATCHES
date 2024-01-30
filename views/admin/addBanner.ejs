@@ -134,6 +134,7 @@
                         <div class="invalid-feedback">
                             Please enter the title.
                         </div>
+                        <p id="title" style="color: red;"></p>
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
@@ -163,50 +164,59 @@
 
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
             <script>
-    document.getElementById('itemForm').addEventListener('submit', function (event) {
-        
-        var titleInput = document.getElementById('title');
-        titleInput.value = titleInput.value.trim();
-
-        var descriptionInput = document.getElementById('description');
-        descriptionInput.value = descriptionInput.value.trim();
-
-        var locationInput = document.getElementById('location');
-        locationInput.value = locationInput.value.trim();
-
-        // only one image allowing code
-        var imageInput = document.getElementById('image');
-        if (imageInput.files.length > 1) {
-            event.preventDefault();
-            event.stopPropagation();
-            document.querySelector('#image + .invalid-feedback').style.display = 'block';
-        } else {
-            document.querySelector('#image + .invalid-feedback').style.display = 'none';
-        }
-
-        if (!this.checkValidity()) {
-            event.preventDefault();
-            event.stopPropagation();
-        } else {
+                document.getElementById('itemForm').addEventListener('submit', function (event) {
+                    
+                    var titleInput = document.getElementById('title');
+                    titleInput.value = titleInput.value.trim();
             
-            Swal.fire({
-                icon: 'success',
-                title: 'Banner added successfully!',
-                showConfirmButton: false,
-                timer: 2000 
-            });
-
+                    var descriptionInput = document.getElementById('description');
+                    descriptionInput.value = descriptionInput.value.trim();
             
-            setTimeout(() => {
-                window.location.href = '/admin/banner';
-            }, 2000); 
-        }
+                    var locationInput = document.getElementById('location');
+                    locationInput.value = locationInput.value.trim();
+            
+                    // only one image allowing code
+                    var imageInput = document.getElementById('image');
+                    if (imageInput.files.length > 1) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        document.querySelector('#image + .invalid-feedback').style.display = 'block';
+                    } else {
+                        document.querySelector('#image + .invalid-feedback').style.display = 'none';
+                    }
+            
 
-        this.classList.add('was-validated');
-    });
-</script>  
+                    if (!titleInput.value || !descriptionInput.value || !locationInput.value) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        alert('Please fill out all required fields.');
+                        return;
+                    }
+            
+            
+                    if (!this.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    } else {
+                        
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Banner added successfully!',
+                            showConfirmButton: false,
+                            timer: 2000 
+                        });
+            
+                        
+                        setTimeout(() => {
+                            window.location.href = '/admin/banner';
+                        }, 2000); 
+                    }
+            
+                    this.classList.add('was-validated');
+                });
+            </script>
+            
 
 
 
