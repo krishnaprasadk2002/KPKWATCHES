@@ -15,7 +15,7 @@ const loadCategory=async (req,res)=>{
         const offer = await Offer.find()
         res.render("category",{categoryData,offer,moment})
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message); 
     }
 }
 
