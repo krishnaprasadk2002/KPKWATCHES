@@ -3,13 +3,17 @@ const Products=require("../models/productModel")
 const category=require ("../models/categoryModel")
 const bcrypt = require("bcrypt");
 const Category = require("../models/categoryModel");
+const Offer = require("../models/offerModel")
+const moment = require("moment")
+
 
 //loadCategory
 
 const loadCategory=async (req,res)=>{
     try {
-        const categoryData=await category.find()
-        res.render("category",{categoryData})
+        const categoryData=await category.find().populate('offer')
+        const offer = await Offer.find()
+        res.render("category",{categoryData,offer,moment})
     } catch (error) {
         console.log(error.message);
     }

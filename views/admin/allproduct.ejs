@@ -135,6 +135,7 @@
                                 <th scope="col">Description</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Stock</th>
+                                <th scope="col">Offer</th>
                                 <th scope="col">Images</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Edit</th>
@@ -150,6 +151,61 @@
                                     <td><%= result.description %></td>
                                     <td><%= result.price %></td>
                                     <td><%= result.quentity %></td>
+
+                                    <td>
+                                        <% if(result.offer){ %>
+                                            <button
+                                                class="btn btn-sm btn-outline-danger rounded-pill font-sm"
+                                                onclick="removeOffer('<%= result._id %>')">Remove
+                                                offer</button>
+                                            <p >
+                                                <%= result.offer.name%>(<%=result.offer.discount %>%)
+                                            </p>
+                                            <%}else{%>
+                                                <button
+                                                    class="btn btn-sm btn-outline-primary rounded-pill font-sm"
+                                                    onclick="showModal('<%= result._id %>')">Apply
+                                                    Offer</button>
+        
+                                                <p>No offers</p>
+                                                <% } %>
+                                    </td>
+
+
+                         <div class="modal fade" id="discountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                         <div class="modal-dialog" role="document">
+                            <% offers.forEach((offer)=>{%>
+                                     <div class="modal-content rounded-50">
+                                         <div data-offerid="<%= offer._id %>" style="cursor: pointer;"
+                                             class="modal-body text-center">
+                                             <div class="icon text-danger">
+                                                 <i style="font-size: 20px;" class="fas fa-gift"></i>
+                                             </div>
+                                             <div class="notice">
+                                                 <h2 class="text-primary">
+                                                     <%= offer.name %>
+                                                 </h2>
+                                                 
+                                                 <h4 class="text-success">
+                                                     <%= offer.discount %>% Discount
+                                                 </h4>
+                                                 <p class="offer-validity">
+                                                     <span>Valid from</span>
+                                                     <%= moment(offer.startingDate).format('DD/MM/YYYY') %> <span> to</span>
+                                                         <%= moment(offer.expiryDate).format('DD/MM/YYYY') %>
+                                                 </p>
+                                             </div>
+                                             <div class="code"></div>
+                                         </div>
+                                     </div>
+                                     <%})%>
+                                         
+                         </div>
+                     </div>
+        
+
+
                                     <td>
                                         <% for (let i = 0; i < result.image.length; i++) { %>
                                             <img src="/uploads/<%= result.image[i] %>" alt="Product Image" width="50" height="50">
@@ -219,6 +275,104 @@
                         });
                     }
                 </script>
+
+
+<script>
+    function showModal(productId) {
+        $('#discountModal').modal('show');
+        const offerElements = document.querySelectorAll('.modal-body.text-center');
+        offerElements.forEach((element) => {
+            element.onclick = function () {
+                const offerId = this.getAttribute('data-offerid');
+
+                console.log("offer",offerId);
+
+                enterOffer(offerId, productId);
+            };
+        });
+    }
+
+  async function enterOffer(offerId, productId) {
+    $('#discountModal').modal('hide');
+    try {
+        const response = await fetch("/admin/applyproductoffer",{
+            method:"PATCH",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({offerId,productId})
+        })
+        
+        if (response.ok) {
+            const responseData = await response.json();
+
+            const isConfirmed = await Swal.fire({
+                title: 'Offer applied',
+                icon: 'success',
+                confirmButtonText: 'OK',
+            });
+
+            if (isConfirmed.value) {
+                window.location = '/admin/allproduct';
+            }
+        } else {
+            
+            console.error('Error applying offer:', response.statusText);
+        }
+    } catch (error) {
+        console.log(error)
+        console.error('Error applying offer:', error);
+    }
+}
+
+
+
+
+async function removeOffer(productId) {
+    try {
+        console.log("cate",productId);
+        const isConfirmed = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You want remove the offer!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, remove it!'
+        });
+
+        if (isConfirmed.isConfirmed) {
+            const response = await fetch("/admin/removeproductoffer", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ productId })
+            });
+            console.log("hfkhjkhh");
+
+            if (response.ok) {
+                const responseData = await response.json();
+
+                const isConfirmed = await Swal.fire({
+                title: 'Offer Removed',
+                icon: 'success',
+                confirmButtonText: 'OK',
+            });
+
+            if (isConfirmed.value) {
+                window.location = '/admin/allproduct';
+            }
+            } else {
+                console.error('Error removing offer:', response.statusText);
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+       </script>
 
 
 

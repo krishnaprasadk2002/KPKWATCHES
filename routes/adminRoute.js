@@ -149,7 +149,10 @@ adminRoute.get("/editoffer",offerController.loadEditOffer)
 adminRoute.post("/editoffer",offerController.editOfferDetails)
 adminRoute.get("/statusoffer",offerController.statusOffer)
 adminRoute.delete("/deleteoffer",offerController.deletingOffer)
-
+adminRoute.patch("/applycategoryoffer",offerController.applyCategoryOffer)
+adminRoute.patch("/removecategoryoffer",offerController.removeCategoryOffer)
+adminRoute.patch("/applyproductoffer",offerController.applyProductOffer)
+adminRoute.patch("/removeproductoffer",offerController.removeProductOffer)
 
 // ======================================================================
 //Logout

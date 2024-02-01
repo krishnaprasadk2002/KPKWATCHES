@@ -321,6 +321,8 @@ const salesReport = async (req,res) =>{
     }
 }
 
+//date sorting
+
 const dateSort=async (req,res)=>{
     try {
         const {startDate,endDate}=req.body

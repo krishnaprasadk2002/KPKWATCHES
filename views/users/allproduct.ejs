@@ -256,6 +256,7 @@
                                                         <%= productData.category.name %>
                                                     </a>
                                                 </div><!-- End .product-cat -->
+                                                <br>
 
                                                 <div class="product-price">
                                                     <% if (productData.offerprice <=productData.price) { %>
@@ -268,9 +269,7 @@
                                                                 <% } %>
                                                 </div>
 
-                                                <div class="Description">
-                                                    <%= productData.description %>
-                                                </div>
+                                              
                                             </div><!-- End .product-body -->
                                         </div><!-- End .product -->
                                     </div><!-- End .col-md-4 -->
@@ -294,6 +293,8 @@
                                         All Category
                                     </a>
                                 </h3><!-- End .widget-title -->
+
+
 
                                 <% allcategory.forEach((productData)=> { %>
 

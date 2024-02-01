@@ -132,7 +132,56 @@ const deletingOffer = async (req,res)=>{
     }
 }
 
+const applyCategoryOffer= async (req,res)=>{
+    try {
+        const {categoryId,offerId} = req.body
+        await Category.updateOne({_id:categoryId},
+            {$set:{offer:offerId}
+        })
+        res.json({success:true})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
+const removeCategoryOffer = async (req,res)=>{
+    try {
+
+        const  { categoryId } = req.body
+
+        await Category.updateOne({_id:categoryId},
+            {$unset:{offer:""}
+        })
+            res.json({ success: true });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const applyProductOffer = async (req,res)=>{
+    try {
+        const {offerId,productId}=req.body
+
+        await Products.updateOne({_id:productId},
+            {$set:{offer:offerId}
+        })
+        res.json({success:true})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const removeProductOffer = async (req,res)=>{
+    try {
+        const {productId} = req.body
+        await Products.updateOne({_id:productId},
+            {$unset:{offer:""}
+        })
+        res.json({success:true})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 module.exports={
     loadOffer,
@@ -141,6 +190,11 @@ module.exports={
     loadEditOffer,
     editOfferDetails,
     statusOffer,
-    deletingOffer
+    deletingOffer,
+    applyCategoryOffer,
+    removeCategoryOffer,
+    applyProductOffer,
+    removeProductOffer
+
 
 }

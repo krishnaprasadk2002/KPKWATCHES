@@ -58,7 +58,10 @@ const loadWhishlist = async (req, res) => {
       const isProductInWishlist = wishlist.products.some(item => item.productId.equals(productId));
   
       if (isProductInWishlist) {
-        return res.status(400).json({ error: 'Product is already in the wishlist.' });
+
+        await Wishlist.updateOne({user:userId},
+          {$pull:{products:{productId:productId}}})
+        return res.status(400).json({ error: 'Product is removed in wishlist' });
       }
   
       wishlist.products.push({

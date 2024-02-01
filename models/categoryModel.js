@@ -15,6 +15,10 @@ const productCategory=mongoose.Schema({
         enum: ['Listed', 'Unlisted'],
         default: 'Listed',
       },
+      offer:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"offer"
+      }
 
 })
 

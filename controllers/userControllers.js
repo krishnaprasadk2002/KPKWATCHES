@@ -274,11 +274,7 @@ const resetPage = async (req, res) => {
     const userId = req.params.userId
     const token = req.params.token
 
-    console.log(" what i want", userId, token);
-    const categories = await Category.find({ is_listed: "Listed" })
-
     res.render("resetPassword", {
-      category: categories,
       userId,
       token
     })
@@ -296,7 +292,6 @@ const resetPassword = async (req, res) => {
     const { email } = userId
 
     const token = req.body.token
-    console.log(userId);
 
     if (!userId) {
       return res.status(400).send("Invalid link or expired")
@@ -307,7 +302,7 @@ const resetPassword = async (req, res) => {
       token: token
     })
 
-    console.log("woking", token);
+    // console.log("woking", token);
 
     if (!tokenDoc) {
       return res.status(400).send("Invalid link or expired")
@@ -315,7 +310,7 @@ const resetPassword = async (req, res) => {
 
     let password = req.body.confirmpassword
     const spassword = await securePassword(password)
-    console.log("this is the last step:", spassword);
+    // console.log("this is the last step:", spassword);
 
     await User.updateOne({
       email: email
@@ -337,7 +332,7 @@ const resetPassword = async (req, res) => {
 
 const loginLoad = async (req, res) => {
   try {
-    let message
+    let message 
     res.render('login', { message });
   } catch (error) {
     console.log(error.message);

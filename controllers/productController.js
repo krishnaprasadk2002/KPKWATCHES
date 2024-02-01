@@ -9,6 +9,8 @@ const sharp=require("sharp")
 const upload = multer({ dest: '/public/uploads/' });
 const fs=require("fs")
 const Category = require("../models/categoryModel")
+const Offer= require("../models/offerModel")
+const moment = require("moment")
 
 
 
@@ -56,8 +58,9 @@ const insertProduct = async (req, res) => {
 
 const loadAllproduct=async(req,res)=>{
     try {
-        const productData=await Products.find()
-        res.render('allproduct',{productData})
+        const productData=await Products.find().populate('offer')
+        const offers = await Offer.find()
+        res.render('allproduct',{productData,offers,moment})
     } catch (error) {
         console.log(error.message);
     }

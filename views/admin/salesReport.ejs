@@ -175,8 +175,8 @@
                                     <tbody id="reportBody">
                                         <% orders.forEach(order => { %>
                                             <tr>
-                                                <td ><%= order.user.name %></td>
-                                                <td><%= order.user.email %></td>
+                                                <td ><%= order.user?.name %></td>
+                                                <td><%= order.user?.email %></td>
                                                 <td><%= new Date(order.date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %></td>
                                                 <td>
                                                     <% if (order.address) { %>
