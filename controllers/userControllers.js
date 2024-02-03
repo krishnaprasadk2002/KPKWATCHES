@@ -12,6 +12,7 @@ const Wishlist = require("../models/WhishlistModel");
 const Cart=require('../models/cartModel')
 const WhishlistModel = require("../models/WhishlistModel");
 const Banner=require("../models/bannerModal")
+const Offer=require("../models/offerModel")
 
 
 
@@ -412,7 +413,23 @@ const loadHome = async (req, res) => {
     const productData = await Products.find({
       is_listed: { $ne: "Unlisted" },
       quentity: { $ne: 0 }
-  }).populate('category').exec();
+  }) .populate({
+    path: 'category',
+    populate: {
+      path: 'offer',
+      match: {
+        startingDate: { $lte: new Date() },
+        expiryDate: { $gte: new Date() }
+      }
+    }
+  })
+  .populate({
+    path: 'offer',
+    match: {
+      startingDate: { $lte: new Date() },
+      expiryDate: { $gte: new Date() }
+    }
+  })
     const banner=await Banner.find({status:{$ne:false}})
     const filteredProducts = productData.filter((product) => product.category.is_listed !== "Unlisted");
 
@@ -473,12 +490,30 @@ const loadProduct = async (req, res) => {
       const category = await Category.findById(selectedCategory);
 
       if (category && category.is_listed) {
-        const products = await Products.find({ category: selectedCategory, is_listed: "Listed" }).populate('category')
+        const products = await Products.find({ category: selectedCategory, is_listed: "Listed" })
+          .populate({
+            path: 'category',
+            populate: {
+              path: 'offer',
+              match: {
+                startingDate: { $lte: new Date() },
+                expiryDate: { $gte: new Date() }
+              }
+            }
+          })
+          .populate({
+            path: 'offer',
+            match: {
+              startingDate: { $lte: new Date() },
+              expiryDate: { $gte: new Date() }
+            }
+          })
           .sort(sort)
           .skip(skip)
           .limit(12)
           .exec();
-        res.render("allproduct", { filteredProducts: products, allcategory: [], totalPages, currentPage, sortOption }); 
+      
+        res.render("allproduct", { filteredProducts: products, allcategory: [], totalPages, currentPage, sortOption });
         return; 
       } else {
         productss = [];
@@ -493,11 +528,53 @@ const loadProduct = async (req, res) => {
       }).populate('category');
     }
 
-    const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }).populate('category')
+    const productData = await Products.find({ is_listed: { $ne: "Unlisted" } }) .populate({
+      path: 'category',
+      populate: {
+        path: 'offer',
+        match: {
+          startingDate: { $lte: new Date() },
+          expiryDate: { $gte: new Date() }
+        }
+      }
+    })
+    .populate({
+      path: 'offer',
+      match: {
+        startingDate: { $lte: new Date() },
+        expiryDate: { $gte: new Date() }
+      }
+    })
       .sort(sort)
       .skip(skip)
       .limit(12)
       .exec();
+
+
+      const updatedProducts = await Promise.all(productData.map(async (product) => {
+        try {
+          if (product.offer) {
+            let discount = Math.round(product.price * (product.offer.discount / 100));
+            product.offerprice = product.price - discount;
+          } else if (product.category.offer) {
+            let discount = Math.round(product.price * (product.category.offer.discount / 100));
+            product.offerprice = product.price - discount;
+          } else {
+            product.offerprice = undefined;
+          }
+      
+          await product.save();
+      
+          return product;
+        } catch (error) {
+          console.error("Error updating product:", error);
+          throw error; 
+        }
+      }));
+      
+      
+      
+
     const filteredProducts = productData.filter((product) => product.category.is_listed !== "Unlisted");
     const allcategory = await Category.find({ is_listed: "Listed" });
 

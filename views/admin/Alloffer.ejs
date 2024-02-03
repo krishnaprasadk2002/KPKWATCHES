@@ -156,10 +156,26 @@
                                 <%= offer.discount %>%
                             </td>
                             <td>
-                                <%= offer.startingDate %>
+                                <% if (offer.startingDate) { %>
+                                    <%= offer.startingDate.toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: '2-digit'
+                                    }).replace(/\//g, '-') %>
+                                <% } else { %>
+                                    Not published
+                                <% } %>
                             </td>
                             <td>
-                                <%= offer.expiryDate %>
+                                <% if (offer.expiryDate) { %>
+                                    <%= offer.expiryDate.toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: '2-digit'
+                                    }).replace(/\//g, '-') %>
+                                <% } else { %>
+                                    Not published
+                                <% } %>
                             </td>
                             <td>
                                 <%= offer.status ? 'Active' : 'Inactive' %>

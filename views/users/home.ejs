@@ -301,15 +301,22 @@
                                                     <div class="product-cat">
                                                         <p><%= product.category.name %></p>
                                                     </div>
-                                                    <div class="product-price">
-                                                        <% if (product.offerprice <= product.price) { %>
-                                                            <span class="original-price">₹<%= product.price %></span>
-                                                            <br>
-                                                            <span class="offer-price">₹<%= product.offerprice %></span>
-                                                        <% } else { %>
-                                                            ₹<%= product.price %>
-                                                        <% } %>
-                                                    </div>
+                                                    
+                                                        <div class="product-price">
+                                                            <% if (product.offer || product.category.offer) { %>
+                                                                <br>
+                                                                <span class="original-price">₹<%= product.price %></span>
+                                                                <span class="offer-price" ><%= product.offer ? product.offer.discount : product .category.offer.discount %>  % Off</span><br>
+                                                                <span class="offer h-75"  style="color: green; font:bold">₹<%= product.offerprice %></span>
+                                                                
+                                                                
+                                                                
+                                                                <% } else { %>
+                                                                    ₹<%= product.price %>
+                                                                        <% } %>
+                                                        </div>
+        
+                                                    
                                                 </div>
                                             </div>
                                         </div>

@@ -19,13 +19,12 @@ const insertProduct = async (req, res) => {
         // Extract the uploaded images
         const images = req.files.map(file => file.filename);
 
-        const { name, description, price, offerprice, category, status, quentity, date } = req.body;
+        const { name, description, price,  category, status, quentity, date } = req.body;
 
         const newProduct = new Products({
             name,
             description,
             price,
-            offerprice,
             category,
             status,
             quentity,
@@ -128,7 +127,7 @@ const loadEditProduct = async (req, res) => {
 const handleEditProduct = async (req, res) => {
     try {
         const productId = req.params.id;
-        const { name, description, price, offerprice, category, quentity } = req.body;
+        const { name, description, price,  category, quentity } = req.body;
         const images = req.files ? req.files.map(file => file.filename) : [];
 
         const existingProduct = await Products.findById(productId);
@@ -159,7 +158,6 @@ const handleEditProduct = async (req, res) => {
         existingProduct.name = name;
         existingProduct.description = description;
         existingProduct.price = price;
-        existingProduct.offerprice = offerprice;
         existingProduct.category = category;
         existingProduct.quentity = quentity;
         // Save the updated product
@@ -205,25 +203,53 @@ const deleteimage = async (req, res) => {
 };
 
 
-// const searchProduct=async(req,res)=>{
-//     try {
-//       const search = req.body.Search;
-//       console.log("search:", search);
-//       const searchProduct = await Products.find({ name: { $regex: new RegExp(search, 'i') } })
-//       const searchedProducts = searchProduct.slice(0, 8);
-//       res.send({ search: searchedProducts });
-//     } catch (error) {
-//       console.log(error.message);
-//     }
-//   }
+
 
 //single product
 
 const singleProduct = async (req, res) => {
     try {
         const queryProduct = req.query.id;
-        const viewProduct = await Products.findById(queryProduct).populate('category').exec(); 
-        console.log(viewProduct);
+        const viewProduct = await Products.findById(queryProduct)
+          .populate({
+            path: 'category',
+            populate: {
+              path: 'offer',
+              match: {
+                startingDate: { $lte: new Date() },
+                expiryDate: { $gte: new Date() }
+              }
+            }
+          })
+          .populate({
+            path: 'offer',
+            match: {
+              startingDate: { $lte: new Date() },
+              expiryDate: { $gte: new Date() }
+            }
+          })
+          .exec();
+        if (!viewProduct) {
+          return res.status(404).send('Product not found');
+        }
+
+        let discountProductprice = 0;
+        let discountCategoryprice = 0;
+        let discountProductPercentage
+        let discountCategoryPercentage
+
+        if (viewProduct.offer) {
+          discountProductprice = viewProduct.price - (viewProduct.price * viewProduct.offer.discount / 100);
+         discountProductPercentage = viewProduct.offer.discount;
+        //   console.log("discountProduct",discountProductPercentage);
+        } else if (viewProduct.category.offer) {
+          discountCategoryprice = viewProduct.price - (viewProduct.price * viewProduct.category.offer.discount / 100);
+          discountCategoryPercentage = viewProduct.category.offer.discount;
+        //   console.log("discountCate",discountCategoryPercentage);
+        }
+
+        // console.log("discountCprice",discountCategoryprice);
+        // console.log("discountPprice",discountProductprice);
 
         const relatedProduct = await Products.find({
             category: viewProduct.category,
@@ -233,15 +259,18 @@ const singleProduct = async (req, res) => {
         }).limit(4);
 
         res.render("eachproduct", {
-            products: viewProduct, 
+            products: viewProduct,
             viewProduct,
-            relatedProduct: relatedProduct 
+            relatedProduct,
+            discountProductprice,discountProductPercentage,discountCategoryprice,discountCategoryPercentage
+
         });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).send('Internal Server Error');
     }
 };
+
 
 const productDelete = async (req, res) => {
     try {

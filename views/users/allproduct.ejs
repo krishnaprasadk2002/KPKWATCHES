@@ -192,11 +192,13 @@
                 .original-price {
                     text-decoration: line-through;
                     color: #999;
+
                 }
 
                 .offer-price {
-                    color: #e44d26;
+                    color: #f10d24;
                     font-weight: bold;
+                    padding-left: 20px;
                 }
             </style>
 
@@ -258,18 +260,30 @@
                                                 </div><!-- End .product-cat -->
                                                 <br>
 
-                                                <div class="product-price">
-                                                    <% if (productData.offerprice <=productData.price) { %>
-                                                        <br>
-                                                        <span class="original-price">₹<%= productData.price %></span>
-                                                        <br><br>
-                                                        <span class="offer-price">₹<%= productData.offerprice %></span>
+                                                <div class="product-price ">
+                                                    <% if (productData.offer || productData.category.offer) { %>
+                                                        <div class="row">
+
+
+                                                            <br>
+                                                            <span class="original-price  " style="margin-left: 10px;">₹
+                                                                <%= productData.price %>
+                                                            </span>
+                                                            <br><br>
+                                                            <span class="offer-price">
+                                                                <%= productData.offer ? productData.offer.discount :
+                                                                    productData . category.offer.discount %> % Off
+                                                            </span>
+
+
+                                                        </div>
+                                                        <span class="w-100" style="color: green;">₹<%= productData.offerprice %>
+                                                                </span>
+
                                                         <% } else { %>
                                                             ₹<%= productData.price %>
                                                                 <% } %>
                                                 </div>
-
-                                              
                                             </div><!-- End .product-body -->
                                         </div><!-- End .product -->
                                     </div><!-- End .col-md-4 -->

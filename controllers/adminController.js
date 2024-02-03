@@ -4,6 +4,7 @@ const category = require("../models/categoryModel")
 const bcrypt = require("bcrypt");
 const Category = require("../models/categoryModel");
 const Orders = require("../models/orderModel")
+const pdf = require('pdfkit');
 
 const loadLogin = async (req, res) => {
     try {
@@ -182,14 +183,12 @@ const loadDashboard = async (req, res) => {
             },
         ]);
 
-
         const updatedMonthlyValues = defalutMonthsValues.map((defaultMonth) => {
             const foundMonth = monthlySales.find(
                 (monthData) => monthData.month === defaultMonth.month
             );
             return foundMonth || defaultMonth;
         });
-
 
 
 
@@ -386,6 +385,18 @@ const dateSort=async (req,res)=>{
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+
+//Get Invoice 
+
+const getInvoice = async (req,res)=>{
+    try {
+        console.log("invoice")
+        
+    } catch (error) {
+        
     }
 }
 

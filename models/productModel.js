@@ -17,8 +17,7 @@ const productSchema = new mongoose.Schema({
     },
     offerprice: {
         type: Number,
-        min:0,
-        required: true,
+        required: false,
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
@@ -47,6 +46,7 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'offer'
       },
+      
 
 });
 

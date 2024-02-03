@@ -4,6 +4,7 @@ const Category=require("../models/categoryModel")
 const Cart=require("../models/cartModel")
 const Coupons=require("../models/couponModel")
 const { response } = require("../routes/userRoute")
+const Offer = require("../models/offerModel")
 
 
 
@@ -58,8 +59,8 @@ const addToCart = async (req, res) => {
                     cart.products.push({
                         productId: product_id,
                         quentity: quentity,
-                        productPrice: productToCart.offerprice,
-                        totalPrice: quentity * productToCart.offerprice,
+                        productPrice: productToCart.price,
+                        totalPrice: quentity * productToCart.price,
                         Image: productToCart.image[0],
                     });
                 }
@@ -73,8 +74,8 @@ const addToCart = async (req, res) => {
                         {
                             productId: product_id,
                             quentity: quentity,
-                            productPrice: productToCart.offerprice,
-                            totalPrice: quentity * productToCart.offerprice,
+                            productPrice: productToCart.price,
+                            totalPrice: quentity * productToCart.price,
                             Image: productToCart.image[0],
                         },
                     ],
