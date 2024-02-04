@@ -127,7 +127,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th><span class="ms-1">Order Id</span></th>
+               
                 <th><span class="ms-1">Product Name</span></th>
                 <th><span class="ms-1">User Name</span></th>
                 <th><span class="ms-1">Price</span></th>
@@ -142,9 +142,7 @@
             <% allOrders.forEach(order => { %>
                 <% order.Products.forEach(product => { %>
                 <tr>
-                    <td>
-                        <p><%= order._id %> </p>
-                      </td>
+                    
                       <td>
                         <p><%= product.name %></p>
                       </td>

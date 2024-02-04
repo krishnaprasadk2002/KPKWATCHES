@@ -13,6 +13,7 @@ const Cart=require('../models/cartModel')
 const WhishlistModel = require("../models/WhishlistModel");
 const Banner=require("../models/bannerModal")
 const Offer=require("../models/offerModel")
+const moment=require("moment")
 
 
 
@@ -627,6 +628,29 @@ const userProfile = async (req, res) => {
   }
 };
 
+const walletHistory = async (req, res) => {
+  try {
+    const userId = req.session.user_id;
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = 10;
+    const skip = (page - 1) * pageSize;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    const walletHistorySubset = user.wallet_history.slice(skip, skip + pageSize);
+    const totalPages = Math.ceil(user.wallet_history.length / pageSize);
+
+    res.render('walletHistory', { user, walletHistorySubset, totalPages, currentPage: page,moment });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+
 //Add address
 
 const loadAddAddress = async (req, res) => {
@@ -818,5 +842,6 @@ module.exports = {
   loadAddAddress,
   addAddressProfile,
   editAddress,
+  walletHistory
 
 }

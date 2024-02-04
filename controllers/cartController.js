@@ -1,8 +1,8 @@
-const User=require("../models/userModel")
-const Products=require("../models/productModel")
-const Category=require("../models/categoryModel")
-const Cart=require("../models/cartModel")
-const Coupons=require("../models/couponModel")
+const User = require("../models/userModel")
+const Products = require("../models/productModel")
+const Category = require("../models/categoryModel")
+const Cart = require("../models/cartModel")
+const Coupons = require("../models/couponModel")
 const { response } = require("../routes/userRoute")
 const Offer = require("../models/offerModel")
 
@@ -10,35 +10,35 @@ const Offer = require("../models/offerModel")
 
 const loadCart = async (req, res) => {
     try {
-      const user = req.session.user_id;
-      const cartData = await Cart.findOne({ userid: user }).populate({
-        path: "products.productId",
-        model: "Products", // Make sure it matches the model name for the Product
-      });
-    
-      if (cartData) {
-        const totalPriceTotal = cartData.products.reduce((total, product) => {
-          return total + product.totalPrice;
-        }, 0);
-  
-        res.render("cartpage", { cartData, totalPriceTotal });
-      }else{
-          
-          res.render("cartpage", {cartData});
-      }
+        const user = req.session.user_id;
+        const cartData = await Cart.findOne({ userid: user }).populate({
+            path: "products.productId",
+            model: "Products",
+        })
+
+        if (cartData) {
+            const totalPriceTotal = cartData.products.reduce((total, product) => {
+                return total + product.totalPrice;
+            }, 0);
+
+            res.render("cartpage", { cartData, totalPriceTotal });
+        } else {
+
+            res.render("cartpage", { cartData });
+        }
     } catch (err) {
-      console.log(err);
+        console.log(err);
     }
-  };
+};
 //Product added to cart
 
 const addToCart = async (req, res) => {
     try {
-        const product_id = req.params.productid; 
+        const product_id = req.params.productid;
         const user_id = req.session.user_id;
         const quentity = parseInt(req.params.quentity);
 
-        const productToCart = await Products.findOne({ _id: product_id }); 
+        const productToCart = await Products.findOne({ _id: product_id });
         // console.log("Product:", productToCart);
 
         const cart = await Cart.findOne({ userid: user_id });
@@ -52,15 +52,19 @@ const addToCart = async (req, res) => {
 
                 if (existingProductIndex !== -1) {
                     const existingProduct = cart.products[existingProductIndex];
-                    existingProduct.quentity 
+                    existingProduct.quentity
                     // += quentity;
                     existingProduct.totalPrice = existingProduct.quentity * existingProduct.productPrice;
                 } else {
+
+                    const productPrice = productToCart.offerprice || productToCart.price
+                    const totalPrice = quentity * productPrice
+
                     cart.products.push({
                         productId: product_id,
                         quentity: quentity,
-                        productPrice: productToCart.price,
-                        totalPrice: quentity * productToCart.price,
+                        productPrice: productPrice,
+                        totalPrice: totalPrice,
                         Image: productToCart.image[0],
                     });
                 }
@@ -97,7 +101,7 @@ const addToCart = async (req, res) => {
 
 //Remove Cart item
 
-    const removeCart = async (req, res) => {
+const removeCart = async (req, res) => {
     try {
         const { productId } = req.body;
         const userId = req.session.user_id;
@@ -143,19 +147,23 @@ const updateQuentity = async (req, res) => {
         if (!productToUpdate) {
             return res.status(404).json({ success: false, message: "Product not found in cart" });
         }
-
+        // Assuming existingCart is an instance of your cart model
         productToUpdate.quentity = quentity;
-        productToUpdate.totalPrice = quentity * productToUpdate.productPrice;
+        productToUpdate.totalPrice = quentity * (productToUpdate.offerPrice || productToUpdate.productPrice);
 
         const updatedCart = await existingCart.save();
         const updatedTotalPrice = productToUpdate.totalPrice;
-        console.log("updated totalprice:",updatedTotalPrice);
+        console.log("updated total price:", updatedTotalPrice);
+
         const totalPriceTotal = existingCart.products.reduce((total, product) => {
-            return total + product.totalPrice, 0});
+            const productPrice = product.offerPrice || product.productPrice;
+            return total + productPrice * product.quentity;
+        }, 0);
 
-            console.log("total:",totalPriceTotal);
+        console.log("total:", totalPriceTotal);
 
-        
+
+
         res.json({
             success: true,
             message: "Quantity updated successfully",
@@ -173,42 +181,42 @@ const updateQuentity = async (req, res) => {
 const loadCheckout = async (req, res) => {
     try {
         const user_id = req.session.user_id;
-        const coupon=await Coupons.find()
-        const couponCode=req.query.coupon||''
-       console.log("code:",couponCode);
-        const user = await User.findById(user_id); 
+        const coupon = await Coupons.find()
+        const couponCode = req.query.coupon || ''
+        console.log("code:", couponCode);
+        const user = await User.findById(user_id);
 
-         if(!req.session.user_id){
+        if (!req.session.user_id) {
             res.redirect("/")
-         }else{
-        const cartData = await Cart.findOne({ userid: user }).populate({
-            path: "products.productId",
-            model: "Products", 
-          });
-          
-        const totalWithoutDiscount=cartData.products.reduce((acc,product)=>{
-            return acc + product.totalPrice
-        },0)
+        } else {
+            const cartData = await Cart.findOne({ userid: user }).populate({
+                path: "products.productId",
+                model: "Products",
+            });
 
-        let totalWithDiscount=totalWithoutDiscount
-        
+            const totalWithoutDiscount = cartData.products.reduce((acc, product) => {
+                const price = product.productId.offerprice || product.productId.price;
+                return acc + price * product.quentity;
+            }, 0);
 
-        if(couponCode){
-            const coupon=await Coupons.findOne({ couponCode })
+            let totalWithDiscount = totalWithoutDiscount;
 
-            if(coupon){
-                const discountAmount=coupon.discountAmount
-                totalWithDiscount -= discountAmount
+            if (couponCode) {
+                const coupon = await Coupons.findOne({ couponCode });
+
+                if (coupon) {
+                    const discountAmount = coupon.discountAmount;
+                    totalWithDiscount -= discountAmount;
+                }
             }
+
+
+
+            res.render("checkout", { user, cartData, totalWithDiscount, totalWithoutDiscount, coupon });
         }
-
-        
-
-        res.render("checkout", { user, cartData , totalWithDiscount,totalWithoutDiscount,coupon});
-    }
     } catch (error) {
         console.log(error.message);
-       
+
     }
 };
 
@@ -233,7 +241,7 @@ const loadCheckout = async (req, res) => {
 //             }, 0);
 
 //             let totalWithDiscount = totalWithoutDiscount;
-            
+
 //             if (couponCode) {
 //                 const coupon = await Coupons.findOne({ couponCode });
 
@@ -261,7 +269,7 @@ const loadCheckout = async (req, res) => {
 
 //add address page
 
-const loadAddAddress=async (req,res)=>{
+const loadAddAddress = async (req, res) => {
     try {
         res.render("checkoutaddress")
     } catch (error) {
@@ -273,13 +281,13 @@ const loadAddAddress=async (req,res)=>{
 //Add address in checkoutPage
 const addAddress = async (req, res) => {
     try {
-        const userId = req.session.user_id; 
+        const userId = req.session.user_id;
         // console.log(userId);
         const { name, mobile, pincode, address, city, state } = req.body;
-        
-        
+
+
         const user = await User.findById(userId);
-        
+
         if (!user) {
             return res.status(404).send('User not found');
         }
@@ -294,7 +302,7 @@ const addAddress = async (req, res) => {
         });
 
         const updatedUser = await user.save();
-        
+
         res.redirect("/checkout");
     } catch (error) {
         console.log(error.message);
@@ -303,7 +311,7 @@ const addAddress = async (req, res) => {
 };
 
 
-module.exports={
+module.exports = {
     loadCart,
     addToCart,
     removeCart,

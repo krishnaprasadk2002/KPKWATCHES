@@ -48,9 +48,6 @@ const loadDashboard = async (req, res) => {
                 $unwind: '$Products'
             },
             {
-                $match: { 'Products.orderStatus': { $nin: ["returned", "cancelled"] } }
-            },
-            {
                 $group: {
                     _id: null,
                     count: { $sum: 1 }
