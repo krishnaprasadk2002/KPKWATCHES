@@ -133,27 +133,27 @@
 
 
 
-            <div class="main-panel">
+            <div class="main-panel" >
                 <div class="content-wrapper">
-                    <div class="row">
+                    <div class="row ms-2">
                         <div class="toolbox">
+
+
                             <div class="toolbox-right">
                                 <div class="toolbox-sort m-4">
-                                    <label for="startDate">Start Date:</label>
-                                    <div class="select-custom">
-                                        <input type="date" id="startDate" name="startDate">
-                                    </div>
+                                    <label for="startDatePicker" style="font-weight: 500;">Start Date:</label>
+                                    <input type="date" id="startDatePicker" class="form-control" style="background-color: white;"  required />
                                     <p id="start" style="color: red;"></p>
                                 </div>
-        
+                                
                                 <div class="toolbox-sort m-4">
-                                    <label for="endDate">End Date:</label>
-                                    <div class="select-custom">
-                                        <input type="date" id="endDate" name="endDate">
-                                    </div>
+                                    <label for="endDatePicker" style="font-weight: 500;">End Date:</label>
+                                    <input type="date" id="endDatePicker" class="form-control" style="background-color: white;"  required />
                                     <p id="end" style="color: red;"></p>
                                 </div>
                             </div><!-- End .toolbox-right -->
+                            
+                            
                             <button class="btn btn-primary ms-4" onclick="sortOrdersByDateRange()">Sort</button>
                             <div id="sorterrorText" class="text-danger"></div>
                             <br>
@@ -161,6 +161,7 @@
         
                         <div class="col-12 grid-margin" id="tabletoload">
                             <div class="table-responsive">
+                                <div id="printThisDiv">
                                 <table class="table text-start align-middle table-bordered table-hover mb-0">
                                     <thead>
                                         <tr class="text-white">
@@ -174,23 +175,27 @@
                                     </thead>
                                     <tbody id="reportBody">
                                         <% orders.forEach(order => { %>
-                                            <tr>
-                                                <td ><%= order.user?.name %></td>
-                                                <td><%= order.user?.email %></td>
-                                                <td><%= new Date(order.date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %></td>
-                                                <td>
-                                                    <% if (order.address) { %>
-                                                        <%= JSON.stringify(order.address) %>
-                                                    <% } else { %>
-                                                        N/A
-                                                    <% } %>
-                                                </td>
-                                                <td><%= order.total %></td>
-                                                <td><%= order.paymentMode %></td>
-                                            </tr>
+                                            <% if (order.user && order.user.id) { %>
+                                                <tr>
+                                                    <td><%= order.user.name %></td>
+                                                    <td><%= order.user.email %></td>
+                                                    <td><%= new Date(order.date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %></td>
+                                                    <td>
+                                                        <% if (order.address) { %>
+                                                            <%= JSON.stringify(order.address) %>
+                                                        <% } else { %>
+                                                            N/A
+                                                        <% } %>
+                                                    </td>
+                                                    <td><%= order.total %></td>
+                                                    <td><%= order.paymentMode %></td>
+                                                </tr>
+                                            <% } %>
                                         <% }); %>
                                     </tbody>
+                                    
                                 </table>
+                            </div>
                             </div>
                         </div>
 
@@ -201,12 +206,15 @@
                 <br>
 
             </div>
-            <a href="/admin/downloadinvoice" class="sales-report-link" id="downloadInvoiceLink">
-              <button class="btn btn-success" onclick="downloadInvoice()">
-                <i class="mdi mdi-clipboard-text"></i>
-                Download invoice
-              </button>
-            </a>
+            <div class="btn-group ms-4">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    DOWNLOAD
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" onclick="downloadPDF('printThisDiv')" style="color: green; font-weight: 600;">Download as PDF</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="downloadExcel('printThisDiv')" style="color: green; font-weight: 600;">Download as Excel</a></li>
+                </ul>
+            </div>
             </div>
 
 
@@ -242,42 +250,47 @@
 
 <script>
     async function sortOrdersByDateRange() {
-        try {
-            const startDate = document.getElementById("startDate").value;
-            const endDate = document.getElementById("endDate").value;
+    try {
+        const startDate = document.getElementById("startDatePicker").value;
+        const endDate = document.getElementById("endDatePicker").value;
 
-            if(!startDate){
-              const message = document.getElementById("start").innerHTML = "please enter StartDate"
-              return
-            }
-
-            if(!endDate){
-              const message = document.getElementById("end").innerHTML = "please enter EndDate"
-              return
-            }
-
-            if (startDate > endDate) {
-                alert("Start date cannot be greater than end date");
-                return;
-            }
-
-            const response = await fetch('/admin/datesort', {
-                method: "post",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ startDate, endDate })
-            });
-
-            const data = await response.json();
-            console.log(data);
-
-            displayOrders(data);
-
-        } catch (error) {
-            console.error(error.message);
+        if (!startDate) {
+            document.getElementById("start").innerHTML = "Please enter Start Date";
+            return;
+        }else{
+            document.getElementById("start").innerHTML = ""
         }
+
+        if (!endDate) {
+            document.getElementById("end").innerHTML = "Please enter End Date";
+            return;
+        }else{
+            document.getElementById("end").innerHTML = " "
+        }
+
+        if (startDate > endDate) {
+            alert("Start date cannot be greater than end date");
+            return;
+        }
+
+        const response = await fetch('/admin/datesort', {
+            method: "post",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ startDate, endDate })
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        displayOrders(data);
+
+    } catch (error) {
+        console.error(error.message);
     }
+}
+
 
     function displayOrders(orders) {
         const reportBody = document.getElementById("reportBody");
@@ -307,9 +320,39 @@
   
 </script>
 
-<script>
-    async function downloadInvoice(){
-        
-    }
-</script>
 
+<script>
+
+    function downloadPDF(divName) {
+        const printContents = document.getElementById(divName).innerHTML;
+        const originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+
+    function downloadExcel(divName) {
+        const table = document.getElementById(divName);
+        const rows = table.getElementsByTagName('tr');
+
+        let csvContent = "data:text/csv;charset=utf-8,";
+
+        for (const row of rows) {
+            const cells = row.getElementsByTagName('td');
+            const cellValues = [];
+            for (const cell of cells) {
+                cellValues.push(cell.textContent);
+            }
+            csvContent += cellValues.join(',') + '\n';
+        }
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', 'data.csv');
+        document.body.appendChild(link);
+
+        link.click();
+        document.body.removeChild(link);
+    }
+    </script>

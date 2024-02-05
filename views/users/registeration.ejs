@@ -254,6 +254,12 @@
                                 <form id="register-form" action="/register" method="post">
                             
                                     <div class="form-group">
+
+                                        <% if (locals.referralCode) { %>
+                                            <input type="hidden" name="referralcode" id="referralCode" value="<%= referralCode %>">
+                                            <% } else{%>
+                                              <%}%>
+
                                         <label for="register-name">Name</label>
                                         <input type="text" class="form-control" id="register-name" name="name" required>
                                     </div>

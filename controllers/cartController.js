@@ -20,10 +20,9 @@ const loadCart = async (req, res) => {
             const totalPriceTotal = cartData.products.reduce((total, product) => {
                 return total + product.totalPrice;
             }, 0);
-
+            console.log("total",totalPriceTotal);
             res.render("cartpage", { cartData, totalPriceTotal });
         } else {
-
             res.render("cartpage", { cartData });
         }
     } catch (err) {
@@ -72,14 +71,17 @@ const addToCart = async (req, res) => {
                 await cart.save();
                 // console.log("Cart updated:", cart);
             } else {
+                const productPrice = productToCart.offerprice || productToCart.price
+                const totalPrice = quentity * productPrice
+
                 const newCart = new Cart({
                     userid: user_id,
                     products: [
                         {
                             productId: product_id,
                             quentity: quentity,
-                            productPrice: productToCart.price,
-                            totalPrice: quentity * productToCart.price,
+                            productPrice: productPrice,
+                            totalPrice: totalPrice,
                             Image: productToCart.image[0],
                         },
                     ],

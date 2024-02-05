@@ -217,7 +217,7 @@
                                     <!-- selector method -->
 
 
-                                    <select id="addressSelect" class="selectpicker" style="max-width: 200px;" required
+                                    <!-- <select id="addressSelect" class="selectpicker" style="max-width: 200px;" required
                                         onchange="updateSelectedAddress()">
                                         <option disabled selected value="">Please select an address</option>
                                         <% if (user && user.address && user.address.length> 0) { %>
@@ -232,7 +232,39 @@
                                                         <option>No addresses found for this user.</option>
                                                         <% } %>
                                     </select>
+                                    <div id="selectedAddress"></div> -->
+
+
+                                    <div id="addressRadioGroup">
+                                        <% if (user && user.address && user.address.length> 0) { %>
+                                            <% user.address.forEach(Address=> { %>
+                                                <div class="form-check address-container">
+                                                    <input class="form-check-input" type="radio" name="selectedAddress"
+                                                        id="<%= `address${Address._id}` %>"
+                                                        value="<%= JSON.stringify(Address) %>">
+                                                    <label class="form-check-label"
+                                                        for="<%= `address${Address._Id}` %>">
+                                                        <%= `Name: ${Address.name}, Mobile: ${Address.mobile}, Address:
+                                                            ${Address.address}, City: ${Address.city}, Pincode:
+                                                            ${Address.pincode}, State: ${Address.state}` %>
+                                                    </label>
+                                                </div>
+                                                <% }); %>
+                                                    <% } else { %>
+                                                        <p>No addresses found for this user.</p>
+                                                        <% } %>
+                                    </div>
+
                                     <div id="selectedAddress"></div>
+
+                                    <style>
+                                        .address-container {
+                                            border: 2px solid #ccc;
+                                            padding: 10px;
+                                            margin-bottom: 10px;
+                                            padding-left: 20px;
+                                        }
+                                    </style>
 
 
 
@@ -275,8 +307,8 @@
                                     <div class="checkout-discount">
                                         <form id="couponForm">
 
-                                            <select id="couponCode" name="couponCode"
-                                                style="max-width: 200px;" required>
+                                            <select id="couponCode" name="couponCode" style="max-width: 200px;"
+                                                required>
                                                 <option disabled selected value="">Please select an avilable coupon
                                                 </option>
                                                 <% if (coupon.length> 0) { %>
@@ -293,7 +325,8 @@
 
                                             <label for="checkout-discount-input" class="text-truncate">Have a coupon?
                                                 <span>Click here to enter your code</span></label><br>
-                                            <button class="btn btn-primary mt-4" type="button" onclick="applyCoupon()">Apply
+                                            <button class="btn btn-primary mt-4" type="button"
+                                                onclick="applyCoupon()">Apply
                                                 Coupon</button>
 
                                             <div id="couponMessage"></div>
@@ -316,7 +349,7 @@
                                             <div id="couponMessage"></div>
                                         </form>
                                     </div> -->
-                                    
+
 
 
                                 </div><!-- End .col-lg-9 -->
@@ -371,7 +404,7 @@
                                                             <% } %>
 
 
-                                                                <tr class="summary-total" >
+                                                                <tr class="summary-total">
                                                                     <td>Total:</td>
                                                                     <td>₹<%= totalWithDiscount %>
                                                                     </td>
@@ -417,7 +450,24 @@
     <!-- Option 2: Local download -->
     <!-- <script src="path/to/sweetalert2.all.min.js"></script> -->
 
+
+
     <script>
+        function updateSelectedAddress() {
+            // Get the selected radio button
+            const selectedRadio = document.querySelector('input[name="selectedAddress"]:checked');
+
+            // Update the selectedAddress div with the selected address details
+            const selectedAddressDiv = document.getElementById('selectedAddress');
+            if (selectedRadio) {
+                const selectedAddress = JSON.parse(selectedRadio.value);
+                selectedAddressDiv.innerHTML = `<p>SelectedAddress: ${selectedAddress.address}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.pincode}</p>`;
+            } else {
+                selectedAddressDiv.innerHTML = ''; // Clear the content if no address is selected
+            }
+        }
+    </script>
+    <!-- <script>
         function updateSelectedAddress() {
             // Get the selected option
             const selectedOption = document.getElementById('addressSelect').value;
@@ -425,7 +475,7 @@
             // Update the div with the selected address
             document.getElementById('selectedAddress').textContent = `Selected Address: ${selectedOption}`;
         }
-    </script>
+    </script> -->
 
 
 
@@ -436,16 +486,25 @@
             const paymentMethod = document.getElementById("payment").value;
 
             // Get the selected address value (adjust this based on your HTML structure)
-            const selectedValue = document.getElementById("addressSelect").value;
+            // const selectedValue = document.getElementById("addressSelect").value;
+
+            const selectedRadio = document.querySelector('input[name="selectedAddress"]:checked');
+
             const couponCode = document.getElementById('couponCode').value;
 
-            if (!selectedValue) {
-                alert('please selcect a payment method & Address');
+            // if (!selectedValue) {
+            //     alert('please selcect a payment method & Address');
+            //     return;
+            // }
+
+            if (!selectedRadio) {
+                alert('Please select an address');
                 return;
             }
 
+            const selectedValue = JSON.parse(selectedRadio.value);
 
-            
+
             fetch('/placeorder', {
                 method: 'POST',
                 headers: {
@@ -462,29 +521,29 @@
                 .then(data => {
                     console.log('Backend response:', data);
 
-                    // Check if the order processing was successful
+                
                     if (data.success) {
                         Swal.fire({
                             title: 'Order Placed Successfully!',
                             icon: 'success',
                             showConfirmButton: false,
-                            timer: 2000 // Set the duration for the alert
+                            timer: 2000 
 
                         });
 
                         setTimeout(() => {
-                           
+
                             window.location.href = '/ordersuccess';
                         }, 2000)
                     } else if (data.response) {
                         var options = {
                             "key": 'rzp_test_TIOiShpd8euA17',
-                            "amount": data.response.order.amount, 
+                            "amount": data.response.order.amount,
                             "currency": "INR",
                             "name": "KPK WATCHES", //your business name
                             "description": "Test Transaction",
                             "image": "https://example.com/your_logo",
-                            "order_id": data.response.order.id, 
+                            "order_id": data.response.order.id,
                             "handler": function (response) {
 
                                 verifyPayment(response, data.response)
@@ -550,46 +609,46 @@
         }
     </script>
 
-    
-<script>
-    
-    async function applyCoupon() {
-        
-        const couponCode = document.getElementById('couponCode').value;
-        
-        console.log("req:", couponCode);
-        event.preventDefault();
-        try {
-            const response = await fetch('/applyCoupon', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ couponCode }),
-            });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+    <script>
+
+        async function applyCoupon() {
+
+            const couponCode = document.getElementById('couponCode').value;
+
+            console.log("req:", couponCode);
+            event.preventDefault();
+            try {
+                const response = await fetch('/applyCoupon', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ couponCode }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    $('#load').load(`/checkout?coupon=${couponCode} #load`)
+                    document.getElementById('couponMessage').innerHTML = data.success;
+                } else if (data.already) {
+                    document.getElementById('couponMessage').innerHTML = data.already;
+                } else if (data.error) {
+                    document.getElementById('couponMessage').innerHTML = data.error;
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+
             }
-
-            const data = await response.json();
-
-            if (data.success) {
-                $('#load').load(`/checkout?coupon=${couponCode} #load`)
-                document.getElementById('couponMessage').innerHTML = data.success;
-            } else if (data.already) {
-                document.getElementById('couponMessage').innerHTML = data.already;
-            } else if (data.error) {
-                document.getElementById('couponMessage').innerHTML = data.error;
-            }
-
-        } catch (error) {
-            console.error('Error:', error);
-           
         }
-    }
 
-</script>
+    </script>
 
 
 

@@ -19,7 +19,10 @@ const moment=require("moment")
 
 const loadRegister = async (req, res) => {
   try {
-    res.render('registeration');
+    const referralCode =req.query.referralCode
+    console.log("referalcode",referralCode);
+
+    res.render('registeration',{referralCode});
   } catch (error) {
     console.log(error.message);
   }
@@ -38,10 +41,16 @@ const insertUser = async (req, res) => {
   try {
     const delteUnverifiedUser = await User.deleteOne({ email: req.body.email, is_verified: 0 })
 
-    if (delteUnverifiedUser) {
-      console.log("Not entered Otp user Deleted");
+    // if (delteUnverifiedUser) {
+    //   console.log("Not entered Otp user Deleted");
+    // }
+    const { name, mobile, email, password,referralcode } = req.body;
+
+    if(referralcode){
+      req.session.referralCode = referralcode
     }
-    const { name, mobile, email, password } = req.body;
+
+    console.log("ref",req.session.referralCode);
 
     const existingUser = await User.findOne({ email });
 
@@ -51,12 +60,14 @@ const insertUser = async (req, res) => {
     }
 
     const spassword = await securePassword(password);
+    const referralCode = generateReferralCode()
     const user = new User({
       name,
       mobile,
       email,
       password: spassword,
       is_admin: 0,
+      referralCode:referralCode
     });
 
     const userData = await user.save();
@@ -68,6 +79,10 @@ const insertUser = async (req, res) => {
     console.log(error.message);
   }
 };
+
+function generateReferralCode() {
+  return Math.random().toString(36).substring(2, 8).toUpperCase();
+}
 
 // otp verificaton 
 
@@ -148,14 +163,63 @@ const verifyOtp = async (req, res) => {
 
     if (validOtp) {
       const userData = await User.findOne({ email });
-      if (userData) {
-        await User.findByIdAndUpdate(userData._id, {
-          $set: {
-            is_verified: 1
-          }
-        });
-      }
 
+
+      if (userData) {
+        if (req.session.referralCode) {
+          await User.updateOne(
+            { referralCode: req.session.referralCode },
+            {
+              $set: {
+                is_verified: 1,
+              },
+              $inc: {
+                wallet: 250,
+              },
+              $push: {
+                wallet_history: {
+                  date: new Date(),
+                  amount: 250,
+                  reason: 'Invited one user using Referral code',
+                },
+              },
+            }
+          );
+
+          await User.updateOne(
+            { _id: userData._id },
+            {
+              $set: {
+                is_verified: 1,
+              },
+              $inc: {
+                wallet: 50,
+              },
+              $push: {
+                wallet_history: {
+                  date: new Date(),
+                  amount: 50,
+                  reason: 'User using Referral code Bouns',
+                },
+              },
+            }
+          );
+
+          
+
+        } else {
+          await User.updateOne(
+            { _id: userData._id },
+            {
+              $set: {
+                is_verified: 1,
+              },
+            }
+          );
+        }
+      }
+      
+      
       // delete the OTP record
       await userOtpVerification.deleteOne({ email });
 
@@ -433,7 +497,11 @@ const loadHome = async (req, res) => {
   })
     const banner=await Banner.find({status:{$ne:false}})
     const filteredProducts = productData.filter((product) => product.category.is_listed !== "Unlisted");
-
+    console.log(username);
+    let cart = []
+    if(req.session.user_id){
+       cart=await Cart.findOne({userid:username._id});
+    }
     // Always check for a blocked user
     const checkUser = await User.findOne({ _id: req.session.user_id, status: "Block" });
     if (checkUser) {
@@ -441,7 +509,7 @@ const loadHome = async (req, res) => {
     }
 
     if (req.session.user_id) {
-      res.render("home", { username, filteredProducts,banner });
+      res.render("home", { username, filteredProducts,banner, cart });
     } else {
       res.render("home", { filteredProducts,banner });
     }
@@ -457,6 +525,7 @@ const loadProduct = async (req, res) => {
 
 
     const search = req.body.Search; 
+    
     
     if (search) {
         const searchProduct = await Products.find({ name: { $regex: new RegExp(search, 'i') } })

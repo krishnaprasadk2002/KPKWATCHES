@@ -185,10 +185,10 @@ const verifyPayment = async (req, res) => {
         const { payment, order } = req.body;
         const Crypto = require("crypto");
         const orderId = order.receipt;
-        console.log('Response:', response);
+        // console.log('Response:', response);
 
-        console.log("payment:", payment);
-        console.log("Order:", order);
+        // console.log("payment:", payment);
+        // console.log("Order:", order);
 
         const secret = process.env.RazorKey;
         let hmac = Crypto.createHmac('sha256', secret);

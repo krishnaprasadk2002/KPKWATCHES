@@ -190,12 +190,31 @@
                                                     <p>Name : <%= user.name %><br>
                                                     Email : <%=user.email%><br>
                                                     Mobile : <%= user.mobile %><br>
+                                                   
                                                     
                                                     <a href="#" data-toggle="modal" data-target="#editModal">Edit <i class="icon-edit"></i></a></p>
                                                 </div><!-- End .card-body -->
                                             </div><!-- End .card-dashboard -->
-                                        </div><!-- End .col-lg-6 -->
+                                           
 
+                                        </div><!-- End .col-lg-6 -->
+                                        Referral Code:
+                                        <div class="input-group">
+                                            <input type="text" class="form-control"
+                                              value="http://localhost:4004/register?referralCode=<%= user.referralCode%>" id="referralLink"
+                                              readonly />
+                                            <div class="input-group-append">
+                                              <button class="btn btn-primary " style="height: 40px;" onclick="copyReferralLink()">Copy</button>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            function copyReferralLink() {
+                                              var referralLink = document.getElementById("referralLink");
+                                              referralLink.select();
+                                              document.execCommand("copy");
+                                              alert("Referral link copied to clipboard!");
+                                           }
+                                       </script>
 								    </div><!-- .End .tab-pane -->
 
 

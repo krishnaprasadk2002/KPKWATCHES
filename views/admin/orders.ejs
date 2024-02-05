@@ -161,7 +161,11 @@
                         <p class="text-center"> <%= product.quentity %> </p>
                       </td>
                       <td>
-                        <p><%= order.address %></p>
+                        <p>
+                            <%= `Name: ${order.address.name}, Mobile: ${order.address.mobile}, Pincode: ${order.address.pincode}, Address: ${order.address.address}, City: ${order.address.city}, State: ${order.address.state}` %>
+                        </p>
+                        
+
                       </td>
                       <td>
                         <img src="/uploads/<%= product.image %>" alt="Product Image" width="50" height="50">
@@ -170,20 +174,29 @@
                         <p id="orderStatus_<%= order._id %>"><%= product.orderStatus %></p>
                       </td>
                       <td>
-                        <% if (product.orderStatus !== 'cancelled' && product.orderStatus !== 'returned') { %>
+                        <% if (product.orderStatus !== 'cancelled' && product.orderStatus !== 'returned' && product.orderStatus !== 'delivered' ) { %>
                             <div class="btn-group">
                                 <div class="btn-group dropstart">
                                     <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                         Status
                                     </button>
+                                    <% if(product.orderStatus == 'request return'){%>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item text-danger" href="#" onclick="updateStatus('returned', '<%= order._id %>')">Returned</a></li>
+                                        </ul>
+                                        <%}else if (product.orderStatus == 'request cancellation'){%>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item text-danger" href="#" onclick="updateStatus('cancelled', '<%= order._id %>')">Cancelled</a></li>
+                                            </ul>
+                                            <%}else{%>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item text-primary" href="#" onclick="updateStatus('shipped', '<%= order._id %>')">Shipped</a></li>
+                                        <li><a class="dropdown-item text-primary" href="#" onclick="updateStatus('placed', '<%= order._id %>')">Placed</a></li>
                                         <li><a class="dropdown-item text-success" href="#" onclick="updateStatus('delivered', '<%= order._id %>')">Delivered</a></li>
-                                        <li><a class="dropdown-item text-danger" href="#" onclick="updateStatus('request cancellation', '<%= order._id %>')">Request Cancellation</a></li>
-                                        <li><a class="dropdown-item text-danger" href="#" onclick="updateStatus('cancelled', '<%= order._id %>')">Cancelled</a></li>
-                                        <li><a class="dropdown-item text-danger" href="#" onclick="updateStatus('request_return', '<%= order._id %>')">Request Return</a></li>
-                                        <li><a class="dropdown-item text-danger" href="#" onclick="updateStatus('returned', '<%= order._id %>')">Returned</a></li>
+                                        
+                                        
                                     </ul>
+                                    <%}%>
                                 </div>
                             </div>
                         <% } %>
