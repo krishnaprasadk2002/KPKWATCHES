@@ -134,65 +134,88 @@
 
 
 
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-12">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">Offers</h6>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Discount</th>
+                                        <th scope="col">Starting Date</th>
+                                        <th scope="col">Expiry Date</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% offerData.forEach((offer)=> { %>
+                                        <tr>
+                                            <td>
+                                                <%= offer.name %>
+                                            </td>
+                                            <td>
+                                                <%= offer.discount %>%
+                                            </td>
+                                            <td>
+                                                <% if (offer.startingDate) { %>
+                                                    <%= offer.startingDate.toLocaleDateString('en-US', { year: 'numeric'
+                                                        , month: 'short' , day: '2-digit' }).replace(/\//g, '-' ) %>
+                                                        <% } else { %>
+                                                            Not published
+                                                            <% } %>
+                                            </td>
+                                            <td>
+                                                <% if (offer.expiryDate) { %>
+                                                    <%= offer.expiryDate.toLocaleDateString('en-US', { year: 'numeric' ,
+                                                        month: 'short' , day: '2-digit' }).replace(/\//g, '-' ) %>
+                                                        <% } else { %>
+                                                            Not published
+                                                            <% } %>
+                                            </td>
+                                            <td>
+                                                <%= offer.status ? 'Active' : 'Inactive' %>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-primary"
+                                                    onclick="offerStatus('<%= offer._id %>', '<%= offer.status %>')">
+                                                    Status
+                                                </a>
+                                                <a class="btn btn-primary"
+                                                    href="/admin/editoffer?id=<%= offer._id %>">Edit</a>
+                                                <button class="btn btn-primary"
+                                                    onclick="deleteOffer('<%= offer._id %>')">Delete</button>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Discount</th>
-                        <th scope="col">Starting Date</th>
-                        <th scope="col">Expiry Date</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% offerData.forEach((offer)=> { %>
-                        <tr>
-                            <td>
-                                <%= offer.name %>
-                            </td>
-                            <td>
-                                <%= offer.discount %>%
-                            </td>
-                            <td>
-                                <% if (offer.startingDate) { %>
-                                    <%= offer.startingDate.toLocaleDateString('en-US', {
-                                        year: 'numeric',
-                                        month: 'short',
-                                        day: '2-digit'
-                                    }).replace(/\//g, '-') %>
-                                <% } else { %>
-                                    Not published
-                                <% } %>
-                            </td>
-                            <td>
-                                <% if (offer.expiryDate) { %>
-                                    <%= offer.expiryDate.toLocaleDateString('en-US', {
-                                        year: 'numeric',
-                                        month: 'short',
-                                        day: '2-digit'
-                                    }).replace(/\//g, '-') %>
-                                <% } else { %>
-                                    Not published
-                                <% } %>
-                            </td>
-                            <td>
-                                <%= offer.status ? 'Active' : 'Inactive' %>
-                            </td>
-                            <td>
-                                <a class="btn btn-primary"
-                                    onclick="offerStatus('<%= offer._id %>', '<%= offer.status %>')">
-                                    Status
-                                </a>
-                                <a class="btn btn-primary" href="/admin/editoffer?id=<%= offer._id %>">Edit</a>
-                                <button class="btn btn-primary"
-                                    onclick="deleteOffer('<%= offer._id %>')">Delete</button>
-                            </td>
-                        </tr>
-                        <% }) %>
-                </tbody>
-            </table>
+             <!-- Footer Start -->
+             <div class="container-fluid pt-4 px-4">
+                <div class="bg-secondary rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            &copy; <a href="#">KPK WATCHES</a>, All Right Reserved.
+                        </div>
+                        <div class="col-12 col-sm-6 text-center text-sm-end">
+                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            Designed By <a href="">KPK</a>
+                            <br>Distributed By: <a href="" target="_blank">KPK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
 
 
             <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>

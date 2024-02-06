@@ -126,76 +126,95 @@
             </nav>
             <!-- Navbar End -->
 
+            
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-12">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">Edit Product</h6>
+                            <form action="/admin/editproduct/<%= product._id %>" method="post" enctype="multipart/form-data" id="productForm" novalidate>
+                                <div class="mb-3">
+                                    <label for="productName" class="form-label">Name</label>
+                                    <input type="text" class="form-control"  placeholder="Product Name" id="productName" name="name" value="<%= product.name %>" required>
+                                    <div class="invalid-feedback">
+                                        Please enter the product name.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="productDescription" class="form-label">Description</label>
+                                    <textarea class="form-control"  id="productDescription" placeholder="Product Description" name="description" required><%= product.description %></textarea>
+                                    <div class="invalid-feedback">
+                                        Please enter the product description.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="productPrice" class="form-label">Price</label>
+                                    <input type="number"  class="form-control" id="productPrice" placeholder="Enter Price" name="price" min="0" value="<%= product.price %>" required>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid price.
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="productCategory" class="form-label">Category</label>
+                                    <select class="form-select"  id="productCategory" name="category" required>
+                                        <% categories.forEach(category => { %>
+                                            <option value="<%= category._id %>" <%= product.category && product.category.equals(category._id) ? 'selected' : '' %>><%= category.name %></option>
+                                        <% }); %>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please select the product category.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="productQuantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="productQuantity" placeholder="Quantity" name="quentity" min="0" value="<%= product.quentity %>"  required>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid quantity.
+                                    </div>
+                                </div>
+            
+                                <!-- Display Current Images -->
+                                <div class="mb-3">
+                                    <label for="currentProductImage" class="form-label">Current Images</label>
+                                    <div class="row">
+                                        <% for (let i = 0; i < product.image.length; i++) { %>
+                                            <div class="col-3 mt-2">
+                                                <img src="/uploads/<%= product.image[i] %>" class="img-thumbnail" style="max-width: 250px; max-height: 250px;">
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </div>
+            
+                                <!-- Delete Images Section -->
+                                <div class="mb-4">
+                                    <label class="form-label">Images</label>
+                                    <% product.image.forEach((image, index) => { %>
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <div class="d-flex align-items-center">
+                                                <img src="/uploads/<%= image %>" alt="Product Image" style="width: 30px; height: 30px; margin-right: 10px;">
+                                                <span><%= image %></span> <!-- Display image name or any other relevant information -->
+                                            </div>
+                                            <a href="#" onclick="confirmDelete('<%= index %>', '<%= product._id %>')" class="btn btn-danger btn-sm">Delete</a>
+                                        </div>
+                                    <% }) %>
+                                </div>
 
-            <div class="container mt-5">
-                <h2 class="mb-4">Edit Product</h2>
-                <form action="/admin/editproduct/<%= product._id %>" method="post" enctype="multipart/form-data" id="productForm" novalidate>
-                    <div class="mb-3">
-                        <label for="productName" class="form-label">Name</label>
-                        <input type="text" class="form-control" style="background-color: white;" placeholder="ProductName" id="productName" name="name" value="<%= product.name %>" required>
-                        <div class="invalid-feedback">
-                            Please enter the product name.
+                                <div class="mb-3">
+                                    <label for="newProductImage" class="form-label">New Images</label>
+                                    <input type="file" class="form-control" id="newProductImage" name="image" accept="image/*" multiple>
+                                    <div class="invalid-feedback">
+                                        Please select at least one new image.
+                                    </div>
+                                </div>
+            
+                                <button type="submit" class="btn btn-primary">Update Product</button>
+                            </form>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="productDescription" class="form-label">Description</label>
-                        <textarea class="form-control" style="background-color: white;" id="productDescription" placeholder="ProductDescription" name="description" required><%= product.description %></textarea>
-                        <div class="invalid-feedback">
-                            Please enter the product description.
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="productPrice" class="form-label">Price</label>
-                        <input type="number" style="background-color: white;" class="form-control" id="productPrice" placeholder="EnterPrice" name="price" min="0" value="<%= product.price %>" required>
-                        <div class="invalid-feedback">
-                            Please enter a valid price.
-                        </div>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="productCategory" class="form-label">Category</label>
-                        <select class="form-select" style="background-color: white;" id="productCategory" name="category" required>
-                            <% categories.forEach(category => { %>
-                                <option value="<%= category._id %>" <%= product.category && product.category.equals(category._id) ? 'selected' : '' %>><%= category.name %></option>
-                            <% }); %>
-                        </select>
-                        <div class="invalid-feedback">
-                            Please select the product category.
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="productQuantity" class="form-label">Quantity</label>
-                        <input type="number" style="background-color: white;" class="form-control" id="productQuantity" placeholder="Quantity" name="quentity" min="0" value="<%= product.quentity %>"  required>
-                        <div class="invalid-feedback">
-                            Please enter a valid quantity.
-                        </div>
-                    </div>
-           
-            <div class="mb-3">
-                <label for="currentProductImage" class="form-label">Current Images</label>
-                <div class="row">
-                    <% for (let i = 0; i < product.image.length; i++) { %>
-                        <div class="col-3 mt-2">
-                            <img src="/uploads/<%= product.image[i] %>" class="img-thumbnail" style="max-width: 250px; max-height: 250px;">
-                        </div>
-                        
-                    <% } %>
                 </div>
             </div>
-    
-            <!-- Delete Images Section -->
-            <div class="mb-4">
-                <label class="form-label">Images</label>
-                <% product.image.forEach((image, index) => { %>
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <div class="d-flex align-items-center">
-                            <img src="/uploads/<%= image %>" alt="Product Image" style="width: 30px; height: 30px; margin-right: 10px;">
-                            <span><%= image %></span> <!-- Display image name or any other relevant information -->
-                        </div>
-                        <a href="#" onclick="confirmDelete('<%= index %>', '<%= product._id %>')" class="btn btn-danger btn-sm">Delete</a>
-                    </div>
-                <% }) %>
-            </div>
+            
 
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -224,7 +243,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    // Validate the form using Bootstrap's native form validation
     document.getElementById('productForm').addEventListener('submit', function (event) {
         // Trim input values before validation
         var productNameInput = document.getElementById('productName');
@@ -236,20 +254,21 @@
         var productPriceInput = document.getElementById('productPrice');
         productPriceInput.value = productPriceInput.value.trim();
 
-        if(productPriceInput <= 0){
-         alert("Only entered to greater then 0")
-         return false
+        if (productPriceInput.value <= 0) {
+            alert("Please enter a price greater than 0");
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
         }
-
-        // var productOfferPriceInput = document.getElementById('productOfferPrice');
-        // productOfferPriceInput.value = productOfferPriceInput.value.trim();
 
         var productQuantityInput = document.getElementById('productQuantity');
         productQuantityInput.value = productQuantityInput.value.trim();
 
-        if(productQuantityInput <= 0){
-         alert("Only entered to greater then 0")
-         return false
+        if (productQuantityInput.value <= 0) {
+            alert("Please enter a quantity greater than 0");
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
         }
 
         // Other input elements can be trimmed similarly
@@ -264,27 +283,8 @@
 
             
     
-            
-            
-            <div class="mb-3">
-                <label for="newProductImage" class="form-label">New Images</label>
-                <input type="file" class="form-control" id="newProductImage" name="image" accept="image/*" multiple>
-                <div class="invalid-feedback">
-                    Please select at least one new image.
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Update Product</button>
-        </form>
-    </div>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-
-
-
-
 
 <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>

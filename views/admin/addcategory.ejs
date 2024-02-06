@@ -126,31 +126,39 @@
             </nav>
             <!-- Navbar End -->
 
-            <div class="container mt-5">
-                <h2 class="mb-4">Add Category</h2>
-                <form id="categoryForm" action="/admin/addcategory" method="POST" novalidate>
-                    <div class="mb-3">
-                        <label for="categoryName" class="form-label">Category Name</label>
-                        <input type="text" class="form-control" style="background-color: white" placeholder="Category Name" id="categoryName" name="name" required>
-                        <div class="invalid-feedback">
-                            Please enter the category name.
+
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-12">
+                        <div class="bg-secondary rounded h-100 p-4">
+                    <h6 class="mb-4">Add Category</h6>
+                    <form id="categoryForm" action="/admin/addcategory" method="POST" novalidate>
+                        <div class="mb-3">
+                            <label for="categoryName" class="form-label">Category Name</label>
+                            <input type="text" class="form-control" id="categoryName" placeholder="Category Name" name="name" required>
+                            <div class="invalid-feedback">
+                                Please enter the category name.
+                            </div>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="categoryDescription" class="form-label">Category Description</label>
-                        <textarea class="form-control" style="background-color: white" id="categoryDescription" placeholder="Category Description" name="description" required></textarea>
-                        <div class="invalid-feedback">
-                            Please enter the category description.
+                        <div class="mb-3">
+                            <label for="categoryDescription" class="form-label">Category Description</label>
+                            <textarea class="form-control" id="categoryDescription" placeholder="Category Description" name="description" required></textarea>
+                            <div class="invalid-feedback">
+                                Please enter the category description.
+                            </div>
                         </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-                <% if (locals.error) { %>
-                    <div class="alert alert-danger">
-                      <%= locals.error %>
-                    </div>
-                  <% } %>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                    <% if (locals.error) { %>
+                        <div class="alert alert-danger mt-3">
+                            <%= locals.error %>
+                        </div>
+                    <% } %>
+                </div>
             </div>
+            </div>
+            </div>
+
            
             
             <!-- Bootstrap JS and Popper.js (for Bootstrap functionality) -->

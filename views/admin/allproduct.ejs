@@ -123,119 +123,142 @@
               
             </nav>
             <!-- Navbar End -->
-                <!-- Content Start -->
 
-                <!-- ... (previous HTML code) ... -->
-
-
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Stock</th>
-                                <th scope="col">Offer</th>
-                                <th scope="col">Images</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Edit</th>
-                                <th scope="col">Product Listing</th>
-                                <th scope="col" hidden>Product Deleting</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% productData.forEach((result) => { %>
-                                <tr>
-                                    <td><%= result.name %></td>
-                                    <td><%= result.description %></td>
-                                    <td><%= result.price %></td>
-                                    <td><%= result.quentity %></td>
-
-                                    <td>
-                                        <% if(result.offer){ %>
-                                            <button
-                                                class="btn btn-sm btn-outline-danger rounded-pill font-sm"
-                                                onclick="removeOffer('<%= result._id %>')">Remove
-                                                offer</button>
-                                            <p >
-                                                <%= result.offer.name%>(<%=result.offer.discount %>%)
-                                            </p>
-                                            <%}else{%>
-                                                <button
-                                                    class="btn btn-sm btn-outline-primary rounded-pill font-sm"
-                                                    onclick="showModal('<%= result._id %>')">Apply
-                                                    Offer</button>
-        
-                                                <p>No offers</p>
-                                                <% } %>
-                                    </td>
-
-
-                         <div class="modal fade" id="discountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                         <div class="modal-dialog" role="document">
-                            <% offers.forEach((offer)=>{%>
-                                     <div class="modal-content rounded-50">
-                                         <div data-offerid="<%= offer._id %>" style="cursor: pointer;"
-                                             class="modal-body text-center">
-                                             <div class="icon text-danger">
-                                                 <i style="font-size: 20px;" class="fas fa-gift"></i>
-                                             </div>
-                                             <div class="notice">
-                                                 <h2 class="text-primary">
-                                                     <%= offer.name %>
-                                                 </h2>
-                                                 
-                                                 <h4 class="text-success">
-                                                     <%= offer.discount %>% Discount
-                                                 </h4>
-                                                 <p class="offer-validity">
-                                                     <span>Valid from</span>
-                                                     <%= moment(offer.startingDate).format('DD/MM/YYYY') %> <span> to</span>
-                                                         <%= moment(offer.expiryDate).format('DD/MM/YYYY') %>
-                                                 </p>
-                                             </div>
-                                             <div class="code"></div>
-                                         </div>
+                    <div class="container-fluid pt-4 px-4">
+                        <div class="row g-4">
+                    <div class="col-sm-12 col-xl-12">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">All Products</h6>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Stock</th>
+                                        <th scope="col">Offer</th>
+                                        <th scope="col">Images</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Edit</th>
+                                        <th scope="col">Product Listing</th>
+                                        <th scope="col" hidden>Product Deleting</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <% productData.forEach((result) => { %>
+                                            <tr>
+                                                <td><%= result.name %></td>
+                                                <td><%= result.description %></td>
+                                                <td><%= result.price %></td>
+                                                <td><%= result.quentity %></td>
+            
+                                                <td>
+                                                    <% if(result.offer){ %>
+                                                        <button
+                                                            class="btn btn-sm btn-outline-danger rounded-pill font-sm"
+                                                            onclick="removeOffer('<%= result._id %>')">Remove
+                                                            offer</button>
+                                                        <p >
+                                                            <%= result.offer.name%>(<%=result.offer.discount %>%)
+                                                        </p>
+                                                        <%}else{%>
+                                                            <button
+                                                                class="btn btn-sm btn-outline-primary rounded-pill font-sm"
+                                                                onclick="showModal('<%= result._id %>')">Apply
+                                                                Offer</button>
+                    
+                                                            <p>No offers</p>
+                                                            <% } %>
+                                                </td>
+            
+            
+                                     <div class="modal fade" id="discountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true">
+                                     <div class="modal-dialog" role="document">
+                                        <% offers.forEach((offer)=>{%>
+                                                 <div class="modal-content rounded-50">
+                                                     <div data-offerid="<%= offer._id %>" style="cursor: pointer;"
+                                                         class="modal-body text-center">
+                                                         <div class="icon text-danger">
+                                                             <i style="font-size: 20px;" class="fas fa-gift"></i>
+                                                         </div>
+                                                         <div class="notice">
+                                                             <h2 class="text-primary">
+                                                                 <%= offer.name %>
+                                                             </h2>
+                                                             
+                                                             <h4 class="text-success">
+                                                                 <%= offer.discount %>% Discount
+                                                             </h4>
+                                                             <p class="offer-validity">
+                                                                 <span>Valid from</span>
+                                                                 <%= moment(offer.startingDate).format('DD/MM/YYYY') %> <span> to</span>
+                                                                     <%= moment(offer.expiryDate).format('DD/MM/YYYY') %>
+                                                             </p>
+                                                         </div>
+                                                         <div class="code"></div>
+                                                     </div>
+                                                 </div>
+                                                 <%})%>
+                                                     
                                      </div>
-                                     <%})%>
-                                         
-                         </div>
-                     </div>
-        
-
-
-                                    <td>
-                                        <% for (let i = 0; i < result.image.length; i++) { %>
-                                            <img src="/uploads/<%= result.image[i] %>" alt="Product Image" width="50" height="50">
-                                        <% } %>
-                                    </td>
-                                    <td id="is_listed<%=result._id%>" > <%= result.is_listed %></td>
-                                    <td>
-                                        <a href="/admin/editproduct?id=<%= result._id %>" class="btn btn-primary">Edit</a>
-                                    </td>
-                                   
-                                    <td>
-                                        <a href="#" class="btn btn-primary" onclick="toggleProduct('<%= result._id %>', '<%= result.is_listed %>')">
-                                            <% if(result.is_listed === "Listed") { %>
-                                                Unlist
-                                            <% } else { %>
-                                                List
-                                            <% } %>
-                                        </a>
-                                    </td>
-
-                                    <td hidden>
-                                        <a class="btn btn-primary" href="#" onclick="confirmDelete('<%= result._id %>')">Delete</a>
-                        
-                                    </td>
+                                 </div>
+                    
+            
+            
+                                                <td>
+                                                    <% for (let i = 0; i < result.image.length; i++) { %>
+                                                        <img src="/uploads/<%= result.image[i] %>" alt="Product Image" width="50" height="50">
+                                                    <% } %>
+                                                </td>
+                                                <td id="is_listed<%=result._id%>" > <%= result.is_listed %></td>
+                                                <td>
+                                                    <a href="/admin/editproduct?id=<%= result._id %>" class="btn btn-primary">Edit</a>
+                                                </td>
+                                               
+                                                <td>
+                                                    <a href="#" class="btn btn-primary" onclick="toggleProduct('<%= result._id %>', '<%= result.is_listed %>')">
+                                                        <% if(result.is_listed === "Listed") { %>
+                                                            Unlist
+                                                        <% } else { %>
+                                                            List
+                                                        <% } %>
+                                                    </a>
+                                                </td>
+            
+                                                <td hidden>
+                                                    <a class="btn btn-primary" href="#" onclick="confirmDelete('<%= result._id %>')">Delete</a>
                                     
-                                </tr>
-                            <% }); %>
-                        </tbody>
-                    </table>
+                                                </td>
+                                                
+                                            </tr>
+                                        <% }); %>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+                </div>
+                <div class="container-fluid pt-4 px-4">
+                    <div class="bg-secondary rounded-top p-4">
+                        <div class="row">
+                            <div class="col-12 col-sm-6 text-center text-sm-start">
+                                &copy; <a href="#">KPK WATCHES</a>, All Right Reserved. 
+                            </div>
+                            <div class="col-12 col-sm-6 text-center text-sm-end">
+                                <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                                Designed By <a href="">KPK</a>
+                                <br>Distributed By: <a href="" target="_blank">KPK</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+            
 
                 <script>
                     function toggleProduct(productId, currentStatus) {

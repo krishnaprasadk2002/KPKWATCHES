@@ -132,87 +132,78 @@
             </nav>
             <!-- Navbar End -->
 
-
-
-
-            <div class="container mt-5">
-                <h2 class="mb-4">Edit Banner</h2>
-                <form id="itemForm" action="/admin/editbanner/<%= banner._id %>" method="POST"
-                    enctype="multipart/form-data" novalidate>
-
-                    <a href="/admin/editbanner/<%= banner._id %>">Edit</a>
-                    <input type="hidden" name="id" value="<%= banner._id %>">
-
-
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control" style="background-color: white" placeholder="Title"
-                            value="<%= banner.title %>" id="title" name="title" required>
-                        <div class="invalid-feedback">
-                            Please enter the title.
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-12">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">Edit Banner</h6>
+                            <form id="itemForm" action="/admin/editbanner/<%= banner._id %>" method="POST" enctype="multipart/form-data" novalidate>
+            
+                                <input type="hidden" name="id" value="<%= banner._id %>">
+            
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Title</label>
+                                    <input type="text" class="form-control" id="title" placeholder="Title" value="<%= banner.title %>" name="title" required>
+                                    <div class="invalid-feedback">
+                                        Please enter the title.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="description" placeholder="Description" name="description" required><%= banner.description %></textarea>
+                                    <div class="invalid-feedback">
+                                        Please enter the description.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="location" class="form-label">Location</label>
+                                    <input type="text" class="form-control" id="location" placeholder="Location" value="<%= banner.location %>" name="location" required>
+                                    <div class="invalid-feedback">
+                                        Please enter the Location.
+                                    </div>
+                                </div>
+            
+                                <div class="mb-3" >
+                                    <label for="currentBannerImage" class="form-label">Current Images</label>
+                                    <div class="row">
+                                        <div class="col-3 mt-2">
+                                            <img src="/uploads/<%= banner.image %>" class="img-thumbnail" style="max-width: 250px; max-height: 250px;">
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div class="mb-4" >
+                                    <label class="form-label">Image</label>
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <img src="/uploads/<%= banner.image %>" alt="Product Image" style="width: 30px; height: 30px; margin-right: 10px;">
+                                            <span>
+                                                <%= banner.image %>
+                                            </span>
+                                        </div>
+                                        <a href="#" onclick="confirmDelete('<%= banner._id %>', '<%= banner.image %>')" class="btn btn-danger btn-sm">Delete</a>
+                                    </div>
+                                </div>
+            
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Image</label>
+                                    <input type="file" class="form-control form-control-sm bg-dark" id="image" name="image" accept="image/*">
+                                    <div class="invalid-feedback">
+                                        Please select one image only.
+                                    </div>
+                                </div>
+            
+                                <button type="submit" class="btn btn-primary">Update Banner</button>
+                            </form>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" style="background-color: white" id="description"
-                            placeholder="Description" name="description" required><%= banner.description %></textarea>
-                        <div class="invalid-feedback">
-                            Please enter the description.
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="location" class="form-label">Location</label>
-                        <input type="text" class="form-control" style="background-color: white" placeholder="Location"
-                            value="<%= banner.location %>" id="location" name="location" required>
-                        <div class="invalid-feedback">
-                            Please enter the Location.
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="currentBannerImage" class="form-label">Current Images</label>
-                        <div class="row">
-                            <div class="col-3 mt-2">
-                                <img src="/uploads/<%= banner.image %>" class="img-thumbnail"
-                                    style="max-width: 250px; max-height: 250px;">
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="mb-4">
-                        <label class="form-label">Image</label>
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <div class="d-flex align-items-center">
-                                <img src="/uploads/<%= banner.image %>" alt="Product Image"
-                                    style="width: 30px; height: 30px; margin-right: 10px;">
-                                <span>
-                                    <%= banner.image %>
-                                </span>
-                            </div>
-                            <a href="#" onclick="confirmDelete('<%= banner._id %>', '<%= banner.image %>')"
-                                class="btn btn-danger btn-sm">Delete</a>
-
-                        </div>
-                    </div>
-
-
-
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Image</label>
-                        <input type="file" class="form-control" style="background-color: white" id="image" name="image"
-                            accept="image/*">
-                        <div class="invalid-feedback">
-                            Please select one image only.
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Update Banner</button>
-                </form>
+                </div>
             </div>
+            
 
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
 

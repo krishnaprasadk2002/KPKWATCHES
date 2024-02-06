@@ -140,112 +140,145 @@
                     <i class="fa fa-bars"></i>
                 </a>
             </nav>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Offers</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Listing and Unlisting </th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% categoryData.forEach((result)=> { %>
-                        <tr>
-                           
-                            <td>
-                                <%= result.name %>
-                            </td>
-                            <td>
-                                <%= result.description %>
-                            </td>
+
+
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-12">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">All Category</h6>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Offers</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Listing and Unlisting </th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <% categoryData.forEach((result)=> { %>
+                                        <tr>
+
+                                            <td>
+                                                <%= result.name %>
+                                            </td>
+                                            <td>
+                                                <%= result.description %>
+                                            </td>
 
 
 
-                            <td>
-                                <% if(result.offer){ %>
-                                    <button
-                                        class="btn btn-sm btn-outline-danger rounded-pill font-sm"
-                                        onclick="removeOffer('<%= result._id %>')">Remove
-                                        offer</button>
-                                    <p >
-                                        <%= result.offer.name%>(<%=result.offer.discount %>%)
-                                    </p>
-                                    <%}else{%>
-                                        <button
-                                            class="btn btn-sm btn-outline-primary rounded-pill font-sm"
-                                            onclick="showModal('<%= result._id %>')">Apply
-                                            Offer</button>
+                                            <td>
+                                                <% if(result.offer){ %>
+                                                    <button class="btn btn-sm btn-outline-danger rounded-pill font-sm"
+                                                        onclick="removeOffer('<%= result._id %>')">Remove
+                                                        offer</button>
+                                                    <p>
+                                                        <%= result.offer.name%>(<%=result.offer.discount %>%)
+                                                    </p>
+                                                    <%}else{%>
+                                                        <button
+                                                            class="btn btn-sm btn-outline-primary rounded-pill font-sm"
+                                                            onclick="showModal('<%= result._id %>')">Apply
+                                                            Offer</button>
 
-                                        <p>No offers</p>
-                                        <% } %>
-                            </td>
+                                                        <p>No offers</p>
+                                                        <% } %>
+                                                                       
+                                            </td>
 
 
-                            <div class="modal fade" id="discountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                   <% offer.forEach((offer)=>{%>
-                            <div class="modal-content rounded-50">
-                                <div data-offerid="<%= offer._id %>" style="cursor: pointer;"
-                                    class="modal-body text-center">
-                                    <div class="icon text-danger">
-                                        <i style="font-size: 20px;" class="fas fa-gift"></i>
-                                    </div>
-                                    <div class="notice">
-                                        <h2 class="text-primary">
-                                            <%= offer.name %>
-                                        </h2>
-                                        
-                                        <h4 class="text-success">
-                                            <%= offer.discount %>% Discount
-                                        </h4>
-                                        <p class="offer-validity">
-                                            <span>Valid from</span>
-                                            <%= moment(offer.startingDate).format('DD/MM/YYYY') %> <span> to</span>
-                                                <%= moment(offer.expiryDate).format('DD/MM/YYYY') %>
-                                        </p>
-                                    </div>
-                                    <div class="code"></div>
-                                </div>
-                            </div>
-                            <%})%>
-                                
+                                            <div class="modal fade" id="discountModal" tabindex="-1" role="dialog"
+                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <% offer.forEach((offer)=>{%>
+                                                        <div class="modal-content rounded-50">
+                                                            <div data-offerid="<%= offer._id %>"
+                                                                style="cursor: pointer;" class="modal-body text-center">
+                                                                <div class="icon text-danger">
+                                                                    <i style="font-size: 20px;" class="fas fa-gift"></i>
+                                                                </div>
+                                                                <div class="notice">
+                                                                    <h2 class="text-primary">
+                                                                        <%= offer.name %>
+                                                                    </h2>
+
+                                                                    <h4 class="text-success">
+                                                                        <%= offer.discount %>% Discount
+                                                                    </h4>
+                                                                    <p class="offer-validity">
+                                                                        <span>Valid from</span>
+                                                                        <%= moment(offer.startingDate).format('DD/MM/YYYY')
+                                                                            %> <span> to</span>
+                                                                            <%= moment(offer.expiryDate).format('DD/MM/YYYY')
+                                                                                %>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="code"></div>
+                                                            </div>
+                                                        </div>
+                                                        <%})%>
+
+                                                </div>
+                                                          
+                                            </div>
+
+
+
+
+                                            <td id="is_listed<%=result._id%>">
+                                                <%= result.is_listed %>
+                                            </td>
+
+
+                                            <td>
+                                                <a href="#" class="btn btn-primary"
+                                                    onclick="toggleCategory('<%= result._id %>', '<%= result.is_listed %>')">
+                                                    <% if(result.is_listed==="Listed" ) { %>
+                                                        Unlist
+                                                        <% } else { %>
+                                                            List
+                                                            <% } %>
+                                                </a>
+                                            </td>
+
+
+                                            <td>
+                                                <a class="btn btn-primary"
+                                                    href="/admin/editcategory?id=<%= result._id %>">Edit</a>
+
+                                                <a class="btn btn-primary" href="#"
+                                                    onclick="confirmDelete('<%= result._id %>')">Delete</a>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </div>
 
-                            
-                           
-
-                            <td id="is_listed<%=result._id%>">
-                                <%= result.is_listed %>
-                            </td>
-
-
-                            <td>
-                                <a href="#" class="btn btn-primary"
-                                    onclick="toggleCategory('<%= result._id %>', '<%= result.is_listed %>')">
-                                    <% if(result.is_listed==="Listed" ) { %>
-                                        Unlist
-                                        <% } else { %>
-                                            List
-                                            <% } %>
-                                </a>
-                            </td>
-
-
-                            <td>
-                                <a class="btn btn-primary" href="/admin/editcategory?id=<%= result._id %>">Edit</a>
-
-                                <a class="btn btn-primary" href="#"
-                                    onclick="confirmDelete('<%= result._id %>')">Delete</a>
-                            </td>
-                        </tr>
-                        <% }); %>
-                </tbody>
-            </table>
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-secondary rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            &copy; <a href="#">KPK WATCHES</a>, All Right Reserved.
+                        </div>
+                        <div class="col-12 col-sm-6 text-center text-sm-end">
+                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            Designed By <a href="">KPK</a>
+                            <br>Distributed By: <a href="" target="_blank">KPK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script>
@@ -293,104 +326,104 @@
 
 
 
-<script>
-    function showModal(categoryId) {
-        $('#discountModal').modal('show');
-        const offerElements = document.querySelectorAll('.modal-body.text-center');
-        offerElements.forEach((element) => {
-            element.onclick = function () {
-                const offerId = this.getAttribute('data-offerid');
+        <script>
+            function showModal(categoryId) {
+                $('#discountModal').modal('show');
+                const offerElements = document.querySelectorAll('.modal-body.text-center');
+                offerElements.forEach((element) => {
+                    element.onclick = function () {
+                        const offerId = this.getAttribute('data-offerid');
 
-                console.log("offer",offerId);
+                        console.log("offer", offerId);
 
-                enterOffer(offerId, categoryId);
-            };
-        });
-    }
-
-  async function enterOffer(offerId, categoryId) {
-    $('#discountModal').modal('hide');
-    try {
-        const response = await fetch("/admin/applycategoryoffer",{
-            method:"PATCH",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({offerId,categoryId})
-        })
-        
-        if (response.ok) {
-            const responseData = await response.json();
-
-            const isConfirmed = await Swal.fire({
-                title: 'Offer applied',
-                icon: 'success',
-                confirmButtonText: 'OK',
-            });
-
-            if (isConfirmed.value) {
-                window.location = '/admin/category';
+                        enterOffer(offerId, categoryId);
+                    };
+                });
             }
-        } else {
-            
-            console.error('Error applying offer:', response.statusText);
-        }
-    } catch (error) {
-        console.log(error)
-        console.error('Error applying offer:', error);
-    }
-}
 
+            async function enterOffer(offerId, categoryId) {
+                $('#discountModal').modal('hide');
+                try {
+                    const response = await fetch("/admin/applycategoryoffer", {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ offerId, categoryId })
+                    })
 
+                    if (response.ok) {
+                        const responseData = await response.json();
 
+                        const isConfirmed = await Swal.fire({
+                            title: 'Offer applied',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                        });
 
-async function removeOffer(categoryId) {
-    try {
-        console.log("cate",categoryId);
-        const isConfirmed = await Swal.fire({
-            title: 'Are you sure?',
-            text: "You want remove the offer!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, remove it!'
-        });
+                        if (isConfirmed.value) {
+                            window.location = '/admin/category';
+                        }
+                    } else {
 
-        if (isConfirmed.isConfirmed) {
-            const response = await fetch("/admin/removecategoryoffer", {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ categoryId })
-            });
-            console.log("hfkhjkhh");
-
-            if (response.ok) {
-                const responseData = await response.json();
-
-                const isConfirmed = await Swal.fire({
-                title: 'Offer Removed',
-                icon: 'success',
-                confirmButtonText: 'OK',
-            });
-
-            if (isConfirmed.value) {
-                window.location = '/admin/category';
+                        console.error('Error applying offer:', response.statusText);
+                    }
+                } catch (error) {
+                    console.log(error)
+                    console.error('Error applying offer:', error);
+                }
             }
-            } else {
-                console.error('Error removing offer:', response.statusText);
+
+
+
+
+            async function removeOffer(categoryId) {
+                try {
+                    console.log("cate", categoryId);
+                    const isConfirmed = await Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You want remove the offer!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, remove it!'
+                    });
+
+                    if (isConfirmed.isConfirmed) {
+                        const response = await fetch("/admin/removecategoryoffer", {
+                            method: "PATCH",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ categoryId })
+                        });
+                        console.log("hfkhjkhh");
+
+                        if (response.ok) {
+                            const responseData = await response.json();
+
+                            const isConfirmed = await Swal.fire({
+                                title: 'Offer Removed',
+                                icon: 'success',
+                                confirmButtonText: 'OK',
+                            });
+
+                            if (isConfirmed.value) {
+                                window.location = '/admin/category';
+                            }
+                        } else {
+                            console.error('Error removing offer:', response.statusText);
+                        }
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
             }
-        }
-    } catch (error) {
-        console.error(error);
-    }
-}
 
-       </script>
+        </script>
 
-      
+
 
 
         <!-- Back to Top -->

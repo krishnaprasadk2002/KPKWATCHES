@@ -132,43 +132,39 @@
             </nav>
 
 
-
-            <div class="container mt-5">
-                <h2 class="mb-4">Add Offer</h2>
-                <form id="offerForm" action="/admin/addoffer" method="POST" novalidate>
-                    <div class="mb-3">
-                        <label for="offerName" class="form-label">Name</label>
-                        <input type="text" class="form-control" style="background-color: white" placeholder="Offer Name"
-                            id="offerName" name="name" required>
-                        <p id="offern" style="color: red;"></p>
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-12">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">Add Offer</h6>
+                            <form id="offerForm" action="/admin/addoffer" method="POST" novalidate>
+                                <div class="mb-3">
+                                    <label for="offerName" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="offerName" placeholder="Offer Name" name="name" required>
+                                    <p id="offern" style="color: red;"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="offerDiscount" class="form-label">Discount Percentage</label>
+                                    <input type="number" class="form-control" id="offerDiscount" placeholder="Discount percentage" name="discount" min="1" required>
+                                    <p id="offerd" style="color: red;"></p>
+                                    <p id="offerdp" style="color: red;"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="offerStartingDate" class="form-label">Starting Date</label>
+                                    <input type="date" class="form-control" id="offerStartingDate" name="startingDate" required>
+                                    <p id="offersd" style="color: red;"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="offerExpiryDate" class="form-label">Expiry Date</label>
+                                    <input type="date" class="form-control" id="offerExpiryDate" name="expiryDate" required>
+                                    <p id="offered" style="color: red;"></p>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="offerDiscount" class="form-label">Discount Percentage</label>
-                        <input type="number" class="form-control" style="background-color: white"
-                            placeholder="Discount percentage" id="offerDiscount" name="discount" min="1" required>
-                        <p id="offerd" style="color: red;"></p>
-                        <p id="offerdp" style="color: red;"></p>
-                    </div>
-                    <div class="mb-3">
-                        <label for="offerStartingDate" class="form-label">Starting Date</label>
-                        <input type="date" class="form-control" style="background-color: white" id="offerStartingDate"
-                            name="startingDate" required>
-                        <p id="offersd" style="color: red;"></p>
-                    </div>
-                    <div class="mb-3">
-                        <label for="offerExpiryDate" class="form-label">Expiry Date</label>
-                        <input type="date" class="form-control" style="background-color: white" id="offerExpiryDate"
-                            name="expiryDate" required>
-                        <p id="offered" style="color: red;"></p>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-
-
+                </div>
             </div>
-
-
-
 
 
 
