@@ -12,7 +12,7 @@ const moment = require("moment")
 const loadCategory=async (req,res)=>{
     try {
         const categoryData=await category.find().populate('offer')
-        const offer = await Offer.find()
+        const offer = await Offer.find({status:true})
         res.render("category",{categoryData,offer,moment})
     } catch (error) {
         console.log(error.message); 

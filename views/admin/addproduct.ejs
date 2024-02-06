@@ -189,7 +189,7 @@
     <!-- Bootstrap JS and Popper.js (for Bootstrap functionality) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>
+    <!-- <script>
         document.getElementById('productForm').addEventListener('submit', function (event) {
             // Trim input values before validation
             var productNameInput = document.getElementById('productName');
@@ -215,6 +215,68 @@
             }
             this.classList.add('was-validated');
         });
+    </script> -->
+    
+
+    <script>
+        document.getElementById('productForm').addEventListener('submit', function (event) {
+            // Trim input values before validation
+            var productNameInput = document.getElementById('productName');
+            productNameInput.value = productNameInput.value.trim();
+    
+            var productDescriptionInput = document.getElementById('productDescription');
+            productDescriptionInput.value = productDescriptionInput.value.trim();
+    
+            var productPriceInput = document.getElementById('productPrice');
+            productPriceInput.value = productPriceInput.value.trim();
+    
+            // var productOfferPriceInput = document.getElementById('productOfferPrice');
+            // productOfferPriceInput.value = productOfferPriceInput.value.trim();
+    
+            var productQuantityInput = document.getElementById('productQuantity');
+            productQuantityInput.value = productQuantityInput.value.trim();
+    
+            // Validate quantity input
+            if (!validateQuantity(productQuantityInput)) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+    
+            // Validate price input
+            if (!validatePrice(productPriceInput)) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+    
+            if (!this.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+    
+            this.classList.add('was-validated');
+        });
+    
+        function validateQuantity(inputElement) {
+            var quantity = parseInt(inputElement.value);
+    
+            if (isNaN(quantity) || quantity <= 0) {
+                alert('Quantity must be greater than 0');
+                return false;
+            }
+    
+            return true;
+        }
+    
+        function validatePrice(inputElement) {
+            var price = parseFloat(inputElement.value);
+    
+            if (isNaN(price) || price <= 0) {
+                alert('Price must be greater than 0');
+                return false;
+            }
+    
+            return true;
+        }
     </script>
     
 

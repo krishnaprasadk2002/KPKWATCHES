@@ -58,7 +58,7 @@ const insertProduct = async (req, res) => {
 const loadAllproduct=async(req,res)=>{
     try {
         const productData=await Products.find().populate('offer')
-        const offers = await Offer.find()
+        const offers = await Offer.find({status:true})
         res.render('allproduct',{productData,offers,moment})
     } catch (error) {
         console.log(error.message);

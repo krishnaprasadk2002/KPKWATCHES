@@ -29,10 +29,45 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <style>
+        .dataTables_wrapper .dataTables_length select {
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 5px;
+    background-color: white;
+    padding: 4px;
+}
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 5px;
+    background-color: #fff;
+    margin-left: 3px;
+}
+.table>:not(caption)>*>* {
+    padding: 0.5rem 0.5rem;
+    background-color: #000;
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+}
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+    color: #6c7293;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+    cursor: default;
+    color: #6c7293 !important;
+    border: 1px solid transparent;
+    background: transparent;
+    box-shadow: none;
+}
+    </style>
 
     <!-- FontAwsome  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+
 
 <body>
     <div class="container-fluid position-relative d-flex p-0">
@@ -124,7 +159,7 @@
             <!-- Navbar End -->
                 <!-- Content Start -->
 
-    <table class="table">
+                <table id="ordersTable" class="table">
         <thead>
             <tr>
                
@@ -225,11 +260,24 @@
 <script src="/admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+
 <!-- Template Javascript -->
 <script src="js/main.js"></script>
 </body>
 
 </html>
+
+<script>
+    $(document).ready(function() {
+        $('#ordersTable').DataTable({
+            paging: true,
+            ordering:false
+        });
+    });
+</script>
 
 <script>
 

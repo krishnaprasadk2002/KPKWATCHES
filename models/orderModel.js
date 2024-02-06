@@ -46,6 +46,10 @@ const ordersSchema=mongoose.Schema({
         type: String,
 
     },
+    paymentStatus:{
+        type:String,
+        default:"pending"
+    },
     total: {
         type: Number
     },

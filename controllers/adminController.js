@@ -4,7 +4,7 @@ const category = require("../models/categoryModel")
 const bcrypt = require("bcrypt");
 const Category = require("../models/categoryModel");
 const Orders = require("../models/orderModel")
-const pdf = require('pdfkit');
+
 
 const loadLogin = async (req, res) => {
     try {
@@ -159,12 +159,9 @@ const loadDashboard = async (req, res) => {
                     _id: { $month: "$date" },
                     total: {
                         $sum: {
-                            $subtract: [
-                                {
-                                    $multiply: ["$Products.price", "$Products.quentity"],
-                                },
-                                "$total",
-                            ],
+                                
+                                    $multiply: ["$Products.total", "$Products.quentity"],
+
                         },
                     },
                     count: { $sum: 1 },
@@ -180,13 +177,13 @@ const loadDashboard = async (req, res) => {
             },
         ]);
 
+
         const updatedMonthlyValues = defalutMonthsValues.map((defaultMonth) => {
             const foundMonth = monthlySales.find(
                 (monthData) => monthData.month === defaultMonth.month
             );
             return foundMonth || defaultMonth;
         });
-
 
 
 
@@ -207,6 +204,7 @@ const loadDashboard = async (req, res) => {
         ]);
 
 
+
         const updatedMonthlyUserCount = defalutMonthsValues.map((defaultMonth) => {
             const foundMonth = monthlyUser.find(
                 (monthData) => monthData.month === defaultMonth.month
@@ -224,7 +222,7 @@ const loadDashboard = async (req, res) => {
             {
                 $match: {
                     "Products.orderStatus": "delivered",
-                    date: { $gte: new Date(currentYear - yearsToInclude + 1, 0, 1) },
+                    date: { $gte: new Date(currentYear - yearsToInclude, 0, 1) },
                     "Products.orderStatus": { $ne: "cancelled" },
 
                 }
@@ -234,15 +232,7 @@ const loadDashboard = async (req, res) => {
                     _id: { $year: "$date" },
                     total: {
                         $sum: {
-                            $subtract: [
-                                {
-                                    $ifNull: [
-                                        { $multiply: ["$Products.price", "$Products.quentity"] },
-                                        0, 
-                                    ],
-                                },
-                                "$total"
-                            ]
+                                       $sum: { $multiply: ["$Products.total", "$Products.quentity"] },
                         }
                     },
                     count: { $sum: 1 }
@@ -257,6 +247,8 @@ const loadDashboard = async (req, res) => {
                 },
             },
         ])
+
+       
 
 
 
@@ -385,17 +377,6 @@ const dateSort=async (req,res)=>{
     }
 }
 
-
-//Get Invoice 
-
-const getInvoice = async (req,res)=>{
-    try {
-        console.log("invoice")
-        
-    } catch (error) {
-        
-    }
-}
 
 //=======================================================================================================
 

@@ -236,11 +236,21 @@
         var productPriceInput = document.getElementById('productPrice');
         productPriceInput.value = productPriceInput.value.trim();
 
-        var productOfferPriceInput = document.getElementById('productOfferPrice');
-        productOfferPriceInput.value = productOfferPriceInput.value.trim();
+        if(productPriceInput <= 0){
+         alert("Only entered to greater then 0")
+         return false
+        }
+
+        // var productOfferPriceInput = document.getElementById('productOfferPrice');
+        // productOfferPriceInput.value = productOfferPriceInput.value.trim();
 
         var productQuantityInput = document.getElementById('productQuantity');
         productQuantityInput.value = productQuantityInput.value.trim();
+
+        if(productQuantityInput <= 0){
+         alert("Only entered to greater then 0")
+         return false
+        }
 
         // Other input elements can be trimmed similarly
 

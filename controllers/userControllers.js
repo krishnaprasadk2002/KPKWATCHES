@@ -497,7 +497,7 @@ const loadHome = async (req, res) => {
   })
     const banner=await Banner.find({status:{$ne:false}})
     const filteredProducts = productData.filter((product) => product.category.is_listed !== "Unlisted");
-    console.log(username);
+    // console.log(username);
     let cart = []
     if(req.session.user_id){
        cart=await Cart.findOne({userid:username._id});
@@ -567,7 +567,8 @@ const loadProduct = async (req, res) => {
               path: 'offer',
               match: {
                 startingDate: { $lte: new Date() },
-                expiryDate: { $gte: new Date() }
+                expiryDate: { $gte: new Date() },
+                status:true
               }
             }
           })
@@ -575,7 +576,8 @@ const loadProduct = async (req, res) => {
             path: 'offer',
             match: {
               startingDate: { $lte: new Date() },
-              expiryDate: { $gte: new Date() }
+              expiryDate: { $gte: new Date() },
+              status:true
             }
           })
           .sort(sort)
@@ -604,7 +606,8 @@ const loadProduct = async (req, res) => {
         path: 'offer',
         match: {
           startingDate: { $lte: new Date() },
-          expiryDate: { $gte: new Date() }
+          expiryDate: { $gte: new Date() },
+          status:true
         }
       }
     })
@@ -612,7 +615,8 @@ const loadProduct = async (req, res) => {
       path: 'offer',
       match: {
         startingDate: { $lte: new Date() },
-        expiryDate: { $gte: new Date() }
+        expiryDate: { $gte: new Date() },
+        status:true
       }
     })
       .sort(sort)
@@ -623,13 +627,13 @@ const loadProduct = async (req, res) => {
 
       const updatedProducts = await Promise.all(productData.map(async (product) => {
         try {
-          if (product.offer) {
+          if ( product.offer ) {
             let discount = Math.round(product.price * (product.offer.discount / 100));
             product.offerprice = product.price - discount;
-          } else if (product.category.offer) {
+          }else if (product.category.offer ) {
             let discount = Math.round(product.price * (product.category.offer.discount / 100));
             product.offerprice = product.price - discount;
-          } else {
+          }else {
             product.offerprice = undefined;
           }
       
@@ -682,6 +686,7 @@ const userProfile = async (req, res) => {
 
     const user = await User.findById(userId);
     const orders = await Orders.find({ user: userId })
+    const deletePending = await Orders.deleteMany({paymentStatus:"pending"})
 
       .populate({
         path: "Products.productId",

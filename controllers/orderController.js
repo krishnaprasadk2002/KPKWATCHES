@@ -78,6 +78,7 @@ const placeOrder = async (req, res) => {
 
         if (paymentMethod === "Cash on delivery") {
             try {
+                orderInstance.paymentStatus = "COD"
                 const savedOrder = await orderInstance.save().then(async () => {
                     await Cart.deleteOne({ userid: req.session.user_id });
     
@@ -109,6 +110,7 @@ const placeOrder = async (req, res) => {
             });
         } else if (paymentMethod === "wallet") {
             try {
+                orderInstance.paymentStatus = "wallet"
 
                 const user=await User.findById(req.session.user_id)
                 if( user.wallet < totalWithDiscount){
@@ -138,7 +140,7 @@ const placeOrder = async (req, res) => {
                         wallet: -totalWithDiscount
                     },
                     $push: {
-                        walletHistory: {
+                        wallet_history: {
                             date: new Date(),
                             amount: `-${totalWithDiscount}`,
                             reason: 'ordered with wallet'
@@ -184,11 +186,13 @@ const verifyPayment = async (req, res) => {
         const userid = req.session.user_id;
         const { payment, order } = req.body;
         const Crypto = require("crypto");
-        const orderId = order.receipt;
+        const orderId = order.order.receipt;
         // console.log('Response:', response);
 
         // console.log("payment:", payment);
         // console.log("Order:", order);
+        // console.log("orderId",orderId);
+        // console.log("order",order);
 
         const secret = process.env.RazorKey;
         let hmac = Crypto.createHmac('sha256', secret);
@@ -372,7 +376,7 @@ const changeStatus = async (req, res) => {
                     $push: {
                         wallet_history: {
                             date: new Date(),
-                            amount: totalAmountofWallet,
+                            amount: totalAmountofWallet ,
                             reason: 'order return'
                         }
                     }

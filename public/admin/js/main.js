@@ -111,10 +111,10 @@
     const year26 = document.getElementById('YearlySalesData2').value;
     const year27 = document.getElementById('YearlySalesData3').value;
     
-    const year241 = document.getElementById('YearlySalesData').value;
-    const year251 = document.getElementById('YearlySalesData1').value;
-    const year261 = document.getElementById('YearlySalesData2').value;
-    const year271 = document.getElementById('YearlySalesData3').value;
+    const year241 = document.getElementById('YearlySalesData4').value;
+    const year251 = document.getElementById('YearlySalesData5').value;
+    const year261 = document.getElementById('YearlySalesData6').value;
+    const year271 = document.getElementById('YearlySalesData7').value;
 
     
     

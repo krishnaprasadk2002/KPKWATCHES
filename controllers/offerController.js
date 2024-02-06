@@ -150,8 +150,12 @@ const removeCategoryOffer = async (req,res)=>{
         const  { categoryId } = req.body
 
         await Category.updateOne({_id:categoryId},
-            {$unset:{offer:""}
-        })
+            {$unset:{offer:1}
+        },
+        await Products.updateMany(
+            { _id: categoryId },
+            { $unset: { offer: 1, offerprice: 1 } 
+        }))
             res.json({ success: true });
     } catch (error) {
         console.log(error.message);
@@ -175,7 +179,7 @@ const removeProductOffer = async (req,res)=>{
     try {
         const {productId} = req.body
         await Products.updateOne({_id:productId},
-            {$unset:{offer:""}
+            {$unset:{offer:1,offerprice:1}
         })
         res.json({success:true})
     } catch (error) {

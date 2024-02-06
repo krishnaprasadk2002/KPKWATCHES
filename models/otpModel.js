@@ -19,7 +19,7 @@ const userOtpVerificationSchema = mongoose.Schema({
 
 });
 
-userOtpVerificationSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 });
+userOtpVerificationSchema.index({ createdAt: 1 }, { expireAfterSeconds: 58 });
 
 const UserOtpVerification = mongoose.model('userOtpVerification', userOtpVerificationSchema);
 

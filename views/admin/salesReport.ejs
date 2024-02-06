@@ -182,7 +182,7 @@
                                                     <td><%= new Date(order.date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %></td>
                                                     <td>
                                                         <% if (order.address) { %>
-                                                            <%= JSON.stringify(order.address) %>
+                                                            <%= `Name: ${order.address.name}, Mobile: ${order.address.mobile}, Pincode: ${order.address.pincode}, Address: ${order.address.address}, City: ${order.address.city}, State: ${order.address.state}` %>
                                                         <% } else { %>
                                                             N/A
                                                         <% } %>
