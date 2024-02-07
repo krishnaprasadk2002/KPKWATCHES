@@ -25,17 +25,24 @@ const placeOrder = async (req, res) => {
 
         const products = await Promise.all(cart.products.map(async (cartProduct) => {
             const productDetails = await Products.findById(cartProduct.productId);
+
+
+            const priceProduct = productDetails.offerprice || productDetails.price
+            const total = priceProduct * cartProduct.quentity;
+
             return {
                 productId: cartProduct.productId,
                 name: productDetails.name,
                 price: productDetails.price,
                 quentity: cartProduct.quentity,
-                total: cartProduct.totalPrice,
+                total: total,
                 orderStatus: cartProduct.status,
                 image: productDetails.image,
                 reason: cartProduct.cancellationReason,
             };
         }));
+
+        console.log("productDetails",products);
 
         const totalWithoutDiscount = products.reduce((acc, product) => {
             return acc + product.total;
@@ -324,37 +331,45 @@ const loadOrder = async (req, res) => {
 
 const changeStatus = async (req, res) => {
     const { orderId } = req.params;
-    const { status } = req.body;
+    const { status,productId } = req.body;
+    console.log(status)
+    // console.log("productId",productId);
 
     try {
-        const updatedOrder = await Orders.updateOne(
-            {
-                _id: orderId,
-                'Products': {
-                    $elemMatch: {
-                        'orderStatus': { $ne: status }
-                    }
-                }
-            },
-            {
-                $set: {
-                    'Products.$[].orderStatus': status,
-                    'orderStatus': status,
-                },
+       
+        const updatedOrder = await Orders.findOne({ _id: orderId });
+
+        if (updatedOrder) {
+            const product = updatedOrder.Products.find((item) => item._id.toString() === productId);
+        
+            if (product) {
+                product.orderStatus = status;
+                updatedOrder.orderStatus = status;
+        
+                await updatedOrder.save();
+            
             }
-        );
+        }
+
 
         const orderData = await Orders.findOne({ _id: orderId });
         const products = orderData.Products;
         const userId = orderData.user;
 
-        let totalAmountofWallet = orderData.total;
+        let totalAmountofWallet = 0;
+
+        const returnedORCancelProduct = products.find(product => product._id.toString() === productId.toString())
+       if(returnedORCancelProduct){
+         totalAmountofWallet = returnedORCancelProduct.total || 0
+       }
+       console.log("RCP",returnedORCancelProduct);
+        
         console.log("total return",totalAmountofWallet);
         console.log("Status",status);
+
         if (status === "returned") {
-            for (let i = 0; i < products.length; i++) {
-                const productId = products[i].productId;
-                const count = products[i].quentity;
+                const productId = returnedORCancelProduct.productId;
+                const count = returnedORCancelProduct.quentity;
 
                 await Products.updateOne(
                     { _id: productId },
@@ -364,7 +379,7 @@ const changeStatus = async (req, res) => {
                         }
                     }
                 );
-            }
+            
 
 
             await User.findByIdAndUpdate(
@@ -384,9 +399,9 @@ const changeStatus = async (req, res) => {
             );
 
         }else if (status === "cancelled" && orderData.paymentMode !== "Cash on delivery") {
-            for (let i = 0; i < products.length; i++) {
-                const productId = products[i].productId;
-                const count = products[i].quentity;
+            
+                const productId = returnedORCancelProduct.productId;
+                const count = returnedORCancelProduct.quentity;
         
                 await Products.updateOne(
                     { _id: productId },
@@ -396,7 +411,7 @@ const changeStatus = async (req, res) => {
                         }
                     }
                 );
-            }
+            
         
             await User.findByIdAndUpdate(
                 { _id: userId },

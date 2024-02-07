@@ -108,23 +108,38 @@
                     </div>
                     
                 </div>
-                <a href="/admin/logout" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Logout</a>
+                
             </nav>
         </div>
         <!-- Sidebar End -->
 
           <!-- Content Start -->
           <div class="content">
-            <!-- Navbar Start -->
-            <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
-               
-                <a href="#" class="sidebar-toggler flex-shrink-0">
-                    <i class="fa fa-bars"></i>
-                </a>
-               
+           <!-- Navbar Start -->
+           <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+           
+            <a href="#" class="sidebar-toggler flex-shrink-0">
+                <i class="fa fa-bars"></i>
+            </a>
+            <form class="d-none d-md-flex ms-4" >
+                <input class="form-control bg-dark border-0" type="search" placeholder="Search" hidden>
+            </form>
+            <div class="navbar-nav align-items-center ms-auto">
               
-            </nav>
-            <!-- Navbar End -->
+                
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                        <span class="d-none d-lg-inline-flex">KRISHNAPRASAD</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                    
+                        <a href="/admin/logout" class="dropdown-item">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Navbar End -->
 
             <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
@@ -192,22 +207,24 @@
                                                 <% if (product.orderStatus !== 'cancelled' && product.orderStatus !== 'returned' && product.orderStatus !== 'delivered' ) { %>
                                                     <div class="btn-group">
                                                         <div class="btn-group dropstart">
+                                                           
                                                             <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                                                 Status
                                                             </button>
+                                                            <!-- <input type="hidden" id="productId" value="<%= product._id %>"> -->
                                                             <% if(product.orderStatus == 'request return'){%>
                                                                 <ul class="dropdown-menu">
-                                                                    <li><a class="dropdown-item text-danger" href="#" onclick="updateStatus('returned', '<%= order._id %>')">Returned</a></li>
+                                                                    <li><a class="dropdown-item text-danger" href="#" onclick="updateStatus('returned', '<%= order._id %>','<%= product._id %>')">Returned</a></li>
                                                                 </ul>
                                                                 <%}else if (product.orderStatus == 'request cancellation'){%>
                                                                     <ul class="dropdown-menu">
-                                                                        <li><a class="dropdown-item text-danger" href="#" onclick="updateStatus('cancelled', '<%= order._id %>')">Cancelled</a></li>
+                                                                        <li><a class="dropdown-item text-danger" href="#" onclick="updateStatus('cancelled', '<%= order._id %>','<%= product._id %>')">Cancelled</a></li>
                                                                     </ul>
                                                                     <%}else{%>
                                                             <ul class="dropdown-menu">
-                                                                <li><a class="dropdown-item text-primary" href="#" onclick="updateStatus('shipped', '<%= order._id %>')">Shipped</a></li>
-                                                                <li><a class="dropdown-item text-primary" href="#" onclick="updateStatus('placed', '<%= order._id %>')">Placed</a></li>
-                                                                <li><a class="dropdown-item text-success" href="#" onclick="updateStatus('delivered', '<%= order._id %>')">Delivered</a></li>
+                                                                <li><a class="dropdown-item text-primary" href="#" onclick="updateStatus('shipped', '<%= order._id %>','<%= product._id %>')">Shipped</a></li>
+                                                                <li><a class="dropdown-item text-primary" href="#" onclick="updateStatus('placed', '<%= order._id %>','<%= product._id %>')">Placed</a></li>
+                                                                <li><a class="dropdown-item text-success" href="#" onclick="updateStatus('delivered', '<%= order._id %>','<%=product._id%>')">Delivered</a></li>
                                                                 
                                                                 
                                                             </ul>
@@ -215,6 +232,8 @@
                                                         </div>
                                                     </div>
                                                 <% } %>
+                                                </div>
+                                                </div>
                                           </td>
                                     </tr>
                                 <% }); %>
@@ -271,8 +290,8 @@
 <script>
 
 
-  function updateStatus(status,orderId) {
-
+  function updateStatus(status,orderId, productId) {
+// const productId = document.getElementById("productId").value
      
       console.log(orderId);
       const url = `/admin/updateStatus/${orderId}`; 
@@ -283,7 +302,7 @@
           headers: {
               'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ status }),
+          body: JSON.stringify({ status,productId }),
       })
       .then(response => {
           if (!response.ok) {

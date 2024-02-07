@@ -58,21 +58,7 @@
                         </div><!-- End .header-dropdown -->
                     </div><!-- End .header-left -->
 
-                    <div class="header-right">
-                        <ul class="top-menu">
-                            <li>
-                                <a href="#">Links</a>
-                                <ul>
-                                    <li><a href="tel:#"><i class="icon-phone"></i>Call: +0123 456 789</a></li>
-                                    <li><a href="wishlist.html"><i class="icon-heart-o"></i>Wishlist
-                                            <span>(3)</span></a></li>
-                                    <li><a href="about.html">About Us</a></li>
-                                    <li><a href="contact.html">Contact Us</a></li>
-                                    <li><a href="/login" data-toggle="modal"><i class="icon-user"></i>Login</a></li>
-                                </ul>
-                            </li>
-                        </ul><!-- End .top-menu -->
-                    </div><!-- End .header-right -->
+                   
                 </div><!-- End .container -->
             </div><!-- End .header-top -->
 
@@ -166,7 +152,7 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody>
+                                    <tbody >
                                         <% if(locals.cartData){%>
                                             <% if (cartData.products && cartData.products.length> 0) { %>
                                                 <% cartData.products.forEach(product=> { %>
@@ -190,7 +176,7 @@
                                                                 </h3><!-- End .product-title -->
                                                             </div><!-- End .product -->
                                                         </td>
-                                                        <td class="price-col">₹ <%= product.productPrice %>
+                                                        <td class="price-col">₹ <%= product.productId.offerprice ? product.productId.offerprice : product.productId.price %>
                                                         </td>
                                                         <td class="quantity-col">
                                                             <!-- End .cart-product-quantity -->
@@ -203,8 +189,7 @@
                                                                     onchange="updateQuantity('<%= cartData._id %>', '<%= product.productId._id %>')">
                                                             </div>
                                                         </td>
-                                                        <% let cartProduct=product.productPrice * product.quentity %>
-                                                            <td class="total-col">₹<%= cartProduct %>
+                                                            <td  class="total-col">₹<%= product.productTotalPrice %>
                                                             </td>
                                                             <input type="text" id="cartid" value="<%=cartData._id%>"
                                                                 hidden>
@@ -301,7 +286,7 @@
                                             <tr class="summary-total">
                                                 <td>Total:</td>
                                                 <td>
-                                                    <%= totalPriceTotal %>
+                                                    <%= locals.totalPriceTotal %>
                                                 </td>
                                             </tr><!-- End .summary-total -->
                                         </tbody>
@@ -476,46 +461,12 @@
         }
     </script>
 
-    <!-- <script>
-    function updateQuantity(cartId, productId) {
-        // Get the updated quantity from the input field
-        const updatedQuantity = document.getElementById(productId).value;
-
-        // Make a fetch request to update the quantity on the server
-        fetch('/updatequentity', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ cartId: cartId, productId: productId, quentity: updatedQuantity }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Quantity updated:', data);
-
-            // Check if the update was successful
-            if (data.success) {
-                // Reload the page
-                location.reload();
-            } else {
-                // Optionally, handle the case where the update failed
-                console.error('Failed to update quantity:', data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-</script> -->
-
 
 
     <script>
         function updateQuantity(cartId, productId) {
-            // Get the updated quantity from the input field
             const updatedQuantity = document.getElementById(productId).value;
 
-            // Make a fetch request to update the quantity on the server
             fetch('/updatequentity', {
                 method: 'POST',
                 headers: {

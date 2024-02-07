@@ -55,6 +55,21 @@ const loadDashboard = async (req, res) => {
             }
         ]);
 
+
+        // let monthlySalesAmount= await Orders.aggregate([
+        //     {
+        //         $unwind: '$Products'
+        //     },
+        //     {
+        //         $match: {
+        //             "Products.orderStatus": { $eq: "delivered" },
+        //             "paymentStatus":{$ne: "pending"}
+        //     }
+           
+        //     }
+        // ])
+
+
         let salesLen = salesDash.length > 0 ? salesDash[0].count : 0;
         // console.log("sale", salesLen);
 
@@ -99,7 +114,7 @@ const loadDashboard = async (req, res) => {
         const pending = await Orders.aggregate([
             {
                 $match: {
-                    "Products.orderStatus": { $ne: "delivered" }
+                    "Products.orderStatus": { $nin: ["delivered","cancelled","returned"] }
                 }
             },
             {
@@ -151,7 +166,7 @@ const loadDashboard = async (req, res) => {
                 $match: {
                     "Products.orderStatus": "delivered",
                     date: { $gte: new Date(currentYear, currentMonth - 1, 1) },
-                    "Products.orderStatus": { $ne: "cancelled" },
+                    "Products.orderStatus": { $nin: ["delivered","cancelled","returned"] }
                 },
             },
             {
@@ -160,7 +175,7 @@ const loadDashboard = async (req, res) => {
                     total: {
                         $sum: {
                                 
-                                    $multiply: ["$Products.total", "$Products.quentity"],
+                      $multiply: ["$Products.total", "$Products.quentity"],
 
                         },
                     },
@@ -223,7 +238,7 @@ const loadDashboard = async (req, res) => {
                 $match: {
                     "Products.orderStatus": "delivered",
                     date: { $gte: new Date(currentYear - yearsToInclude, 0, 1) },
-                    "Products.orderStatus": { $ne: "cancelled" },
+                    "Products.orderStatus": { $nin: ["delivered","cancelled","returned"] }
 
                 }
             },
@@ -285,7 +300,7 @@ const salesReport = async (req,res) =>{
         const lastOrder = await Orders.find().sort({date : -1})
 
         const orders = await Orders.find({
-            "Products.orderStatus":{ $nin: ["returned", "cancelled"] }
+            "Products.orderStatus":{ $in: [ "delivered"] }
         }).populate({
             path: "Products.productId",
             model: "Products",
@@ -327,7 +342,7 @@ const dateSort=async (req,res)=>{
                         $lte:endDateObj
                     },
                     
-                    "Products.orderStatus":{ $nin: ["returned", "cancelled"] }
+                    "Products.orderStatus":{ $in: [ "delivered"] }
                 },
             },
       

@@ -181,10 +181,10 @@
 
 	                		<div class="col-md-8 col-lg-9">
 	                			<div class="tab-content">
-								    <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
-								    	<div class="col-lg-6">
-                                            <div class="card card-dashboard">
-                                                <div class="card-body">
+								    <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link" >
+								    	<div class="col-lg-6" >
+                                            <div class="card card-dashboard" >
+                                                <div class="card-body" id="userProfile">
                                                     <h3 class="card-title">Profile</h3><!-- End .card-title -->
 
                                                     <p>Name : <%= user.name %><br>
@@ -252,14 +252,14 @@
 
 <!-- -----------------------------------------------------------------------Orders section---------------------------------------------------------------------------------- -->
 
-                                          <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                                          <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link" >
                                             <section class="vh-70 gradient-custom-2">
-                                                <div class="container py-5 ">
+                                                <div class="container py-5 " >
                                                   <% orders.forEach(order => { %>
-                                                    <div class="row align-items-center h-100">
-                                                      <div class="col-md-10 col-lg-8 col-xl-6">
-                                                        <div class="card card-stepper " style="border-radius: 16px;">
-                                                          <div class="card-header p-4">
+                                                    <div class="row align-items-center h-100" >
+                                                      <div class="col-md-10 col-lg-8 col-xl-6" >
+                                                        <div class="card card-stepper " style="border-radius: 16px;" id="taborders">
+                                                          <div class="card-header p-4" >
                                                             <div class="d-flex justify-content-between align-items-center">
                                                               <div>
                                                                 <p class="text-muted mb-2"> Order ID <span class="fw-bold text-body"><%= order._id %></span></p>
@@ -360,197 +360,109 @@
                                             
 			
 
-								    <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
-                                        <h3 class="card-title">Delivery Address</h3><!-- End .card-title -->
+ <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
+    <h3 class="card-title">Delivery Address</h3><!-- End .card-title -->
 
-								    	<div class="row">
-                                           
-
-                                            <% user.address.forEach((address)=>{%>
-								    		<div class="col-lg-6">
-								    			<div class="card card-dashboard">
-								    				<div class="card-body">
-								    					
-                                                       
-
-                                                       
-
-														<p><%= address.name %><br>
-                                                        <%= address.mobile %><br>
-														<%= address.address %><br>
-														<%= address.pincode %><br>
-														<%= address.city %><br>
-														<%= address.state %><br></p>
-
-														<div class="container justify-content-between">
-															<!-- Edit button with data-toggle attribute to open the modal -->
-															<a href="#" data-toggle="modal" data-target="#editModal<%=address._id%>">Edit <i class="icon-edit"></i></a>
+    <div class="row">
+        <div class="col-md-12" id="tabaddress">
+            <% user.address.forEach((address)=>{%>
+            <div class="card card-dashboard">
+                <div class="card-body">
+                    <h3 class="card-title">Billing Address</h3><!-- End .card-title -->
+                    <p><%= address.name %><br>
+                        <%= address.mobile %><br>
+                        <%= address.address %><br>
+                        <%= address.pincode %><br>
+                        <%= address.city %><br>
+                        <%= address.state %><br></p>
+                    	<a href="#" data-toggle="modal" data-target="#editModal<%=address._id%>">Edit <i class="icon-edit"></i></a>
 										
 															
-															<a href="#" style="margin-left: 255px;" onclick="removeAddress('<%=address._id%>')">Delete <i class="fa-solid fa-trash"></i></a>
+						<a href="#" style="float: right;" onclick="removeAddress('<%=address._id%>')">Delete <i class="fa-solid fa-trash"></i></a>
+                </div><!-- End .card-body -->
+            </div><!-- End .card-dashboard -->
+            <%})%>
+            <a href="/addaddress" class="btn btn-primary">Add Address</a>
+        </div><!-- End .col-lg-6 -->
 
-														</div>
-                                                        
-                                                        
-                                                       
-								    				</div><!-- End .card-body -->
-								    			</div><!-- End .card-dashboard -->
-								    		</div><!-- End .col-lg-6 -->
+        <% user.address.forEach((address)=>{%>
+        <div class="modal fade" id="editModal<%= address._id %>" tabindex="-1" role="dialog" aria-labelledby="editModalLabel<%= address._id %>" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <!-- Add your modal content here -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel<%= address._id %>">Edit Address</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
 
-                                            <div class="modal fade" id="editModal<%= address._id %>" tabindex="-1" role="dialog" aria-labelledby="editModalLabel<%= address._id %>" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <!-- Add your modal content here -->
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="editModalLabel<%= address._id %>">Edit Address</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
+                    <div class="modal-body">
+                        <!-- Add your form fields with predefined values here -->
+                        <form id="editForm<%= address._id %>">
+                            <!-- Example input field (replace with your actual form fields) -->
+                            <div class="modal-body mx-3">
+                                <div class="modal-body mx-3">
+                                    <div class="form-group">
+                                        <label for="editName<%= address._id %>">Name</label>
+                                        <input type="text" class="form-control" id="editName<%= address._id %>" value="<%= address.name %>" name="name">
 
-                                                        <div class="modal-body">
-                                                            <!-- Add your form fields with predefined values here -->
-                                                            <form id="editForm<%= address._id %>">
-                                                                <!-- Example input field (replace with your actual form fields) -->
-                                                                <div class="modal-body mx-3">
-                                                                    <div class="modal-body mx-3">
-                                                                        <div class="form-group">
-                                                                            <label for="editName<%= address._id %>">Name</label>
-                                                                            <input type="text" class="form-control" id="editName<%= address._id %>" value="<%= address.name %>" name="name">
-
-                                                                            <p id="addn" style="color: red"></p>
-                                                                        </div>
-                                                                    
-                                                                        <div class="form-group">
-                                                                            <label for="editMobile<%= address._id %>">Mobile Number</label>
-                                                                            <input type="tel" class="form-control" id="editMobile<%= address._id %>" value="<%= address.mobile %>" name="mobile" required>
-                                                                            <p id="addm" style="color: red"></p>
-                                                                        </div>
-                                                                    
-                                                                        <div class="form-group">
-                                                                            <label for="editPincode<%= address._id %>">Pincode</label>
-                                                                            <input type="number" class="form-control" id="editPincode<%= address._id %>" value="<%= address.pincode %>" name="pincode" required>
-                                                                            <p id="addp" style="color: red"></p>
-                                                                        </div>
-                                                                    
-                                                                        <div class="form-group">
-                                                                            <label for="editAddress<%= address._id %>">Address</label>
-                                                                            <input type="text" class="form-control" id="editAddress<%= address._id %>" value="<%= address.address %>" name="address" required>
-                                                                            <p id="adda" style="color: red"></p>
-                                                                        </div>
-                                                                    
-                                                                        <div class="form-group">
-                                                                            <label for="editCity<%= address._id %>">City</label>
-                                                                            <input type="text" class="form-control" id="editCity<%= address._id %>" value="<%= address.city %>" name="city" required>
-                                                                            <p id="addc" style="color: red"></p>
-                                                                        </div>
-                                                                    
-                                                                        <div class="form-group">
-                                                                            <label for="editState<%= address._id %>">State</label>
-                                                                            <select class="form-control" id="editState<%= address._id %>" name="state" >
-                                                                                <option value="<%= address.state %>" selected><%= address.state %></option>
-                                                                                <option value="<%= address.state %>">Tamil Nadu</option>
-                                                                                <option value="<%= address.state %>">Karnataka</option>
-                                                                                <option value="<%= address.state %>">Goa</option>
-                                                                                <option value="<%= address.state %>">Mumbai</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <p id="adds" style="color: red"></p>
-                                                                        </div>
-                        
-                                                                <!-- Add more fields as needed -->
-                                
-                                                                <!-- Example Save button -->
-                                                                <button type="button" class="btn btn-primary" onclick="saveEdit('<%= address._id %>')">Save Changes</button>
-                                                            </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- End Edit Modal -->
-                                           
-                                            
-                                            
-                                            <!-- Address Form Modal -->
-                                            <!-- <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="addressModalLabel">Delivery Address</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form id="addressForm" onsubmit="return submitForm()">
-                                                                <div class="form-group">
-                                                                    <label for="name">Name *</label>
-                                                                    <input type="text" class="form-control" id="name" name="name" required>
-                                                                </div>
-                                            
-                                                                <div class="row">
-                                                                    <div class="col-sm-6">
-                                                                        <div class="form-group">
-                                                                            <label for="mobile">Mobile Number *</label>
-                                                                            <input type="tel" class="form-control" id="mobile" name="mobile" required>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="form-group">
-                                                                            <label for="pincode">Pincode *</label>
-                                                                            <input type="number" class="form-control" id="pincode" name="pincode" required>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                            
-                                                                <div class="form-group">
-                                                                    <label for="Address1">Address *</label>
-                                                                    <input type="text" class="form-control" id="Address1" name="address" placeholder="Enter your address" required>
-                                                                </div>
-                                            
-                                                                <div class="row">
-                                                                    <div class="col-sm-6">
-                                                                        <div class="form-group">
-                                                                            <label for="City">City *</label>
-                                                                            <input type="text" class="form-control" id="City" name="city" required>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="form-group">
-                                                                            <label for="state">State *</label>
-                                                                            <select class="form-control" id="state" name="state" required>
-                                                                                <option value="" selected disabled>Select your state</option>
-                                                                                <option value="Kerala">Kerala</option>
-                                                                                <option value="Tamil Nadu">Tamil Nadu</option>
-                                                                                <option value="Karnataka">Karnataka</option>
-                                                                                <option value="Goa">Goa</option>
-                                                                                <option value="Mumbai">Mumbai</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                            
-                                                                <button type="submit" class="btn btn-outline-primary btn-block">
-                                                                    Submit Address
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div> -->
-                                            
-                                            
-                                        <%})%>
-                                        <a href="/addaddress" class="btn btn-primary">Add Address</a>
-                                        
-                                        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addressModal">
-                                            Add Address
-                                        </button> -->
-								    </div><!-- .End .tab-pane -->
+                                        <p id="addn" style="color: red"></p>
                                     </div>
+                                
+                                    <div class="form-group">
+                                        <label for="editMobile<%= address._id %>">Mobile Number</label>
+                                        <input type="tel" class="form-control" id="editMobile<%= address._id %>" value="<%= address.mobile %>" name="mobile" required>
+                                        <p id="addm" style="color: red"></p>
+                                    </div>
+                                
+                                    <div class="form-group">
+                                        <label for="editPincode<%= address._id %>">Pincode</label>
+                                        <input type="number" class="form-control" id="editPincode<%= address._id %>" value="<%= address.pincode %>" name="pincode" required>
+                                        <p id="addp" style="color: red"></p>
+                                    </div>
+                                
+                                    <div class="form-group">
+                                        <label for="editAddress<%= address._id %>">Address</label>
+                                        <input type="text" class="form-control" id="editAddress<%= address._id %>" value="<%= address.address %>" name="address" required>
+                                        <p id="adda" style="color: red"></p>
+                                    </div>
+                                
+                                    <div class="form-group">
+                                        <label for="editCity<%= address._id %>">City</label>
+                                        <input type="text" class="form-control" id="editCity<%= address._id %>" value="<%= address.city %>" name="city" required>
+                                        <p id="addc" style="color: red"></p>
+                                    </div>
+                                
+                                    <div class="form-group">
+                                        <label for="editState<%= address._id %>">State</label>
+                                        <select class="form-control" id="editState<%= address._id %>" name="state" >
+                                            <option value="<%= address.state %>" selected><%= address.state %></option>
+                                            <option value="<%= address.state %>">Tamil Nadu</option>
+                                            <option value="<%= address.state %>">Karnataka</option>
+                                            <option value="<%= address.state %>">Goa</option>
+                                            <option value="<%= address.state %>">Mumbai</option>
+                                        </select>
+                                    </div>
+                                    <p id="adds" style="color: red"></p>
+                                    </div>
+
+                            <!-- Add more fields as needed -->
+
+                            <!-- Example Save button -->
+                            <button type="button" class="btn btn-primary" onclick="saveEdit('<%= address._id %>')">Save Changes</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%})%>
+        
+    </div><!-- End .row -->
+</div><!-- .End .tab-pane -->
+
+								   
                                 
 
 
@@ -588,53 +500,12 @@
     
                                                     </p>
                                     
-                                                        <!-- Button to open Wallet history modal -->
-                                                        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#walletHistoryModal">
-                                                            Wallet History
-                                                        </button> -->
 
                                                         <a href="/wallethistory" class="btn btn-primary"> Wallet History </a>
                                                     
                                                 </div><!-- End .card-body -->
                                             </div><!-- End .card-dashboard -->
                                         </div><!-- End .col-lg-6 -->
-                                    
-                                        <!-- Wallet History Modal -->
-                                        <!-- <div class="modal fade" id="walletHistoryModal" tabindex="-1" role="dialog" aria-labelledby="walletHistoryModalLabel" aria-hidden="true">
-                                            
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="walletHistoryModalLabel">Wallet History</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <table class="table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th scope="col">Date</th>
-                                                                    <th scope="col">Amount</th>
-                                                                    <th scope="col">Reason</th>
-                                                                    
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                               <% user.wallet_history.forEach((result)=>{ %>
-                                                                    <tr>
-                                                                      <td><%= result.date%></td>
-                                                                      <td><%= result.amount%></td>
-                                                                      <td><%= result.reason%></td>
-                                                                    </tr>
-                                                                    <%})%>
-                                                            </tbody>
-                                                        </table>
-                                                        <p>Wallet history content goes here...</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>End Wallet History Modal -->
                                     </div><!-- .End .tab-pane -->
 								</div>
 	                		</div><!-- End .col-lg-9 -->
@@ -1082,7 +953,6 @@
 
 
 
-
                 
                 fetch(`/updateaddress/${addressId}`, {
                     method: 'POST',
@@ -1108,7 +978,7 @@
                        
 
                         console.log('Response from the backend:', data);
-
+                        $('#tabaddress').load('/profile #tabaddress')
                         
                         Swal.fire({
                             icon: 'success',
@@ -1116,7 +986,7 @@
                             text: 'Address updated successfully.',
                         });
 
-                        window.location.reload();
+                        // window.location.reload();
 
 
                        
@@ -1170,6 +1040,7 @@
                 const errorMessageDiv = document.getElementById('errorMessage');
 
                 if (data.success) {
+                    $('#changePasswordForm').load('/profile #changePasswordForm')
                     successMessageDiv.textContent = data.message;
                     errorMessageDiv.textContent = ''; 
 					document.getElementById('changePasswordForm').reset();
@@ -1240,7 +1111,9 @@
                             text: 'Profile updated successfully.',
                         });
 
-                        window.location.reload();
+                        $('#userProfile').load('/profile  #userProfile')
+
+                        // window.location.reload();
                     })
                     .catch(error => {
                         // Handle errors
@@ -1293,7 +1166,7 @@ function deleteAddress(userId) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        
+        $('#tabaddress').load('/profile #tabaddress')
         Swal.fire({
             title: 'Success!',
             text: 'Address removed successfully.',
@@ -1370,15 +1243,19 @@ function reloadAddressTab() {
                     .then(data => {
                        
                         console.log('Cancel request submitted successfully:', data);
-
+                        $('#taborders').load('/profile #taborders')
                      
                         Swal.fire({
                             icon: 'success',
                             title: 'cancel request submitted!',
                             text: 'Your Cancel request has been submitted successfully.',
+
+                            
                         }).then(() => {
                             // page reload
-                            window.location.reload();
+                            // window.location.reload();
+
+                           
                         });
                     })
                     .catch(error => {
@@ -1421,6 +1298,7 @@ function returnfromorder(orderId, proId, orderStatus) {
                 })
                 .then(data => {
                     console.log('Return request submitted successfully:', data);
+                    $('#taborders').load('/profile #taborders')
 
                     Swal.fire({
                         icon: 'success',
@@ -1428,7 +1306,7 @@ function returnfromorder(orderId, proId, orderStatus) {
                         text: 'Your return request has been submitted successfully.',
                     }).then(() => {
                         // page reload or redirect to the return requests page
-                        window.location.reload();
+                        // window.location.reload();
                         // or window.location.href = '/return-requests'; // Redirect to a specific page
                     });
                 })
@@ -1451,75 +1329,4 @@ function returnfromorder(orderId, proId, orderStatus) {
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- <script>
-    async function submitForm() {
 
-        // Get input values and trim them
-        const name = document.getElementById('name').value.trim();
-        const mobile = document.getElementById('mobile').value.trim();
-        const pincode = document.getElementById('pincode').value.trim();
-        const address = document.getElementById('Address1').value.trim();
-        const city = document.getElementById('City').value.trim();
-        const state = document.getElementById('state').value.trim();
-
-        // Perform validation
-        if (!name || !mobile || !pincode || !address || !city || !state) {
-            // Display SweetAlert for validation error
-            Swal.fire({
-                icon: 'error',
-                title: 'Validation Error',
-                text: 'All fields are required.',
-            });
-
-            return false;  // Prevent form submission
-        }
-
-        // Prepare the data to be sent in the request body
-        const formData = {
-            name,
-            mobile,
-            pincode,
-            address,
-            city,
-            state
-        };
-
-        try {
-            // Make a fetch request to submit the form data
-            const response = await fetch('/addAddressProfile', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            // Display SweetAlert for successful submission
-            Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: 'Address submitted successfully.',
-            }).then(() => {
-                // Reload the page
-                window.location.reload();
-            });
-
-            return true;  // Allow form submission
-        } catch (error) {
-            console.error('Error submitting address:', error);
-
-            // Display SweetAlert for submission error
-            Swal.fire({
-                icon: 'error',
-                title: 'Submission Error',
-                text: 'There was an error submitting the address.',
-            });
-
-            return false;  // Prevent form submission
-        }
-    }
-</script> -->

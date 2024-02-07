@@ -153,9 +153,10 @@ const removeCategoryOffer = async (req,res)=>{
             {$unset:{offer:1}
         },
         await Products.updateMany(
-            { _id: categoryId },
-            { $unset: { offer: 1, offerprice: 1 } 
+            { category: categoryId },
+            { $unset: {offerprice: 1 } 
         }))
+        
             res.json({ success: true });
     } catch (error) {
         console.log(error.message);

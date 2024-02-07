@@ -11,16 +11,23 @@ const Offer = require("../models/offerModel")
 const loadCart = async (req, res) => {
     try {
         const user = req.session.user_id;
+
+        if(!user){
+        res.redirect("/login")
+        }
         const cartData = await Cart.findOne({ userid: user }).populate({
             path: "products.productId",
             model: "Products",
-        })
+        });
 
-        if (cartData) {
-            const totalPriceTotal = cartData.products.reduce((total, product) => {
-                return total + product.totalPrice;
-            }, 0);
-            console.log("total",totalPriceTotal);
+        if (cartData.products.length > 0) {
+            cartData.products.forEach((product) => {
+                const productPrice = product.productId.offerprice || product.productId.price;
+                product.productTotalPrice = productPrice * product.quentity;
+            });
+
+            const totalPriceTotal = cartData.products.reduce((total, product) => total + product.productTotalPrice, 0);
+
             res.render("cartpage", { cartData, totalPriceTotal });
         } else {
             res.render("cartpage", { cartData });
@@ -29,6 +36,7 @@ const loadCart = async (req, res) => {
         console.log(err);
     }
 };
+
 //Product added to cart
 
 const addToCart = async (req, res) => {
@@ -155,14 +163,12 @@ const updateQuentity = async (req, res) => {
 
         const updatedCart = await existingCart.save();
         const updatedTotalPrice = productToUpdate.totalPrice;
-        console.log("updated total price:", updatedTotalPrice);
+    
 
         const totalPriceTotal = existingCart.products.reduce((total, product) => {
             const productPrice = product.offerPrice || product.productPrice;
             return total + productPrice * product.quentity;
         }, 0);
-
-        console.log("total:", totalPriceTotal);
 
 
 
