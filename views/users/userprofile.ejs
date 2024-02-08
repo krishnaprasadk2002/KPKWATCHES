@@ -254,11 +254,11 @@
 
                                           <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link" >
                                             <section class="vh-70 gradient-custom-2">
-                                                <div class="container py-5 " >
+                                                <div class="container py-5 " id="taborders">
                                                   <% orders.forEach(order => { %>
-                                                    <div class="row align-items-center h-100" >
+                                                    <div class="row align-items-center h-100"  >
                                                       <div class="col-md-10 col-lg-8 col-xl-6" >
-                                                        <div class="card card-stepper " style="border-radius: 16px;" id="taborders">
+                                                        <div class="card card-stepper " style="border-radius: 16px;" >
                                                           <div class="card-header p-4" >
                                                             <div class="d-flex justify-content-between align-items-center">
                                                               <div>
@@ -286,10 +286,14 @@
                                                                 <div>
                                                                   <img class="align-self-center img-fluid" src="/uploads/<%=product.image%>" width="150" height="100">
                                                                 </div>
+                                                                
                                                               </div>
-                                                              <% if(product.orderStatus=="placed"){%>
-                                                                    <p class="text-primary"><%=product.orderStatus%></p>
-                                                              <div class="card-footer p-4">
+                                                              <p class="text-primary"><%=product.orderStatus%></p>
+
+                                                             
+                                                              <!-- <% if(product.orderStatus=="placed"){%> -->
+                                                                    
+                                                              <!-- <div class="card-footer p-4">
                                                                 <div class="d-flex justify-content-between">
                                                                   <h5 class="fw-normal mb-0">
                                                                     <a href="#" class="mb-4" onclick="removefromorder('<%=order._id%>' , '<%=product._id%>','<%= product.orderStatus %>')">Cancel</a>
@@ -297,8 +301,8 @@
                                                                   <div class="border-start h-100"></div>
                                                                 </div>
                                                               </div>
-                                                              <%}%>
-                                                                <%if(product.orderStatus=="shipped"){%>
+                                                              <%}%> -->
+                                                                <!-- <%if(product.orderStatus=="shipped"){%>
                                                                 <h6 class="text-primary " style="margin-left: 20px; margin-bottom: 30px;" ><%=product.orderStatus%></h6>
                                                                 <div class="card-footer p-4">
                                                                     <div class="d-flex justify-content-between">
@@ -308,9 +312,9 @@
                                                                       <div class="border-start h-100"></div>
                                                                     </div>
                                                                   </div>
-                                                                <%}%>
+                                                                <%}%> -->
 
-                                                                <% if (product.orderStatus == "delivered") { %>
+                                                                <!-- <% if (product.orderStatus == "delivered") { %>
                                                                     <h6 class="text-primary" style="margin-left: 20px; margin-bottom: 30px;"><%= product.orderStatus %></h6>
                                                                     <div class="card-footer p-4">
                                                                         <div class="d-flex justify-content-between">
@@ -320,28 +324,29 @@
                                                                             <div class="border-start h-100"></div>
                                                                         </div>
                                                                     </div>
-                                                                <% } %>
+                                                                <% } %> -->
 
 
                                                                 
                                                                 
                                                                 
                                                                 
-                                                                    <%if(product.orderStatus=="request cancellation"){%>
+                                                                    <!-- <%if(product.orderStatus=="request cancellation"){%>
                                                                     <h6 class="text-danger"><%=product.orderStatus%></h6>
-                                                                    <%}%>
-                            
+                                                                    <%}%> -->
+<!--                             
                                                                     <%if(product.orderStatus=="cancelled"){%>
                                                                         <h6 class="text-danger"><%=product.orderStatus%></h6>
-                                                                        <%}%>
-                                                                    <%if(product.orderStatus=="request return"){%>
+                                                                        <%}%> -->
+                                                                    <!-- <%if(product.orderStatus=="request return"){%>
                                                                         <h6 class="text-danger"><%=product.orderStatus%></h6>
-                                                                        <%}%>
-                                                                    <%if(product.orderStatus=="returned"){%>
+                                                                        <%}%> -->
+                                                                    <!-- <%if(product.orderStatus=="returned"){%>
                                                                         <h6 class="text-success"><%=product.orderStatus%></h6>
-                                                                        <%}%>
+                                                                        <%}%> -->
                                                             <% }); %>
                                                           </div>
+                                                          <a href="/orderdetails?orderId=<%= order._id %>" class="btn btn-primary">View More</a>
                                                         </div>
                                                       </div>
                                                     </div>
@@ -1243,7 +1248,7 @@ function reloadAddressTab() {
                     .then(data => {
                        
                         console.log('Cancel request submitted successfully:', data);
-                        $('#taborders').load('/profile #taborders')
+                        
                      
                         Swal.fire({
                             icon: 'success',
@@ -1254,7 +1259,7 @@ function reloadAddressTab() {
                         }).then(() => {
                             // page reload
                             // window.location.reload();
-
+                            $('#taborders').load('/profile #taborders')
                            
                         });
                     })

@@ -267,37 +267,6 @@
                                     </style>
 
 
-
-                                    <!-- <div id="addressSelect" class="address-checkboxes">
-                                        <% if (user && user.address && user.address.length > 0) { %>
-                                          <% user.address.forEach(Address => { %>
-                                            <div class="address-checkbox" onclick="handleAddressSelection(this)">
-                                              <input type="radio" id="address<%= Address._id %>" name="selectedAddresses" value="selectedAddresses">
-                                              <label for="address<%= Address._id %>">
-                                                <%= `Name: ${Address.name}, Mobile: ${Address.mobile}, Address: ${Address.address}, City: ${Address.city}, Pincode: ${Address.pincode}, State: ${Address.state}` %>
-                                              </label>
-                                            </div>
-                                          <% }); %>
-                                        <% } else { %>
-                                          <div class="address-checkbox">
-                                            <input type="radio" id="noAddress" name="selectedAddresses" value="noAddress" disabled>
-                                            <label for="noAddress">No addresses found for this user.</label>
-                                          </div>
-                                        <% } %>
-                                      </div> -->
-
-                                    <!-- <script>
-                                        function handleAddressSelection(selectedCheckbox) {
-                                          // Remove the "selected" class from all checkboxes
-                                          document.querySelectorAll('.address-checkbox').forEach(checkbox => {
-                                            checkbox.classList.remove('selected');
-                                          });
-                                      
-                                          // Add the "selected" class to the clicked checkbox
-                                          selectedCheckbox.classList.add('selected');
-                                        }
-                                      </script> -->
-
                                     <div>
                                         <!-- Add Address button with the /address route -->
                                         <a href="/address" class="btn btn-primary btn-rounded mb-4 mt-3">Add Address</a>
@@ -322,33 +291,20 @@
                                                                 <% } %>
                                             </select>
 
+                                            <div id="couponMessage" style="color: red;"></div>
+
 
                                             <label for="checkout-discount-input" class="text-truncate">Have a coupon?
-                                                <span>Click here to enter your code</span></label><br>
+                                                <span>Select here</span></label><br>
                                             <button class="btn btn-primary mt-4" type="button"
                                                 onclick="applyCoupon()">Apply
                                                 Coupon</button>
 
-                                            <div id="couponMessage"></div>
+                                            
                                         </form>
 
                                     </div>
 
-
-                                    <!-- <div class="checkout-discount">
-                                        <form id="couponForm">
-                                    
-                                           
-                                            <input type="text" id="couponCode" name="couponCode" style="max-width: 200px;" placeholder="Enter coupon code" required>
-                                    
-                                            <label for="checkout-discount-input" class="text-truncate">Have a coupon?
-                                                <span>Click here to enter your code</span>
-                                            </label>
-                                            <button class="btn btn-primary mt-4" type="button" onclick="applyCoupon()">Apply Coupon</button>
-                                    
-                                            <div id="couponMessage"></div>
-                                        </form>
-                                    </div> -->
 
 
 
@@ -535,7 +491,15 @@
 
                             window.location.href = '/ordersuccess';
                         }, 2000)
-                    } else if (data.response) {
+                    }else if (data.message) {
+            // Display SweetAlert error notification for product quantity check
+            Swal.fire({
+                title: 'Order Processing Failed',
+                text: data.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+         } else if (data.response) {
                         var options = {
                             "key": 'rzp_test_TIOiShpd8euA17',
                             "amount": data.response.order.amount,

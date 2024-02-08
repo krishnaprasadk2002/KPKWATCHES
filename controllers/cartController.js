@@ -189,9 +189,10 @@ const updateQuentity = async (req, res) => {
 const loadCheckout = async (req, res) => {
     try {
         const user_id = req.session.user_id;
-        const coupon = await Coupons.find()
+        const coupon = await Coupons.find({ 'userUsed.used': { $ne: true } });
+
         const couponCode = req.query.coupon || ''
-        console.log("code:", couponCode);
+        // console.log("code:", couponCode);
         const user = await User.findById(user_id);
 
         if (!req.session.user_id) {

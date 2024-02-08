@@ -10,7 +10,7 @@ const Cart=require('../models/cartModel')
 const loadWhishlist = async (req, res) => {
     try {
       const user=req.session.user_id
-      const wishlist=await Wishlist.findOne({user:user._id}).populate({
+      const wishlist=await Wishlist.findOne({user:user}).populate({
         path:"products.productId",
         model:"Products"
       }).exec()
@@ -29,27 +29,26 @@ const loadWhishlist = async (req, res) => {
       const userId = req.session.user_id; 
   
       if (!userId) {
-        return res.status(401).json({ error: 'Unauthorized. User not logged in.' });
+        res.redirect("/login")
       }
   
       const productToWishlist = await Products.findOne({ _id: productId });
   
-      if (!productToWishlist) {
-        return res.status(404).json({ error: 'Product not found.' });
-      }
-  
       const wishlist = await Wishlist.findOne({ user: userId });
-  
+   
+       const productPrice = productToWishlist.offerprice || productToWishlist.price
       if (!wishlist) {
         const newWishlist = new Wishlist({
           user: userId,
           products: [{
             productId: productId,
             name: productToWishlist.name,
-            price: productToWishlist.offerprice,
+            price: productPrice,
             Image: productToWishlist.image[0]
           }]
         });
+
+        console.log("wish",wishlist);
   
         const savedWishlist = await newWishlist.save();
         return res.status(200).json({ message: 'Product added to wishlist successfully.', wishlist: savedWishlist });
@@ -67,7 +66,7 @@ const loadWhishlist = async (req, res) => {
       wishlist.products.push({
         productId: productId,
         name: productToWishlist.name,
-        price: productToWishlist.offerprice,
+        price: productPrice,
         Image: productToWishlist.image[0],
       });
   

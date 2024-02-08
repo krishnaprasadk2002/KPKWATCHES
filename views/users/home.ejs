@@ -253,10 +253,10 @@
                                                     </a>
                                                     <div class="product-action row">
                                                         <div class="col-6">
-                                                            <input  type="number" id="qty" class="form-control" value="1" min="1" max="<%=product.quentity%>" step="1" data-decimals="0" required>
+                                                            <input  type="hidden" id="qty" class="form-control" value="1" min="1" max="<%=product.quentity%>" step="1" data-decimals="0" required>
                                                         </div>
                                                     
-                                                        <div class="col-6">
+                                                        <div class="col-12">
                                                             <a href="#" onclick="addtoCart('<%=product._id%>', '<%=locals.username%>,')" class="btn-product btn-cart"><span>Add to Cart</span></a>
                                                         </div>
                                                     </div><!-- End .product-action -->

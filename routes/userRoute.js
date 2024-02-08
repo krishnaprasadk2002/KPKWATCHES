@@ -102,6 +102,8 @@ userRoute.post('/cancelOrder/:orderId/:productId',orderController.cancelOrPlaced
 userRoute.get("/ordersuccess",orderController.loadOrderSuccess)
 userRoute.post('/returnOrder/:orderId/:productId',orderController.returnOrder)
 userRoute.get("/wallethistory",userController.walletHistory)
+userRoute.get("/orderdetails",orderController.loadOrderDetailsPage)
+userRoute.get("/download-invoice/:id",orderController.loadInvoice)
 
 //==============================================OnlinePayment==================================
 userRoute.post("/varifypayment",orderController.verifyPayment)

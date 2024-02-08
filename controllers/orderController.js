@@ -5,6 +5,12 @@ const Orders = require("../models/orderModel");
 const Razorpay = require("razorpay");
 const Coupons = require("../models/couponModel")
 const { response } = require("express");
+const puppeteer=require("puppeteer")
+const moment = require("moment")
+const path = require("path")
+const ejs = require('ejs');
+
+
 
 //==========================================================Razorpay instance===============================
 
@@ -19,6 +25,27 @@ const placeOrder = async (req, res) => {
         const selectedValue = req.body.selectedValue;
         const cartId = req.session.user_id;
         const { couponCode } = req.body;
+
+
+        const cartQuanity = await Cart.findOne({ userid: cartId }).populate({
+            path: "products.productId",
+            model: "Products",
+        });
+
+        // Check availability of each item in the cart
+        for (const cartItem of cartQuanity.products) {
+            const product = cartItem.productId;
+            const requestedQuantity = cartItem.quentity;
+
+            if (product.quentity < requestedQuantity) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Not enough quantity available for product ${product.name}`,
+                });
+            }
+        }
+
+
         const cart = await Cart.findOne({ userid: cartId });
         const userId = req.session.user_id;
         const currentDate=new Date()
@@ -444,6 +471,80 @@ const changeStatus = async (req, res) => {
 };
 
 
+const loadOrderDetailsPage = async (req,res)=>{
+    try {
+        const orderid = req.query.orderId
+        const userData=req.session.user_id
+        const userName= await User.findOne({_id:userData._id})
+        const orders=await Orders.find({_id:orderid}).populate({
+            path: "Products.productId",
+            model: "Products",
+        }).exec()
+
+        const banner = await 
+        res.render("orderDetails",{userName,orders,orderid})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+const loadInvoice = async (req, res) => {
+    try {
+      const orderId = req.params.id; // Use req.params for URL parameters
+      const { user_id } = req.session;
+  
+      console.log('user_id:', user_id);
+      console.log('orderId:', orderId);
+      
+      const userData = await User.findById(user_id);
+      const orderData = await Orders.findById(orderId).populate({
+        path: 'Products.productId',
+        model: "Products"
+      });
+   
+      
+  
+      const sumTotal = orderData.Products.reduce((total, item) => total + item.price * item.quentity, 0);
+      const date = new Date();
+      const data = {
+        order: orderData,
+        user: userData,
+        
+        date,
+        sumTotal,
+        moment
+      };
+
+      console.log("sum",sumTotal);
+
+  
+      // Render the EJS template
+      const ejsTemplate = path.resolve(__dirname, '../views/users/invoice.ejs');
+      const ejsData = await ejs.renderFile(ejsTemplate, data);
+  
+      // Launch Puppeteer and generate PDF
+      const browser = await puppeteer.launch({ headless: true });
+      const page = await browser.newPage();
+      await page.setContent(ejsData, { waitUntil: 'networkidle0' });
+      const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
+  
+      // Close the browser
+      await browser.close();
+  
+      // Set headers for inline display in the browser
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': 'inline; filename=order_invoice.pdf'
+      }).send(pdfBuffer);
+  
+    } catch (error) {
+      console.error('Error generating invoice:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  };
+  
+
 
 module.exports = {
     placeOrder,
@@ -452,7 +553,10 @@ module.exports = {
     loadOrder,
     changeStatus,
     returnOrder,
-    loadOrderSuccess
+    loadOrderSuccess,
+    loadOrderDetailsPage,
+    loadInvoice
+    
 
 };
 
