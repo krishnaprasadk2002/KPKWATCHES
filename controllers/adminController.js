@@ -10,7 +10,7 @@ const loadLogin = async (req, res) => {
     try {
         res.render("login");
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
     }
 };
 
@@ -29,7 +29,7 @@ const verifyLogin = (req, res) => {
             res.redirect("/admin");
         }
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
     }
 };
 
@@ -283,7 +283,7 @@ const loadDashboard = async (req, res) => {
 
         res.render("dashboard", { salesLen, revenue, codRevenue, productlen, categorylen, totalUser, revenuelen, pendlen, updatedMonthlyValues, updatedMonthlyUserCount, updatedYearlyValues,user });
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
@@ -318,7 +318,7 @@ const salesReport = async (req,res) =>{
          })
 
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
         res.status(500).json({ error: 'Internal Server Error' });
 
     }
@@ -387,7 +387,7 @@ const dateSort=async (req,res)=>{
         res.status(200).json(selectedDate);
         console.log("selected",selectedDate)
     } catch (error) {
-        console.error(error.message);
+        res.redirect("/500")
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
@@ -397,12 +397,22 @@ const dateSort=async (req,res)=>{
 
 const loadAlluser = async (req, res) => {
     try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 8; 
+
+        const totalUsers = await User.countDocuments({ is_verified: 1 });
+        const totalPages = Math.ceil(totalUsers / limit);
+
         const userData = await User.find({ is_verified: 1 })
-        res.render('alluser', { userData });
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        res.render('alluser', { userData, totalPages, currentPage: page });
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
     }
-}
+};
+
 
 const listUnlistUser = async (req, res) => {
     try {
@@ -420,7 +430,7 @@ const listUnlistUser = async (req, res) => {
             res.send("listing and unlisting")
         }
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
     }
 }
 
@@ -429,7 +439,7 @@ const adminLogout = async (req, res) => {
         req.session.destroy()
         res.redirect('/admin')
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
     }
 }
 

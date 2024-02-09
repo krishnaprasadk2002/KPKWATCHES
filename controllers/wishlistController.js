@@ -17,7 +17,7 @@ const loadWhishlist = async (req, res) => {
   
       res.render("wishlist",{wishlist})
     } catch (error) {
-      console.log(error.message);
+      res.redirect("/500")
     }
   }
   
@@ -74,7 +74,7 @@ const loadWhishlist = async (req, res) => {
   
       res.status(200).json({ message: 'Product added to wishlist successfully.', wishlist: updatedWishlist });
     } catch (error) {
-      console.error(error);
+     res.redirect("/500")
       res.status(500).json({ error: 'Internal server error.' });
     }
   };
@@ -104,7 +104,7 @@ const loadWhishlist = async (req, res) => {
         updatedWishlist,
       });
     } catch (error) {
-      console.error(error);
+     res.redirect("/500")
       res.status(500).json({ success: false, message: "Internal server error" });
     }
   };
@@ -180,7 +180,7 @@ const loadWhishlist = async (req, res) => {
         res.status(400).json({ error: "Invalid product or user." });
       }
     } catch (error) {
-      console.error(error);
+     res.redirect("/500")
       res.status(500).json({ error: "Internal server error." });
     }
   };

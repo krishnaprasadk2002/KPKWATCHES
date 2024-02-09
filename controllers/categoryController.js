@@ -9,21 +9,33 @@ const moment = require("moment")
 
 //loadCategory
 
-const loadCategory=async (req,res)=>{
+const loadCategory = async (req, res) => {
     try {
-        const categoryData=await category.find().populate('offer')
-        const offer = await Offer.find({status:true})
-        res.render("category",{categoryData,offer,moment})
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 8; 
+
+        const totalCategories = await Category.countDocuments();
+        const totalPages = Math.ceil(totalCategories / limit);
+
+        const categoryData = await Category.find()
+            .populate('offer')
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        const offer = await Offer.find({ status: true });
+
+        res.render("category", { categoryData, offer, moment, totalPages, currentPage: page });
     } catch (error) {
-        console.log(error.message); 
+        res.redirect("/500")
     }
-}
+};
+
 
 const loadAddCategory=async(req,res)=>{
     try {
         res.render("addcategory")
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
     }
 }
 
@@ -41,7 +53,7 @@ const insertCategory = async (req, res) => {
         await newCategory.save();
         res.redirect("/admin/category")
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
         res.status(500).send("Internal Server Error");
     }
 };
@@ -66,7 +78,7 @@ const listUnlistCategory = async (req, res) => {
             res.send("Category not found");
         }
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
         res.status(500).send("Internal Server Error");
     }
 };
@@ -80,7 +92,7 @@ const loadEditCategory = async (req, res) => {
         const Category = await category.findById(categoryId);  
         res.render("editcategory", { Category });
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
     }
 }
 
@@ -103,7 +115,7 @@ const updateCategory = async (req, res) => {
         req.flash('success', 'category edited successful!');
         res.redirect("/admin/category");
     } catch (error) {
-        
+        res.redirect("/500")
         res.status(500).json({ error: "Internal server error" });
     }
 };
@@ -116,7 +128,7 @@ const deleteCategory = async (req, res) => {
         const deletingCategory = await Category.findByIdAndDelete(categoryId);
         res.redirect('/admin/category'); 
     } catch (error) {
-        console.error(error.message);
+        res.redirect("/500")
         res.status(500).send('Internal Server Error');
     }
 };

@@ -50,7 +50,7 @@ const insertProduct = async (req, res) => {
         // res.status(200).send("Product added successfully");
         res.redirect("/admin/allproduct")
     } catch (error) {
-        console.error(error);
+        res.redirect("/500")
         res.status(500).send("Internal Server Error");
     }
 };
@@ -58,11 +58,21 @@ const insertProduct = async (req, res) => {
 
 const loadAllproduct=async(req,res)=>{
     try {
-        const productData=await Products.find().populate('offer')
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 8;
+
+        const totalProducts = await Products.countDocuments();
+        const totalPages = Math.ceil (totalProducts / limit);
+
+        const productData=await Products.find()
+        .populate('offer')
+        .skip((page - 1) * limit)
+        .limit(limit);
+
         const offers = await Offer.find({status:true})
-        res.render('allproduct',{productData,offers,moment})
+        res.render('allproduct',{productData,offers,moment,totalPages,currentPage:page,limit})
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
     }
 }
 
@@ -72,7 +82,7 @@ const loadAddproducts=async(req,res)=>{
     try {
         res.render("addproduct")
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
     }
 }
 
@@ -82,7 +92,7 @@ const addproductCategory=async(req,res)=>{
         const categories=await Category.find()
         res.render("addproduct",{categories})
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
     }
 }
 
@@ -105,7 +115,7 @@ const listunlistProduct = async (req, res) => {
             res.send("Unlisting failed");
         }
     } catch (err) {
-        console.log(err.message);
+        res.redirect("/500")
         res.status(500).send("Internal Server Error");
     }
 };
@@ -119,7 +129,7 @@ const loadEditProduct = async (req, res) => {
         const categories = await Categories.find(); 
         res.render("editproduct", { product, categories });
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
     }
 }
 
@@ -165,7 +175,7 @@ const handleEditProduct = async (req, res) => {
         await existingProduct.save();
         res.redirect("/admin/allproduct");
     } catch (error) {
-        console.error(error.message);
+        res.redirect("/500")
         res.status(500).send('Internal Server Error');
     }
 };
@@ -198,7 +208,7 @@ const deleteimage = async (req, res) => {
             res.status(400).send('Invalid index');
         }
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
         res.status(500)
     }
 };
@@ -279,7 +289,7 @@ const singleProduct = async (req, res) => {
 
         });
     } catch (err) {
-        console.error(err);
+        res.redirect("/500")
         res.status(500).send('Internal Server Error');
     }
 };
@@ -291,7 +301,7 @@ const productDelete = async (req, res) => {
         const deleteProduct = await Products.findByIdAndDelete(productId);
         res.redirect("/admin/allproduct");
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
         res.status(500).send('Internal Server Error');
     }
 };

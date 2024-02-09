@@ -24,7 +24,7 @@ const loadRegister = async (req, res) => {
 
     res.render('registeration',{referralCode});
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 }
 
@@ -33,7 +33,7 @@ const securePassword = async (password) => {
     const passwordHash = await bcrypt.hash(password, 10);
     return passwordHash;
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 }
 
@@ -76,7 +76,7 @@ const insertUser = async (req, res) => {
     sendOTPverificationEmail(userData, res);
 
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 };
 
@@ -122,7 +122,7 @@ const sendOTPverificationEmail = async ({ email }, res) => {
     res.redirect(`/otp?email=${email}`);
 
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 }
 
@@ -135,7 +135,7 @@ const loadotp = async (req, res) => {
     const otp = req.flash('error')[0]
     res.render("otp", { email, otp })
   } catch (error) {
-    console.log(error.message)
+    res.redirect("/500")
   }
 }
 
@@ -230,7 +230,7 @@ const verifyOtp = async (req, res) => {
       res.redirect(`/otp?email=${email}`);
     }
   } catch (error) {
-    console.log(error);
+    res.redirect("/500")
     res.status(500).send('Internal Server Error');
   }
 };
@@ -267,7 +267,7 @@ const forgotpass = async (req, res) => {
   try {
     res.render("forgotpassword")
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 }
 
@@ -316,7 +316,7 @@ const sendResetPasslink = async (email, res) => {
 
 
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 }
 
@@ -329,7 +329,7 @@ const sentResetPass = async (req, res) => {
     req.flash('success', 'we sented a reset password link');
     res.redirect("/login")
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 }
 
@@ -345,7 +345,7 @@ const resetPage = async (req, res) => {
       token
     })
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 }
 
@@ -389,7 +389,7 @@ const resetPassword = async (req, res) => {
     req.flash('success', 'successfully setted new password');
     res.redirect("/login")
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 }
 
@@ -401,7 +401,7 @@ const loginLoad = async (req, res) => {
     let message 
     res.render('login', { message });
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 }
 
@@ -441,7 +441,7 @@ const verifyLogin = async (req, res) => {
       return res.render('login', { message: req.flash('er') });
     }
   } catch (error) {
-    console.error(error);
+    res.redirect("/500")
     return res.status(500).send('Internal Server Error');
   }
 };
@@ -488,7 +488,7 @@ const loadHome = async (req, res) => {
       res.render("home", { filteredProducts,banner });
     }
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 }
 
@@ -630,7 +630,7 @@ const loadProduct = async (req, res) => {
 
     res.render("allproduct", { filteredProducts, allcategory, totalPages, currentPage, sortOption });
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 };
 
@@ -641,7 +641,7 @@ const userLogout = async (req, res) => {
     req.session.destroy()
     res.redirect("/")
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 }
 
@@ -672,7 +672,7 @@ const userProfile = async (req, res) => {
     // console.log(orders);
     res.render("userprofile", { user, orders });
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 };
 
@@ -693,7 +693,7 @@ const walletHistory = async (req, res) => {
 
     res.render('walletHistory', { user, walletHistorySubset, totalPages, currentPage: page,moment });
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
     res.status(500).send('Internal Server Error');
   }
 };
@@ -709,7 +709,7 @@ const loadAddAddress = async (req, res) => {
     }
     res.render('addaddress')
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
   }
 }
 const addAddressProfile = async (req, res) => {
@@ -740,7 +740,7 @@ const addAddressProfile = async (req, res) => {
     }
 
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
     res.status(500).send('Internal Server Error');
   }
 };
@@ -774,7 +774,7 @@ const editAddress = async (req, res) => {
       res.status(404).json({ success: false, message: 'User or address not found' });
     }
   } catch (error) {
-    console.error('Error updating address:', error);
+    res.redirect("/500")
     res.status(500).json({ success: false, error: 'Internal server error' });
   }
 };
@@ -797,7 +797,7 @@ const editProfile = async (req, res) => {
     await user.save()
     return res.status(200).json({ success: true, message: 'Form submitted successfully' });
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
     return res.status(500).json({ success: false, error: 'Internal server error' });
   }
 }
@@ -836,7 +836,7 @@ const changePassword = async (req, res) => {
 
     return res.status(200).json({ success: true, message: 'Password changed successfully' });
   } catch (error) {
-    console.log(error.message);
+   res.redirect("/500")
     return res.status(500).json({ error: 'Internal server error' })
   }
 }
@@ -857,13 +857,21 @@ const removeAddress = async (req, res) => {
 
     res.status(200).json({ message: 'Address removed successfully' });
   } catch (error) {
-    console.log(error);
+    res.redirect("/500")
 
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 
+
+const InternalServer = async(req,res)=>{
+  try {
+    res.render("500")
+  } catch (error) {
+   res.redirect("/500")
+  }
+}
 
 
 
@@ -890,6 +898,7 @@ module.exports = {
   loadAddAddress,
   addAddressProfile,
   editAddress,
-  walletHistory
+  walletHistory,
+  InternalServer
 
 }

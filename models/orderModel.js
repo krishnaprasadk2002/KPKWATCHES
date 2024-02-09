@@ -60,7 +60,9 @@ const ordersSchema=mongoose.Schema({
         type: Object
     },
 
-});
+},
+{ timestamps: true }
+);
 
 const Orders=mongoose.model('orders',ordersSchema)
 module.exports=Orders

@@ -4,20 +4,36 @@ const sharp=require("sharp")
 const path=require("path")
 const { log } = require("console")
 
-const loadBanner = async(req,res)=>{
+const loadBanner = async (req, res) => {
     try {
-      const bannerData=await Banner.find()
-      res.render("banner",{bannerData})
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 8;
+
+
+        const totalBanners = await Banner.countDocuments();
+        const totalPages = Math.ceil(totalBanners / limit);
+
+        const bannerData = await Banner.find()
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        res.render("banner", {
+            bannerData,
+            limit,
+            currentPage: page,
+            totalPages: totalPages,
+        });
     } catch (error) {
-        console.log(error.message);
+       res.redirect("/500")
     }
-}
+};
+
 
 const addBanner=async(req,res)=>{
     try {
         res.render("addBanner")
     } catch (error) {
-        console.log(error.message);
+       res.redirect("/500")
     }
 }
 
@@ -47,7 +63,7 @@ const addBannerDetails = async (req, res) => {
         await Promise.all(promises);
 
     } catch (error) {
-        console.log(error.message);
+       res.redirect("/500")
         res.status(500).send("Internal Server Error");
     }
 };
@@ -61,7 +77,7 @@ const editBanner = async (req, res) => {
         console.log(banner);
         res.render("editbanner", { banner });
     } catch (error) {
-        console.log(error.message);
+       res.redirect("/500")
         res.status(500).send("Internal Server Error");
     }
 };

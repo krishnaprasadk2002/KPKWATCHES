@@ -189,7 +189,7 @@ const placeOrder = async (req, res) => {
             }
         }
     } catch (error) {
-        console.error('Place order error:', error);
+        res.redirect("/500")
         res.status(500).json({ success: false, message: 'An error occurred while processing the order.' });
     }
 };
@@ -261,7 +261,7 @@ const verifyPayment = async (req, res) => {
             res.json({ payment: true });
         }
     } catch (error) {
-        console.error('Error:', error);
+        res.redirect("/500")
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
@@ -272,7 +272,7 @@ const loadOrderSuccess = async (req, res) => {
 
         res.render("ordersuccess")
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
     }
 }
 
@@ -301,7 +301,7 @@ const cancelOrPlacedOrder = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error cancelling product:", error.message);
+        res.redirect("/500")
         res.status(500).json({ success: false, message: "Internal server error" });
 
     }
@@ -330,7 +330,7 @@ const returnOrder = async (req, res) => {
         });
         
     } catch (error) {
-        console.error("Error returning product:", error.message);
+        res.redirect("/500")
         res.status(500).json({ success: false, message: "Internal server error" });
     }
 }
@@ -340,18 +340,29 @@ const returnOrder = async (req, res) => {
 
 const loadOrder = async (req, res) => {
     try {
-        const admin = req.session.admin
-        const allOrders = await Orders.find()
-    .populate({
-        path: "Products.productId",
-        model: "Products",
-    })
-    .populate('user', 'name').exec();
-        res.render("orders", { allOrders })
+        const admin = req.session.admin;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 8; 
+
+        const totalOrders = await Orders.countDocuments();
+        const totalPages = Math.ceil(totalOrders / limit);
+
+        const allOrders = await Orders.find().sort({date:-1})
+            .populate({
+                path: "Products.productId",
+                model: "Products",
+            })
+            .populate('user', 'name')
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .exec();
+
+        res.render("orders", { allOrders, totalPages, currentPage: page });
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
     }
-}
+};
+
 
 
 //change status
@@ -484,7 +495,7 @@ const loadOrderDetailsPage = async (req,res)=>{
         const banner = await 
         res.render("orderDetails",{userName,orders,orderid})
     } catch (error) {
-        console.log(error.message);
+        res.redirect("/500")
     }
 }
 
@@ -539,7 +550,7 @@ const loadInvoice = async (req, res) => {
       }).send(pdfBuffer);
   
     } catch (error) {
-      console.error('Error generating invoice:', error);
+        res.redirect("/500")
       res.status(500).send('Internal Server Error');
     }
   };

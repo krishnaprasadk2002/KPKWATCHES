@@ -2,20 +2,37 @@ const Offer=require("../models/offerModel")
 const Category=require("../models/categoryModel")
 const Products=require("../models/productModel")
 
-const loadOffer = async(req,res)=>{
+
+
+const loadOffer = async (req, res) => {
     try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 8;
+
+        const totalOffers = await Offer.countDocuments();
+        const totalPages = Math.ceil(totalOffers / limit);
+
         const offerData = await Offer.find()
-        res.render("Alloffer",{offerData})
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        res.render("Alloffer", {
+            offerData,
+            limit,
+            currentPage: page,
+            totalPages: totalPages,
+        });
     } catch (error) {
-        console.log(error.message);
+      res.redirect("/500")
     }
-}
+};
+
 
 const loadAddOffer = async(req,res)=>{
     try {
         res.render("addoffer")
     } catch (error) {
-        console.log(error.message);
+      res.redirect("/500")
     }
 }
 
@@ -40,7 +57,7 @@ const addOfferDetails = async (req, res) => {
             return res.status(200).json({ message: 'Offer added successfully' });
         }
     } catch (error) {
-        console.error(error.message);
+        res.redirect("/500")
         return res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -53,7 +70,7 @@ const loadEditOffer = async (req,res)=>{
         const offerData = await Offer.findById(editoffer)
         res.render("editOffer",{offerData})
     } catch (error) {
-        console.log(error.message);
+      res.redirect("/500")
         return res.status(500).json({ error: 'Internal server error' });
     }
 }
@@ -85,7 +102,7 @@ const editOfferDetails = async (req, res) => {
 
         res.status(200).json({ success: true, message: "Offer edited successfully" });
     } catch (error) {
-        console.log(error.message);
+      res.redirect("/500")
         return res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -108,7 +125,7 @@ const statusOffer = async (req,res)=>{
         }
 
     } catch (error) {
-        console.error(error.message);
+        res.redirect("/500")
         res.status(500).send("Internal Server Error");
     }
 } 
@@ -127,7 +144,7 @@ const deletingOffer = async (req,res)=>{
             res.status(404).json({error:"offer not found"})
         }
     } catch (error) {
-        console.error(error.message);
+        res.redirect("/500")
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
@@ -140,7 +157,7 @@ const applyCategoryOffer= async (req,res)=>{
         })
         res.json({success:true})
     } catch (error) {
-        console.log(error.message);
+      res.redirect("/500")
     }
 }
 
@@ -159,7 +176,7 @@ const removeCategoryOffer = async (req,res)=>{
         
             res.json({ success: true });
     } catch (error) {
-        console.log(error.message);
+      res.redirect("/500")
     }
 }
 
@@ -172,7 +189,7 @@ const applyProductOffer = async (req,res)=>{
         })
         res.json({success:true})
     } catch (error) {
-        console.log(error.message);
+      res.redirect("/500")
     }
 }
 
@@ -184,7 +201,7 @@ const removeProductOffer = async (req,res)=>{
         })
         res.json({success:true})
     } catch (error) {
-        console.log(error.message);
+      res.redirect("/500")
     }
 }
 

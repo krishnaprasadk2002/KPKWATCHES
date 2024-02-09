@@ -43,7 +43,7 @@ const applyCoupon = async (req, res) => {
     }
     
   } catch (err) {
-      console.error(err);
+    res.redirect("/500")
       res.status(500).json({ error: 'Internal Server Error' });
   }
 };
@@ -51,22 +51,39 @@ const applyCoupon = async (req, res) => {
 //====================================================coupon admin side====================================================
 
 
-const loadCoupan=async(req,res)=>{
+const loadCoupan = async (req, res) => {
     try {
-        const admin=req.session.admin
-        const coupons =await Coupon.find()
-        res.render("coupon",{admin,coupons})
+        const admin = req.session.admin;
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 8;
+
+        const totalCoupons = await Coupon.countDocuments();
+        const totalPages = Math.ceil(totalCoupons / limit);
+
+        const coupons = await Coupon.find()
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        res.render("coupon", {
+            admin,
+            coupons,
+            limit,
+            currentPage: page,
+            totalPages: totalPages,
+        });
     } catch (error) {
-        console.log(error.message)
+       res.redirect("/500")
     }
-}
+};
+
 
 const loadAddCoupon = async(req,res)=>{
     try {
         const admin=req.session.admin
         res.render("addCoupon",{admin})
     } catch (error) {
-        console.log(error.message);
+       res.redirect("/500")
     }
 }
 const addCouponDetails = async (req, res) => {
@@ -118,7 +135,7 @@ const loadEditCoupon=async (req,res)=>{
         console.log("coupon data:",coupon);
         res.render("editCoupon",{coupon})
     } catch (error) {
-        console.log(error.message);
+       res.redirect("/500")
     }
 }
 //edit coupon
@@ -149,7 +166,7 @@ const editCoupon = async (req, res) => {
         
         res.json({ success: true, message: 'Coupon edited successfully!' });
     } catch (error) {
-        console.error(error);
+        res.redirect("/500")
         res.status(500).json({ error: "Internal server error" });
     }
 };
@@ -162,7 +179,7 @@ const deleteCoupon = async(req,res)=>{
 
 
     } catch (error) {
-        console.log(error.message);
+       res.redirect("/500")
     }
 }
 

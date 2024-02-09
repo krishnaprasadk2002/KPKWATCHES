@@ -32,8 +32,8 @@ const loadCart = async (req, res) => {
         } else {
             res.render("cartpage", { cartData });
         }
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        res.redirect("/500")
     }
 };
 
@@ -104,7 +104,7 @@ const addToCart = async (req, res) => {
             res.status(400).json({ error: "Invalid product or user." });
         }
     } catch (error) {
-        console.error(error);
+        res.redirect("/500")
         res.status(500).json({ error: "Internal server error." });
     }
 };
@@ -134,7 +134,7 @@ const removeCart = async (req, res) => {
             updatedCart,
         });
     } catch (error) {
-        console.error(error);
+        res.redirect("/500")
         res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
@@ -186,7 +186,7 @@ const updateQuentity = async (req, res) => {
             totalPriceTotal,
         });
     } catch (error) {
-        console.error(error.message);
+        res.redirect("/500")
         res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
@@ -231,7 +231,7 @@ const loadCheckout = async (req, res) => {
             res.render("checkout", { user, cartData, totalWithDiscount, totalWithoutDiscount, coupon });
         }
     } catch (error) {
-        console.log(error.message);
+       res.redirect("/500")
 
     }
 };
@@ -277,7 +277,7 @@ const loadCheckout = async (req, res) => {
 //             res.render("checkout", { user, cartData, totalWithDiscount, totalWithoutDiscount, coupon });
 //         }
 //     } catch (error) {
-//         console.log(error.message);
+//        res.redirect("/500")
 //     }
 // };
 
@@ -289,7 +289,7 @@ const loadAddAddress = async (req, res) => {
     try {
         res.render("checkoutaddress")
     } catch (error) {
-        console.log(error.message);
+       res.redirect("/500")
     }
 }
 
@@ -321,7 +321,7 @@ const addAddress = async (req, res) => {
 
         res.redirect("/checkout");
     } catch (error) {
-        console.log(error.message);
+       res.redirect("/500")
         res.status(500).send('Internal Server Error');
     }
 };

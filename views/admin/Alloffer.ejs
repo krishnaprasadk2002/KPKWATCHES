@@ -81,7 +81,7 @@
                     <div class="col-sm-12 col-xl-12">
                         <div class="bg-secondary rounded h-100 p-4">
                             <h6 class="mb-4">Offers</h6>
-                            <table class="table" id="offerTable">
+                            <table class="table" >
                                 <thead>
                                     <tr>
                                         <th scope="col">Name</th>
@@ -137,25 +137,54 @@
                         </div>
                     </div>
                 </div>
+
+                <nav aria-label="Page navigation ">
+                    <ul class="pagination justify-content-center mt-4">
+                      <% if (currentPage> 1) { %>
+                        <li class="page-item">
+                          <a class="page-link" href="/admin/offer?page=<%= currentPage - 1 %>"
+                            aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                          </a>
+                        </li>
+                        <% } else { %>
+                          <li class="page-item disabled">
+                            <span class="page-link" aria-hidden="true">&laquo;</span>
+                          </li>
+                          <% } %>
+    
+                            <% for (let page=1; page <=totalPages; page++) { %>
+                              <li class="page-item <%= currentPage === page ? 'active' : '' %>">
+                                <a class="page-link" href="/admin/offer?page=<%= page %>">
+                                  <%= page %>
+                                </a>
+                              </li>
+                              <% } %>
+    
+                                <!-- <li class="page-item-total">of <%= totalPages %></li> -->
+    
+                                <% if (currentPage < totalPages) { %>
+                                  <li class="page-item">
+                                    <a class="page-link" href="/admin/offer?page=<%= currentPage + 1 %>"
+                                      aria-label="Next">
+                                      <span aria-hidden="true">&raquo;</span>
+                                      <span class="sr-only">Next</span>
+                                    </a>
+                                  </li>
+                                  <% } else { %>
+                                    <li class="page-item disabled">
+                                      <span class="page-link" aria-hidden="true">&raquo;</span>
+                                    </li>
+                                    <% } %>
+                    </ul>
+                  </nav>
             </div>
 
             
  <%- include('../layouts/admin/footBar') %>
  <%- include('../layouts/admin/adminFooter') %>
 
-        
-
-<script>
-
-    $(document).ready(function () {
-        $('#offerTable').DataTable({
-            paging: true,   
-            ordering: false  // Disable sorting
-        });
-    });
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 
