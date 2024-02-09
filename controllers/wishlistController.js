@@ -119,6 +119,10 @@ const loadWhishlist = async (req, res) => {
       const productToCart = await Products.findOne({ _id: productId });
       const cart = await Cart.findOne({ userid: userId });
       const wishlist = await Wishlist.findOne({ user: userId });
+
+      if(!wishlist){
+        res.redirect("/")
+      }
   
       if (productToCart && userId) {
         const isProductInWishlist = wishlist && wishlist.products.some(item => item.productId.equals(productId));
@@ -134,6 +138,7 @@ const loadWhishlist = async (req, res) => {
           const existingProductIndex = cart.products.findIndex(
             (item) => item.productId.toString() === productId
           );
+
   
           if (existingProductIndex !== -1) {
             const existingProduct = cart.products[existingProductIndex];
@@ -141,11 +146,13 @@ const loadWhishlist = async (req, res) => {
             existingProduct.totalPrice =
               existingProduct.quentity * existingProduct.productPrice;
           } else {
+            
             cart.products.push({
               productId: productId,
               quentity: 1,
-              productPrice: productToCart.offerprice,
-              totalPrice: productToCart.offerprice,
+
+              productPrice: productToCart.offerprice || productToCart.price,
+              totalPrice: productToCart.offerprice || productToCart.price,
               Image: productToCart.image[0],
             });
           }
@@ -158,8 +165,8 @@ const loadWhishlist = async (req, res) => {
               {
                 productId: productId,
                 quentity: 1,
-                productPrice: productToCart.offerprice,
-                totalPrice: productToCart.offerprice,
+                productPrice: productToCart.offerprice || productToCart.price,
+                totalPrice: productToCart.offerprice || productToCart.price,
                 Image: productToCart.image[0],
               },
             ],

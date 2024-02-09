@@ -157,6 +157,13 @@ const updateQuentity = async (req, res) => {
         if (!productToUpdate) {
             return res.status(404).json({ success: false, message: "Product not found in cart" });
         }
+
+        // const maxQuentity = productToUpdate.quentity
+        // console.log("max",quentity);
+        // if(maxQuentity<quentity){
+        //     return res.status(400).json({ success: false, message: `Exceeded maximum quantity limit (${maxQuentity}).` });
+        // }
+
         // Assuming existingCart is an instance of your cart model
         productToUpdate.quentity = quentity;
         productToUpdate.totalPrice = quentity * (productToUpdate.offerPrice || productToUpdate.productPrice);

@@ -11,6 +11,7 @@ const fs=require("fs")
 const Category = require("../models/categoryModel")
 const Offer= require("../models/offerModel")
 const moment = require("moment")
+const Cart = require("../models/cartModel")
 
 
 
@@ -209,6 +210,7 @@ const deleteimage = async (req, res) => {
 
 const singleProduct = async (req, res) => {
     try {
+        const userid=req.session.user_id
         const queryProduct = req.query.id;
         const viewProduct = await Products.findById(queryProduct)
           .populate({
@@ -258,11 +260,22 @@ const singleProduct = async (req, res) => {
             }
         }).limit(4);
 
+        //check already added in cart or not
+
+        // Check if the product is already in the cart
+        const checkCart = await Cart.findOne({ userid: userid });
+
+        let alreadyCart = false;
+
+        if (checkCart) {
+            alreadyCart = checkCart.products.some(product => product.productId.toString() === queryProduct);
+        }
+
         res.render("eachproduct", {
             products: viewProduct,
             viewProduct,
             relatedProduct,
-            discountProductprice,discountProductPercentage,discountCategoryprice,discountCategoryPercentage
+            discountProductprice,discountProductPercentage,discountCategoryprice,discountCategoryPercentage,alreadyCart
 
         });
     } catch (err) {
