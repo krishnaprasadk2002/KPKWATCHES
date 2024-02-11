@@ -873,6 +873,22 @@ const InternalServer = async(req,res)=>{
   }
 }
 
+const loadAbout = async(req,res)=>{
+  try {
+    res.render("about")
+  } catch (error) {
+    res.redirect("/500")
+  }
+}
+
+const loadContact = async(req,res)=>{
+  try {
+    res.render("contact")
+  } catch (error) {
+    res.redirect("/500")
+  }
+}
+
 
 
 module.exports = {
@@ -899,6 +915,8 @@ module.exports = {
   addAddressProfile,
   editAddress,
   walletHistory,
-  InternalServer
+  InternalServer,
+  loadAbout,
+  loadContact
 
 }

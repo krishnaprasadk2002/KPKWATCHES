@@ -119,7 +119,8 @@ userRoute.post("/addingWishlist/:productid",wishlistController.addToWishlist);
 userRoute.post("/removeFromWishlist",wishlistController.removeWishlist)
 userRoute.post("/addToCart/:productid", wishlistController.wishAddToCart);
 
-
+userRoute.get("/about",userController.loadAbout)
+userRoute.get("/contact",userController.loadContact)
 userRoute.get("/500",userController.InternalServer)
 
 module.exports=userRoute

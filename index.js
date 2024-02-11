@@ -1,5 +1,6 @@
 const mongoose=require("mongoose")
-mongoose.connect("mongodb://127.0.0.1:27017/Ecommerce-Project")
+mongoose.connect("mongodb+srv://prasadkrishna1189:Prasad5273@kpkwatches.3gio8po.mongodb.net/KPKWATCHES")
+// mongoose.connect("mongodb://127.0.0.1:27017/Ecommerce-Project")
 
 const express=require("express")
 const app=express()
