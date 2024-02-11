@@ -19,7 +19,7 @@ app.use(nocache())
 
 app.use(flash())
 
-const PORT=process.env.PORT || 4000
+const PORT=process.env.PORT || 3001
 const path=require("path")
 
 const cors = require('cors');
