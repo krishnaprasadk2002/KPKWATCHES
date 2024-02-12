@@ -1,39 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-
-
-<!-- molla/product.html  22 Nov 2019 09:54:50 GMT -->
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Molla - Bootstrap eCommerce Template</title>
-    <meta name="keywords" content="HTML5 Template">
-    <meta name="description" content="Molla - Bootstrap eCommerce Template">
-    <meta name="author" content="p-themes">
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="../user/assets/images/icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="../user/assets/images/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../user/assets/images/icons/favicon-16x16.png">
-    <link rel="manifest" href="../user/assets/images/icons/site.html">
-    <link rel="mask-icon" href="../user/assets/images/icons/safari-pinned-tab.svg" color="#666666">
-    <link rel="shortcut icon" href="../user/assets/images/icons/favicon.ico">
-    <meta name="apple-mobile-web-app-title" content="Molla">
-    <meta name="application-name" content="Molla">
-    <meta name="msapplication-TileColor" content="#cc9966">
-    <meta name="msapplication-config" content="../user/assets/images/icons/browserconfig.xml">
-    <meta name="theme-color" content="#ffffff">
-    <!-- Plugins CSS File -->
-    <link rel="stylesheet" href="../user/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../user/assets/css/plugins/owl-carousel/owl.carousel.css">
-    <link rel="stylesheet" href="../user/assets/css/plugins/magnific-popup/magnific-popup.css">
-    <!-- Main CSS File -->
-    <link rel="stylesheet" href="../user/assets/css/style.css">
-    <link rel="stylesheet" href="../user/assets/css/plugins/nouislider/nouislider.css">
-</head>
-
-<body>
+<%- include('../layouts/user/userHeader') %>
+<%- include('../layouts/user/userNavBar') %>
     <div class="container">
         <style>
             .product-price {
@@ -74,149 +40,6 @@
 
 
         <div class="row">
-            <div class="page-wrapper">
-                <header class="header">
-                    <div class="header-top">
-                        <div class="container">
-
-
-                            <div class="header-right">
-                                <ul class="top-menu">
-                                    <li>
-                                        <a href="#">Links</a>
-                                        <ul>
-                                            <li><a href="/login"><i class="icon-user"></i>Login</a></li>
-                                        </ul>
-                                    </li>
-                                </ul><!-- End .top-menu -->
-                            </div><!-- End .header-right -->
-                        </div><!-- End .container -->
-                    </div><!-- End .header-top -->
-
-                    <div class="header-middle sticky-header">
-                        <div class="container">
-                            <div class="header-left">
-                                <button class="mobile-menu-toggler">
-                                    <span class="sr-only">Toggle mobile menu</span>
-                                    <i class="icon-bars"></i>
-                                </button>
-
-                                <a href="index.html" class="logo">
-                                    <img src="../user/assets/images/logo.png" alt="Molla Logo" width="105" height="25">
-                                </a>
-
-                                <nav class="main-nav">
-                                    <ul class="menu sf-arrows">
-                                        <li class="megamenu-container ">
-                                            <a href="/">Home</a>
-
-                                        </li>
-                                        <li class="active">
-                                            <a href="/product">Product</a>
-
-                                        </li>
-                                        <li>
-                                            <a href="#">About</a>
-
-                                        </li>
-                                        <li>
-                                            <a href="#">Blog</a>
-
-                                        </li>
-
-                                    </ul><!-- End .menu -->
-                                </nav><!-- End .main-nav -->
-                            </div><!-- End .header-left -->
-
-                            <div class="header-right">
-                                <div class="header-search" hidden>
-                                    <a href="#" class="search-toggle" role="button" title="Search"><i
-                                            class="icon-search"></i></a>
-                                    <form action="#" method="get">
-                                        <div class="header-search-wrapper">
-                                            <label for="q" class="sr-only">Search</label>
-                                            <input type="search" class="form-control" name="q" id="q"
-                                                placeholder="Search in..." required>
-                                        </div><!-- End .header-search-wrapper -->
-                                    </form>
-                                </div><!-- End .header-search -->
-
-
-                                <div class="dropdown cart-dropdown">
-                                    <a href="/cart" class="dropdown-toggle" role="button" aria-haspopup="true"
-                                        aria-expanded="false" data-display="static">
-                                        <i class="icon-shopping-cart"></i>
-                                        <span class="cart-count">2</span>
-                                    </a>
-
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <div class="dropdown-cart-products">
-                                            <div class="product">
-                                                <div class="product-cart-details">
-                                                    <h4 class="product-title">
-                                                        <a href="product.html">Beige knitted elastic runner shoes</a>
-                                                    </h4>
-
-                                                    <span class="cart-product-info">
-                                                        <span class="cart-product-qty">1</span>
-                                                        x $84.00
-                                                    </span>
-                                                </div><!-- End .product-cart-details -->
-
-                                                <figure class="product-image-container">
-                                                    <a href="product.html" class="product-image">
-                                                        <img src="../user/assets/images/products/cart/product-1.jpg"
-                                                            alt="product">
-                                                    </a>
-                                                </figure>
-                                                <a href="#" class="btn-remove" title="Remove Product"><i
-                                                        class="icon-close"></i></a>
-                                            </div><!-- End .product -->
-
-                                            <div class="product">
-                                                <div class="product-cart-details">
-                                                    <h4 class="product-title">
-                                                        <a href="product.html">Blue utility pinafore denim dress</a>
-                                                    </h4>
-
-                                                    <span class="cart-product-info">
-                                                        <span class="cart-product-qty">1</span>
-                                                        x $76.00
-                                                    </span>
-                                                </div><!-- End .product-cart-details -->
-
-                                                <figure class="product-image-container">
-                                                    <a href="product.html" class="product-image">
-                                                        <img src="../user/assets/images/products/cart/product-2.jpg"
-                                                            alt="product">
-                                                    </a>
-                                                </figure>
-                                                <a href="#" class="btn-remove" title="Remove Product"><i
-                                                        class="icon-close"></i></a>
-                                            </div><!-- End .product -->
-                                        </div><!-- End .cart-product -->
-
-                                        <div class="dropdown-cart-total">
-                                            <span>Total</span>
-
-                                            <span class="cart-total-price">$160.00</span>
-                                        </div><!-- End .dropdown-cart-total -->
-
-                                        <div class="dropdown-cart-action">
-                                            <a href="/cart" class="btn btn-primary">View Cart</a>
-                                            <a href="/checkout"
-                                                class="btn btn-outline-primary-2"><span>Checkout</span><i
-                                                    class="icon-long-arrow-right"></i></a>
-                                        </div><!-- End .dropdown-cart-total -->
-                                    </div><!-- End .dropdown-menu -->
-                                </div><!-- End .cart-dropdown -->
-                            </div><!-- End .header-right -->
-                        </div><!-- End .container -->
-                    </div><!-- End .header-middle -->
-                </header><!-- End .header -->
-
-
-
                 <main class="main">
                     <div class="page-content mt-4">
                         <div class="container">
@@ -308,19 +131,33 @@
                                             <div class="details-filter-row details-row-size">
                                                 <label for="qty">Qty:</label>
                                                 <div class="product-details-quantity">
-                                                    <input type="number" id="qty" class="form-control" value="1" min="1"
-                                                        max="<%=products.quentity%>" step="1" data-decimals="0"
-                                                        required>
+                                                    <input type="number" id="qty" class="form-control" value="1" min="1" max="<%=products.quentity%>" step="1" data-decimals="0" required readonly onkeydown="return false;">
                                                 </div><!-- End .product-details-quantity -->
                                             </div><!-- End .details-filter-row -->
+                                            
 
-                                            <div class="product-details-action">
-                                                <a href="#" class="btn-product btn-cart"
-                                                    onclick="addtoCart('<%=products._id%>')"><span>add to
-                                                        cart</span></a>
+                                                    <div class="row dflex" >
+                                                    <% if (products.quentity > 0) { %>
+                                                        <% if (!alreadyCart) { %>
+                                                         
+                                                          <div class="product-details-action"  >
+                                                            <a href="#" class="btn-product btn-cart" " onclick="addtoCart('<%= products._id %>')">
+                                                              <span>Add to Cart</span>
+                                                            </a>
+                                                          </div>
+                                                        <% } else { %>
+                                                          <div class="product-details-action">
+                                                            <a href="/cart" class="btn-product btn-cart">
+                                                              <span>Go To Cart</span>
+                                                            </a>
+                                                          </div>
+                                                        <% } %>
+                                                      <% } else { %>
+                                                        <span class="out-of-stock-message text-danger">Out of Stock</span>
+                                                      <% } %>
 
 
-                                                <div class="details-action-wrapper">
+                                                <div class="details-action-wrapper mb-3">
                                                     <a href="#" class="btn-product btn-wishlist" title="Wishlist"
                                                         onclick="addtoWishlist('<%= products._id %>')">
                                                         <span>Add to Wishlist</span>
@@ -425,7 +262,7 @@
                                                 <a href="#" class="btn-product btn-cart"
                                                     onclick="addtoCart('<%=products._id%>')"><span>Add to
                                                         cart</span></a>
-                                            </div><!-- End .product-action -->
+                                            </div>
                                         </figure><!-- End .product-media -->
                                         <div class="product-body">
                                             <div class="product-cat">
@@ -503,6 +340,11 @@
                                     showConfirmButton: false,
                                     timer: 1500,
                                 });
+                            }).then(()=>{
+                                setTimeout(()=>{
+                                    location.reload()
+                                },1500)
+                                
                             })
                             .catch((error) => {
                                 console.error('Error:', error);
@@ -571,101 +413,5 @@
 
 
 
-                <footer class="footer">
-                    <div class="footer-middle">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-sm-6 col-lg-3">
-                                    <div class="widget widget-about">
-                                        <img src="../user/assets/images/logo.png" class="footer-logo" alt="Footer Logo"
-                                            width="105" height="25">
-                                        <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu
-                                            vulputate magna eros eu erat. </p>
-
-                                        <div class="social-icons">
-                                            <a href="#" class="social-icon" target="_blank" title="Facebook"><i
-                                                    class="icon-facebook-f"></i></a>
-                                            <a href="#" class="social-icon" target="_blank" title="Twitter"><i
-                                                    class="icon-twitter"></i></a>
-                                            <a href="#" class="social-icon" target="_blank" title="Instagram"><i
-                                                    class="icon-instagram"></i></a>
-                                            <a href="#" class="social-icon" target="_blank" title="Youtube"><i
-                                                    class="icon-youtube"></i></a>
-                                            <a href="#" class="social-icon" target="_blank" title="Pinterest"><i
-                                                    class="icon-pinterest"></i></a>
-                                        </div><!-- End .soial-icons -->
-                                    </div><!-- End .widget about-widget -->
-                                </div><!-- End .col-sm-6 col-lg-3 -->
-
-                                <div class="col-sm-6 col-lg-3">
-                                    <div class="widget">
-                                        <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
-
-                                        <ul class="widget-list">
-                                            <li><a href="about.html">About Molla</a></li>
-                                            <li><a href="#">How to shop on Molla</a></li>
-                                            <li><a href="#">FAQ</a></li>
-                                            <li><a href="contact.html">Contact us</a></li>
-                                            <li><a href="login.html">Log in</a></li>
-                                        </ul><!-- End .widget-list -->
-                                    </div><!-- End .widget -->
-                                </div><!-- End .col-sm-6 col-lg-3 -->
-
-                                <div class="col-sm-6 col-lg-3">
-                                    <div class="widget">
-                                        <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
-
-                                        <ul class="widget-list">
-                                            <li><a href="#">Payment Methods</a></li>
-                                            <li><a href="#">Money-back guarantee!</a></li>
-                                            <li><a href="#">Returns</a></li>
-                                            <li><a href="#">Shipping</a></li>
-                                            <li><a href="#">Terms and conditions</a></li>
-                                            <li><a href="#">Privacy Policy</a></li>
-                                        </ul><!-- End .widget-list -->
-                                    </div><!-- End .widget -->
-                                </div><!-- End .col-sm-6 col-lg-3 -->
-
-                                <div class="col-sm-6 col-lg-3">
-                                    <div class="widget">
-                                        <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
-
-                                        <ul class="widget-list">
-                                            <li><a href="#">Sign In</a></li>
-                                            <li><a href="cart.html">View Cart</a></li>
-                                            <li><a href="#">My Wishlist</a></li>
-                                            <li><a href="#">Track My Order</a></li>
-                                            <li><a href="#">Help</a></li>
-                                        </ul><!-- End .widget-list -->
-                                    </div><!-- End .widget -->
-                                </div><!-- End .col-sm-6 col-lg-3 -->
-                            </div><!-- End .row -->
-                        </div><!-- End .container -->
-                    </div><!-- End .footer-middle -->
-
-                    <div class="footer-bottom">
-                        <div class="container">
-                            <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p>
-                            <!-- End .footer-copyright -->
-                            <figure class="footer-payments">
-                                <img src="../user/assets/images/payments.png" alt="Payment methods" width="272"
-                                    height="20">
-                            </figure><!-- End .footer-payments -->
-                        </div><!-- End .container -->
-                    </div><!-- End .footer-bottom -->
-                </footer><!-- End .footer -->
-            </div><!-- End .page-wrapper -->
-            <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
-
-            <!-- Sticky Bar -->
-
-
-            <!-- Mobile Menu -->
-            <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
-
-           
-
-            <%- include('../layouts/user/mobileview') %>
+<%- include('../layouts/user/mobileview') %>
 <%- include('../layouts/user/smallFooter') %>
-
-</html>
