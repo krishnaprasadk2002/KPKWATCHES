@@ -22,7 +22,13 @@ const loadCategory = async (req, res) => {
             .skip((page - 1) * limit)
             .limit(limit);
 
-        const offer = await Offer.find({ status: true });
+            const currentDate = new Date();
+
+            const offer = await Offer.find({
+              status: true,
+              startingDate: { $lte: currentDate },
+              expiryDate: { $gte: currentDate }
+            })
 
         res.render("category", { categoryData, offer, moment, totalPages, currentPage: page });
     } catch (error) {

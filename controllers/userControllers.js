@@ -142,7 +142,6 @@ const loadotp = async (req, res) => {
 const verifyOtp = async (req, res) => {
   try {
     const email = req.body.email;
-    console.log('email', req.body.email);
     const otp = req.body.Otp;
 
     const userVerification = await userOtpVerification.findOne({ email: req.body.email });
@@ -301,7 +300,7 @@ const sendResetPasslink = async (email, res) => {
       }
     });
 
-    const resetpage = `http://localhost:4004/resetpassword/${user._id
+    const resetpage = `http://kpkwatches.shop/resetpassword/${user._id
       }/${token.token
       }`;
 

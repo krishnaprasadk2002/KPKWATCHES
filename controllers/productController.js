@@ -69,7 +69,13 @@ const loadAllproduct=async(req,res)=>{
         .skip((page - 1) * limit)
         .limit(limit);
 
-        const offers = await Offer.find({status:true})
+        const currentDate = new Date();
+
+const offers = await Offer.find({
+  status: true,
+  startingDate: { $lte: currentDate },
+  expiryDate: { $gte: currentDate }
+})
         res.render('allproduct',{productData,offers,moment,totalPages,currentPage:page,limit})
     } catch (error) {
         res.redirect("/500")
