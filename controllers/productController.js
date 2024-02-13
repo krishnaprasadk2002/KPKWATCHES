@@ -6,7 +6,7 @@ const Products=require("../models/productModel")
 const User= require("../models/userModel")
 const Categories = require("../models/categoryModel")
 const sharp=require("sharp")
-const upload = multer({ dest: '/public/uploads/' });
+// const upload = multer({ dest: '/public/uploads/' });
 const fs=require("fs")
 const Category = require("../models/categoryModel")
 const Offer= require("../models/offerModel")
@@ -40,9 +40,9 @@ const insertProduct = async (req, res) => {
             const originalImagePath = path.join(__dirname, '../public/uploads', image);
             const resizedPath = path.join(__dirname, '../public/uploads', 'resized_' + image);
 
-            // await sharp(originalImagePath)
-            //     .resize(800, 1200, { fit: 'fill' })
-            //     .toFile(resizedPath);
+            await sharp(originalImagePath)
+                .resize(800, 1200, { fit: 'fill' })
+                .toFile(resizedPath);
         });
 
         await Promise.all(promises);
@@ -181,8 +181,10 @@ const handleEditProduct = async (req, res) => {
         await existingProduct.save();
         res.redirect("/admin/allproduct");
     } catch (error) {
+        console.log(error.message);
         res.redirect("/500")
-        res.status(500).send('Internal Server Error');
+       
+        
     }
 };
 
@@ -214,8 +216,10 @@ const deleteimage = async (req, res) => {
             res.status(400).send('Invalid index');
         }
     } catch (error) {
+        console.log(error.message);
         res.redirect("/500")
         res.status(500)
+        
     }
 };
 

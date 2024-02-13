@@ -139,7 +139,8 @@
     });
 </script> -->
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+                            
 <script>
     function getQueryParam(paramName) {
         const params = new URLSearchParams(window.location.search);
@@ -206,7 +207,12 @@
                 })
                 .then(data => {
                     console.log(data);
-                    alert('OTP has been sent successfully!');
+                    Swal.fire({
+    icon: 'success',
+    title: 'OTP has been sent successfully!',
+    showConfirmButton: false,
+    timer: 1000, 
+});
 
                     timerResetRequested = true;
                 })

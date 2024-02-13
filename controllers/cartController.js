@@ -12,13 +12,15 @@ const loadCart = async (req, res) => {
     try {
         const user = req.session.user_id;
 
-        // if(!user){
-        // res.redirect("/login")
-        // }
         const cartData = await Cart.findOne({ userid: user }).populate({
             path: "products.productId",
             model: "Products",
         });
+
+        if (!cartData) {
+            res.render("cartpage", { cartData: { products: [] } });
+            return;
+        }
 
         if (cartData.products.length > 0) {
             cartData.products.forEach((product) => {
@@ -39,19 +41,23 @@ const loadCart = async (req, res) => {
 
 //Product added to cart
 
+
 const addToCart = async (req, res) => {
     try {
         const product_id = req.params.productid;
         const user_id = req.session.user_id;
         const quentity = parseInt(req.params.quentity);
 
+        // user logged or not checking 
+        if (!user_id) {
+            return res.status(401).json({ error: "Unauthorized - User not authenticated" });
+        }
+
         const productToCart = await Products.findOne({ _id: product_id });
-        // console.log("Product:", productToCart);
 
         const cart = await Cart.findOne({ userid: user_id });
-        // console.log("Cart:", cart);
 
-        if (productToCart && user_id) {
+        if (productToCart) {
             if (cart) {
                 const existingProductIndex = cart.products.findIndex(
                     (item) => item.productId.toString() === product_id
@@ -59,11 +65,9 @@ const addToCart = async (req, res) => {
 
                 if (existingProductIndex !== -1) {
                     const existingProduct = cart.products[existingProductIndex];
-                    existingProduct.quentity
-                    // += quentity;
+                    existingProduct.quentity += quentity;
                     existingProduct.totalPrice = existingProduct.quentity * existingProduct.productPrice;
                 } else {
-
                     const productPrice = productToCart.offerprice || productToCart.price
                     const totalPrice = quentity * productPrice
 
@@ -77,7 +81,6 @@ const addToCart = async (req, res) => {
                 }
 
                 await cart.save();
-                // console.log("Cart updated:", cart);
             } else {
                 const productPrice = productToCart.offerprice || productToCart.price
                 const totalPrice = quentity * productPrice
@@ -96,16 +99,15 @@ const addToCart = async (req, res) => {
                 });
 
                 await newCart.save();
-                // console.log("New cart created:", newCart);
             }
 
-            res.status(200).json({ message: "Product added to cart successfully." });
+            return res.status(200).json({ message: "Product added to cart successfully." });
         } else {
-            res.status(400).json({ error: "Invalid product or user." });
+            return res.status(400).json({ error: "Invalid product." });
         }
     } catch (error) {
-        res.redirect("/500")
-        res.status(500).json({ error: "Internal server error." });
+        console.error(error);
+        return res.status(500).json({ error: "Internal server error." });
     }
 };
 

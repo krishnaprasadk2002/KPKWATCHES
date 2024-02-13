@@ -301,15 +301,11 @@
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
-
-
                 <script>
                     function addtoCart(proid, userid) {
                         const quentity = document.getElementById('qty').value;
-
-
+                
                         if (quentity < 1) {
-
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Out of Stock',
@@ -317,8 +313,7 @@
                             });
                             return;
                         }
-
-
+                
                         fetch(`/addingcart/${proid}/${quentity}/${userid}`, {
                             method: 'POST',
                             headers: {
@@ -328,36 +323,39 @@
                                 quentity: quentity,
                             }),
                         })
-                            .then((response) => response.json())
-                            .then((data) => {
-
-                                console.log('Response from backend:', data);
-
-
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Product added to cart!',
-                                    showConfirmButton: false,
-                                    timer: 1500,
-                                });
-                            }).then(()=>{
-                                setTimeout(()=>{
-                                    location.reload()
-                                },1500)
-                                
-                            })
-                            .catch((error) => {
-                                console.error('Error:', error);
-
-
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error adding to cart',
-                                    text: 'An error occurred while adding the product to the cart.',
-                                });
+                        .then((response) => {
+                            if (!response.ok) {
+                                // Check if the response status is not okay (e.g., 401 Unauthorized)
+                                throw new Error('Unauthorized - User not authenticated.');
+                            }
+                            return response.json();
+                        })
+                        .then((data) => {
+                            console.log('Response from backend:', data);
+                
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Product added to cart!',
+                                showConfirmButton: false,
+                                timer: 1500,
                             });
+                            
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1500);
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error adding to cart',
+                                text: error.message || 'An error occurred while adding the product to the cart.',
+                            });
+                        });
                     }
                 </script>
+                
 
                 <script>
 
