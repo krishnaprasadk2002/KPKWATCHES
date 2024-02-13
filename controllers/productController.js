@@ -134,6 +134,7 @@ const loadEditProduct = async (req, res) => {
         const product = await Products.findById(productId);  
         const categories = await Categories.find(); 
         res.render("editproduct", { product, categories });
+        
     } catch (error) {
         res.redirect("/500")
     }
