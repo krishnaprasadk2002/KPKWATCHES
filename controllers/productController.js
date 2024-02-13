@@ -133,8 +133,8 @@ const loadEditProduct = async (req, res) => {
         const productId = req.query.id; 
         const product = await Products.findById(productId);  
         const categories = await Categories.find(); 
-        res.render("editproduct", { product, categories });
-        
+        res.render("editProduct", { product, categories });
+
     } catch (error) {
         res.redirect("/500")
     }

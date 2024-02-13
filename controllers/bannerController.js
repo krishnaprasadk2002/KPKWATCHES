@@ -75,8 +75,7 @@ const editBanner = async (req, res) => {
         const bannerId = req.query.id;
         const banner = await Banner.findById(bannerId);
         console.log(banner);
-        res.render("editbanner", { banner });
-        
+        res.render("editBanner", { banner });
     } catch (error) {
        res.redirect("/500")
         res.status(500).send("Internal Server Error");
