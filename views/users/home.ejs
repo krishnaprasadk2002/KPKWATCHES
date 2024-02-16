@@ -338,7 +338,9 @@
                                 title: 'Product added to cart!',
                                 showConfirmButton: false,
                                 timer: 1500, 
-                            });
+                            }).then(()=>{
+                                $('#cart-count').load('/home #cart-count')
+                            })
                         })
                         .catch((error) => {
                             console.error('Error:', error);

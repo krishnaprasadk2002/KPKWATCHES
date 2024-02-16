@@ -55,16 +55,15 @@ const addBannerDetails = async (req, res) => {
             const originalImagePath = path.join(__dirname, '../public/uploads', filename);
             const resizedPath = path.join(__dirname, '../public/uploads', 'resized_Banner' + filename);
 
-            await sharp(originalImagePath)
-                .resize(1920, 900)
-                .toFile(resizedPath);
+            // await sharp(originalImagePath)
+            //     .resize(1920, 900)
+            //     .toFile(resizedPath);
         });
 
         await Promise.all(promises);
 
     } catch (error) {
        res.redirect("/500")
-        res.status(500).send("Internal Server Error");
     }
 };
 
